@@ -1,0 +1,78 @@
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+turbo_room,88,80,3	script	Broadcaster	402,{
+       set @header$,"[^0000ffBroadcaster^000000]";
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+           mes @header$;
+       mes "Hola, yo soy el Broadcaster de PvP-RoMX";
+       mes "Yo puedo anunciar un mensaje a todo el servidor por ti";
+       mes "Cuesta ^ff00001 Cash^000000";
+   next;
+   mes @header$;
+   mes "Quisieras hacer un broadcast...";
+   switch (select("En PvP-RoMX","En RoMX")){
+       case 1:
+               if(@Broadcast> gettimetick(2)) {
+               next;
+               mes @header$;
+               mes "Perdona pero necesitas esperar 3 minutos.";
+               close;
+               }
+           next;
+           mes @header$;
+           if(#CASHPOINTS<1){ goto $nozenybc;}
+           atcommand "@cash -1";
+           mes "Por favor, escribe tu mensaje.";
+           next;
+           input @broadcast$;
+           announce "Mensaje de "+strcharinfo(0)+": "+@broadcast$+"",0,0xB1FB17;
+           close2;
+           set @Broadcast, gettimetick(2)+180;
+           dispbottom "Por favor espera 3 minutos antes de mandar otro mensaje, evitemos el spam ;D";
+           end;
+       case 2:
+            if(@Broadcast> gettimetick(2)) {
+               next;
+               mes @header$;
+               mes "Perdona pero necesitas esperar 3 minutos.";
+               close;
+               }
+           next;
+           mes @header$;
+           if(#CASHPOINTS<1){ goto $nozenybc;}
+           atcommand "@cash -1";
+           mes "Por favor, escribe tu mensaje.";
+           next;
+           input @broadcast$;
+		set @msj$, "Mensaje de "+strcharinfo(0)+": "+@broadcast$;
+           query_logsql("INSERT INTO `broadcaster` (`mensaje`,`bandera`,`destino`) VALUES ('"+@msj$+"',1,'romx')");
+           close2;
+           set @Broadcast, gettimetick(2)+180;
+           dispbottom "Por favor espera 3 minutos antes de mandar otro mensaje, evitemos el spam ;D";
+           close;
+   }
+$nozenybc:
+   mes "No tienes suficiente cash TwT";
+   mes "Necesitas pagar ^ff00001 cash^000000";
+   mes "Regresa cuando tengas mas solvencia :D";
+   close;
+
+}
+
+//------------------------------------------------------------
+
+-	script	broad	-1,{
+
+OnInit:
+    set .limite,120000;//2 minutos
+
+	while(1) {
+	        sleep .limite;
+	        query_logsql("SELECT `id`, `mensaje` FROM `broadcaster` WHERE `bandera`=1 AND `destino`='pvp' LIMIT 1", .@id, .@mensaje$);
+		if(getarraysize(.@id)>0){
+			announce .@mensaje$,0,0xB1FB17;
+			query_logsql ("UPDATE `broadcaster` SET `bandera`=0 WHERE `id`="+.@id);
+		}
+		deletearray .@id;
+		deletearray .@mensaje$;
+	}
+}

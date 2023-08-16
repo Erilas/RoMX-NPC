@@ -1,0 +1,3243 @@
+//[========================================================]
+//[===========      GM Eventos Automaticos      ===========]
+//[========================================================]
+//[ Version 1                                              ]
+//[========================================================]
+//[ Original script by: Erilas                          ]
+//[========================================================]
+//[ Descripcion:                                           ]
+//[--------------------------------------------------------]
+// - 12 eventos automaticos a llamar
+// 		- 2.- Poring Catcher by [Wild Karrd]
+// 		- 3.- MVP Conquer by [Erilas]
+// 		- 4.- Treasure Hunter by [Erilas]
+// 		- 5.- Ultimo Hombre en pie by [iTouch]
+// 		- 6.- Poring Bomba by [Dastgir]
+// 		- 7.- Poring Party by [Erilas]
+// 		- 8.- Mas EXP by [Erilas]
+//		- 9.- Dice by []
+//		- 10.- Lotto by [Erilas]			
+//		- 11.- Reaction by []
+//		- 12.- RoMX Team by [Erilas]
+//		- 13.- Democracia by [Erilas]
+//		- 14.- Lost by [Erilas]
+//		- 15.- Novice Race by [Erilas]
+//		- 16.- Invasor by [Erilas]
+//		- 17.- Sistema Autorecuperacion (Troll r by [Erilas]
+// - Premios aleatorios al ganador.
+// - Aleatoriedad en llamado de eventos by [Ivion]
+// - Anuncio de "evento activo" al logear
+// - Espera de usuarios conectados para inicar evento, sin contar gms ni usuarios en vending       
+// - GM Virtual con info del server y cosas mas
+// - GM Control Panel wispeando a NPC:GMEventos
+//[========================================================]
+
+-	script	GMEventos	-1,{
+
+OnInit:
+// 	[====================Configuracion=======================]
+	set .npc$,"GM Eureka";									//nombre del gm o anunciador
+	set .t1tiempogm,4;									//Tiempo Minimo para activar evento. (horas)
+	set .t2tiempogm,8;									//Tiempo maximo para activar evento. (horas)
+	set .gm,99;										//Nivel GM minimo para tomar en cuenta
+	set .limite,10;										//Usuarios minimos para iniciar un evento SIN contar GMS NI VENDINGS
+	setarray .mapasdetesoro$[0],"morocc","payon","izlude","geffen","alberta","comodo","yuno";		//mapas donde se ejecutan eventos 4 y 7
+	setarray .idmobevento[0],1583,1252,1115,1159,1046,1112,1087,1150,1059,1147,1785,1272,1418,1251,1924,1922,1925,1923,1630,1039,2068,1389,1768,1086,1885,1492,1373,1190,1038,1157,1159,1623,1312,1658,2501,2494; 		//mobs a invocar en evento 3
+	set .miembros_evento12,6;								//numero de miembros en el evento 12
+	setarray .tipo_fight$[0],"Novice","No Renacidos","2os Jobs","Todo Vale";		//array de evento 5
+	setarray .eventos_disponibles$[1],"Doble Drop","Poring Catcher","MVP Conquer","Treasure Hunter","The Fight Club","Bomb Punch","Poring Party","Mas Exp","Dice","Lotto RoMX","Reaction","RoMX Team","Democracia","Lost","Novice Race","Invasion"," Master"; //nombres de los eventos, para log de eureka
+	setarray .mapainvacion$[0],"Glast Heim","Thor Volcano","Kiel Academy","Orc Camp";	//mapas evento 16
+	set .@cantidad_invasor,500;    //numero de mobs totales en inicio de mapa
+	set .@tiempo_por_mapa,10;		//tiempo por mapa en evento 16
+// 	[========================================================]
+	set .anuncio_woe$,"RoMX Rulez!";
+	set .eventoniciado,0;		//bandera...NO TOCAR
+	set .esperausaurios,0;		//bandera...NO TOCAR
+	set .nomevento$,""; 		//nombre del evento activo...NO TOCAR
+	set .mapatesoro$,"";		//nombre del mapa de eventos...NO TOCAR
+	disablenpc "Warper_Eventos";	//Warper eventos
+	hideonnpc "Warper_Eventos";
+	disablenpc "Totem";		//Evento 11
+	hideonnpc "Totem";
+	disablenpc "NPC_Premiador";	//Premidor y clones
+	hideonnpc "NPC_Premiador";
+	disablenpc "NPC_Premiador#1";
+	hideonnpc "NPC_Premiador#1";
+	disablenpc "NPC_Premiador#2";
+	hideonnpc "NPC_Premiador#2";
+	disablenpc "Totem#thor";	//Objetivo evento 12 y clones
+	hideonnpc "Totem#thor";
+	disablenpc "Totem#hidden";
+	hideonnpc "Totem#hidden";
+	disablenpc "Totem#abyss";
+	hideonnpc "Totem#abyss";
+	disablenpc "Totem#odin";
+	hideonnpc "Totem#odin";
+	disablenpc "Totem#juperos";
+	hideonnpc "Totem#juperos";
+	disablenpc "Totem#glas";
+	hideonnpc "Totem#glas";		
+	disablenpc "Totem#name";
+	hideonnpc "Totem#name";
+	disablenpc "RoMX Team";		//chat de evento 12
+	hideonnpc "RoMX Team";
+	disablenpc "RoMX Team.";	//warper evento 12 a nameless
+	hideonnpc "RoMX Team.";
+	disablenpc "GM Eureka#troll";		//Evento 17
+	hideonnpc "GM Eureka#troll";
+	
+while(1) {
+		set .@tiempogm,gettimetick(2) / 60;
+		//[------seleccion de juego------]
+		set .mapatesoro$,.mapasdetesoro$[rand(0,getarraysize(.mapasdetesoro$)-1)];//selecciona mapa de evento 4 y 7
+		set .numero_fight,rand(0,getarraysize(.tipo_fight$)-1);//selecciona tipo de pelea en evento 5
+		set .mapas_ev12,rand(1,7);//selecciona mapa en evento 12
+		set .mobfeo, .idmobevento[rand(0,getarraysize(.idmobevento)-1)];//selecciona mob de evento 3
+		set .eventoactivo,rand(2,getarraysize(.eventos_disponibles$));
+		//seleccionador de ruta
+		set $ruta,rand(1,2);
+		set .ruta_seleccionada,rand(getarraysize(.mapainvacion$));//selecciona ruta evento 16
+		set .gmdice,0;
+		if($TItiempogm <= .@tiempogm) set $TItiempogm,.@tiempogm + rand(.t1tiempogm * 60,.t2tiempogm * 60);
+		do {
+			if(($TItiempogm - .@tiempogm) / (24 * 60)) sleep 24 * 60 * 60 * 1000;
+			else sleep ($TItiempogm - .@tiempogm) * 60 * 1000;
+			set .@tiempogm,gettimetick(2) / 60;
+		} while(.@tiempogm < $TItiempogm);
+		iniciaevento:		
+		set .@gmsonline,0;
+		set .@ciclogms,0;
+		if (.gmdice==1) goto eventogmdice;
+		//[-------revicion de pjs-------]
+		//revisa cuantos gms estan on
+		query_sql("SELECT `account_id` FROM `login` WHERE `level`>="+.gm, .@idsgms$);
+		do {
+			query_sql("SELECT COUNT(`account_id`) FROM `char` WHERE `online`=1 AND `account_id`="+.@idsgms$[.@ciclogms], .@gmonline);
+			if (.@gmonline==1){ set .@gmsonline,.@gmsonline+1;}
+			set .@ciclogms,.@ciclogms+1;
+		} while(.@ciclogms < getarraysize(.@idsgms$));
+		set .@usuarios_onine,0;
+		set .@ciclo_usuarios_on,0;
+		//revisa que los usuarios esten en vending
+		query_sql("SELECT `name` FROM `char` WHERE `online`=1",.@nombres_online$);
+		do {
+			if (checkVending(.@nombres_online$[.@ciclo_usuarios_on])){ set .@usuarios_onine,.@usuarios_onine+1;}
+			set .@ciclo_usuarios_on,.@ciclo_usuarios_on+1;
+		} while(.@ciclo_usuarios_on < getarraysize(.@nombres_online$));
+		set .@usuariosonline,getusers(1)-.@gmsonline-.@usuarios_onine;
+		if (.@usuariosonline>=.limite && agitcheck()==0) {//si hay mas de X usuarios online y no hay woe
+			//[------si el gm llama evento-----]
+			eventogmdice:
+			set $TItiempogm,0;
+			set .@tiempogm,0;
+			set .esperausaurios,0;
+			set .eventoniciado,1;
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Active el evento "+.eventos_disponibles$[.eventoactivo]+", GM activo evento="+.gmdice+". Con fecha "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+". A las "+gettime(3)+":"+gettime(2)+":"+gettime(1)+". El servidor marcaba "+getusers(1)+" usuarios en linea, de los cuales "+.@gmsonline+" eran GMs y "+.@usuarios_onine+" son Merchants en Vending.')");
+			query_logsql("INSERT INTO `face` (`mensaje`,`mensaje2`,`tipo`,`chek`,`ev`) VALUES ('Se ha iniciado el evento "+.eventos_disponibles$[.eventoactivo]+"','hay "+getusers(1)+" usuarios en linea.','Evento',0,"+.eventoactivo+")");
+			set .gmdice,0;
+			switch(.eventoactivo) {
+			case 2://[------Poring Catcher-----]
+				announce .npc$+": Es hora de jugar Poring Catcher! :3",0;
+				killmonsterall "quiz_02";
+				sleep 5000;
+				enablenpc "Warper_Eventos";
+				hideoffnpc "Warper_Eventos";
+				callfunc "Aviso_warper";
+				sleep 1000;
+				disablenpc "Warper_Eventos";
+				hideonnpc "Warper_Eventos";
+				sleep 5000;
+				mapannounce "quiz_02",.npc$+": Yo invocare diferentes Porings.",0;
+				sleep 5000;
+				mapannounce "quiz_02",.npc$+": Solamente UNO de ellos es el Poring correcto.",0;
+				sleep 5000;
+				mapannounce "quiz_02",.npc$+": Toma tu tiempo por que si matas un poring equivocado, saldras del juego.",0;
+				sleep 5000;
+				mapannounce "quiz_02",.npc$+": ... Es hora de jugar!",0;
+				sleep 1000;
+				mapannounce "quiz_02",.npc$+": 3",0;
+				sleep 1000;
+				mapannounce "quiz_02",.npc$+": 2",0;
+				sleep 1000;
+				mapannounce "quiz_02",.npc$+": 1",0;
+				sleep 1000;
+				mapannounce "quiz_02",.npc$+": PORINGS!",0;
+				areamonster "quiz_02",287,266,321,234,"Poring",1002,1,"warpremiador::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Pouring",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Proing",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Poiring",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Poing",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"No soy un Poring",1002,5,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Soy un Poring",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Gnirop",1002,1,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Poring",1113,1,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Poring",1062,1,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Poriiing",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"PoriNg",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Porong",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"P0ring",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Por1ng",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Pornig",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Porin",1002,10,"poringlose::OnMobKilled";
+				areamonster "quiz_02",287,266,321,234,"Porng",1002,1,"poringlose::OnMobKilled";
+				set .timerx,0;
+				do{
+					sleep 50000;//1 min
+					if (getmapusers("quiz_02")==0) set .timerx,9999;//si no hay usuarios en el mapa
+					set .timerx,.timerx+1;
+				} while(.timerx<60);// 1 horas
+				if (getmapusers("quiz_02")>1 && .eventoactivo>0){
+					mapannounce "quiz_02",.npc$+": El evento Poring Catcher se da por terminado...",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					sleep 1000;
+					mapwarp "quiz_02","prontera",155,182;						
+				}
+				killmonsterall "quiz_02";
+				set .eventoactivo,0;
+				break;
+			case 3://[------MVP Conquer-----]
+				announce .npc$+": Es hora de jugar MVP Conquer :D",0;
+				killmonsterall "guild_vs3";
+				sleep 10000;
+				announce .npc$+": Invocare un Moustro en la sala PVP, el que lo mate recibira un premio especial :D",0;
+				sleep 10000;
+				announce .npc$+": hmm... que Moustro Elegire?...",0;
+				sleep 10000;
+				announce .npc$+": Muy bien! Invocare en a: "+getmonsterinfo(.mobfeo,0),0;
+				sleep 10000;
+				announce .npc$+": El Moustro estara solo por 3 horas, ustedes pueden! :3",0;
+				monster "guild_vs3",0,0,getmonsterinfo(.mobfeo,0),.mobfeo,1,"warpremiador::OnMobKilled";
+				set .timerx,0;
+				do{
+					sleep 50000;//1 min
+					if (getmapmobs ("guild_vs3")==0) set .timerx,9999;//si no hay mobs en el mapa termina evento
+					set .timerx,.timerx+1;
+				} while(.timerx<180);// 3 horas
+				if (getmapusers("guild_vs3")>0 && getmapmobs ("guild_vs3")>0){
+					mapannounce "guild_vs3",.npc$+": El evento MVP Conquer se da por terminado.",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					mapwarp "guild_vs3","prontera",155,182;
+				}
+				sleep 1000;
+				killmonsterall "guild_vs3";	
+				set .eventoactivo,0;
+				break;
+			case 4://[------Treasure Hunter-----]
+				announce .npc$+": Es hora de buscar un tesoro! :o",0;
+				sleep 10000;
+				announce .npc$+": Escondere un Treasure Box en alguna ciudad.",0;
+				sleep 10000;
+				announce .npc$+": hmm... en donde la escondere?...",0;
+				sleep 10000;
+				announce .npc$+": Muy bien!... escondere el Tesoro en "+.mapatesoro$+"!",0;
+				sleep 10000;
+				killmonsterall .mapatesoro$;
+				announce .npc$+": El Tesoro solo estara por una hora, Suerte :D",0;
+				monster .mapatesoro$,0,0,"Treasure Box",1324,1,"warpremiador::OnMobKilled";
+				set .timerx,0;
+				do{
+					sleep 50000;//1 min
+					if (getmapmobs (.mapatesoro$)==0){//si no hay mobs en el mapa termina evento
+						set .timerx,9999;
+						query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					}
+					set .timerx,.timerx+1;
+				} while(.timerx<60);// 1 hora
+				killmonsterall .mapatesoro$;
+				set .eventoactivo,0;
+				break;
+			case 5://[------Fight Club-----]
+				disablenpc "NPC_Premiador#1";
+				hideonnpc "NPC_Premiador#1";
+				announce .npc$+": El evento The Fight Club va a comenzar.",0;
+				sleep 5000;
+				announce .npc$+": Las inscripciones estaran abiertas solo para: "+.tipo_fight$[.numero_fight],0;
+				sleep 10000;
+				enablenpc "Warper_Eventos";
+				hideoffnpc "Warper_Eventos";
+				setmapflag "pvp_n_1-5",mf_noskill;
+				pvpoff "pvp_n_1-5";
+				callfunc "Aviso_warper";
+				sleep 1000;
+				announce .npc$+": Se termino el tiempo para acceder al portal.",0;
+				disablenpc "Warper_Eventos";
+				hideonnpc "Warper_Eventos";
+				sleep 1000;
+				mapannounce "pvp_n_1-5",.npc$+": El evento The Fight Club se iniciara en breve.",0;
+				sleep 5000;
+				mapannounce "pvp_n_1-5",.npc$+": Recuerden que el uso de las skills Cloaking, Hiding y Chase Walk no estan permitidos.",0;
+				sleep 5000;
+				mapannounce "pvp_n_1-5",.npc$+": Solo el Ultimo en Pie sera el ganador!",0;
+				sleep 5000;
+				if(getmapusers("pvp_n_1-5") == 0) goto UHP_None;
+				mapannounce "pvp_n_1-5",.npc$+": Preparate a la cuenta de 3 vamos a comenzar!",0;
+				sleep 3000;
+				mapannounce "pvp_n_1-5",.npc$+": 1",0;
+				sleep 3000;
+				mapannounce "pvp_n_1-5",.npc$+": 2",0;
+				sleep 3000;
+				mapannounce "pvp_n_1-5",.npc$+": 3! AHORA!",0;
+				removemapflag "pvp_n_1-5",mf_noskill;
+				pvpon "pvp_n_1-5";	
+				do{
+					if(getmapusers("pvp_n_1-5") == 0) goto UHP_None;
+					sleep 5000;
+				} while(getmapusers("pvp_n_1-5")>1);
+				mapannounce "pvp_n_1-5",.npc$+": Por favor habla con el NPC para obtener tu premio.",0;
+				pvpoff "pvp_n_1-5";
+				enablenpc "NPC_Premiador#1";
+				hideoffnpc "NPC_Premiador#1";
+				goto UHP_finevento;
+				UHP_None:
+					announce .npc$+": Evento Cancelado, no se registraron combatientes.",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. NO CONVATIENTES "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					disablenpc "NPC_Premiador#1";
+					hideonnpc "NPC_Premiador#1";
+					pvpoff "pvp_n_1-5";
+				UHP_finevento:
+				set .eventoactivo,0;
+				break;
+			case 6://[------Bomb Punch-----]
+				announce .npc$+": El evento Bomb Punch iniciara en 3 minutos.",0;
+				killmonsterall "quiz_01";
+				disablenpc "NPC_Premiador";
+				hideonnpc "NPC_Premiador";
+				sleep 30000;
+				enablenpc "Warper_Eventos";
+				hideoffnpc "Warper_Eventos";
+				setmapflag "quiz_01",mf_noskill;
+				callfunc "Aviso_warper";
+				disablenpc "Warper_Eventos";
+				hideonnpc "Warper_Eventos";
+				sleep 2000;
+				mapannounce "quiz_01",.npc$+": Ok...el objetivo del evento es SOBREVIVIR!!",0;
+				sleep 10000;
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Al evento entraron "+getmapusers("quiz_01") +" jugadores. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				for( set .@ia,1; .@ia <= 5; set .@ia,.@ia+1 ){
+					mapannounce "quiz_01",.npc$+": Round "+.@ia+" !!",0;
+					sleep 2000;
+					switch(.@ia) {
+					case 2:
+						mapannounce "quiz_01",.npc$+": Que!? Las Bombas se multiplicaron!!",0;
+						sleep 3000;
+						break;
+					case 3:
+						mapannounce "quiz_01",.npc$+": Dis!! Las Bombas se multiplicaron de nuevo!!",0;
+						sleep 3000;
+						break;
+					case 4:
+						mapannounce "quiz_01",.npc$+": OMG!!?? Son Demasiadas Bombas!!",0;
+						sleep 3000;
+						break;
+					case 5:
+						mapannounce "quiz_01",.npc$+": SALVESE QUIEN PUEDA!!",0;
+						sleep 3000;
+						announce .npc$+": Estamos en el Round Final!! Quien sobrevivira!!??",0;
+						break;
+					}
+					mapannounce "quiz_01",.npc$+": "+getmapusers("quiz_01") +" jugadores sovreviven.",0,0x00FF00;
+					sleep 3000;
+					mapannounce "quiz_01",.npc$+": Bien!! Es hora de volar por los aires!!",0;
+					sleep 3000;
+					areamonster "quiz_01", 23, 361, 38, 376, "Timed Bomb",1904,1;
+					areamonster "quiz_01", 45, 362, 60, 376, "Timed Bomb",2561,2,"bomblose::OnMobDied";
+					sleep 13000;
+					areamonster "quiz_01", 23, 361, 38, 376, "Timed Bomb",1904,1;
+					areamonster "quiz_01", 45, 362, 60, 376, "Timed Bomb",2561,2,"bomblose::OnMobDied";
+					sleep 10000;
+					mapannounce "quiz_01",.npc$+": Round "+.@ia+" Terminado !!",0;
+				}
+				if(getmapusers("quiz_01") < 1) goto BP_Lose;
+				if(getmapusers("quiz_01") == 1) goto BP_GanadorPB;
+				sleep 1000;
+				mapannounce "quiz_01",.npc$+": OMG!! Solo puede ganar un jugador! asi que iniciare... MUERTE SUBITA muahahaha!!! >:3",0;
+				sleep 5000;
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Active muerte subita, usuarios en evento: "+getmapusers("quiz_01") +" jugadores. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				do{
+					if(getmapusers("quiz_01") < 1){ goto BP_Lose;}
+					if(getmapmobs ("quiz_01")<50){
+						mapannounce "quiz_01",.npc$+": Mas Bombas >:3",0;
+						areamonster "quiz_01", 23, 361, 38, 376, "Timed Bomb",2561,1,"bomblose::OnMobDied";
+						areamonster "quiz_01", 45, 362, 60, 376, "Timed Bomb",2561,1,"bomblose::OnMobDied";
+					}
+					sleep 10000;//cada 10 segundos
+				} while(getmapusers("quiz_01")>1);
+				if(getmapusers("quiz_01") < 1) goto BP_Lose;
+				BP_GanadorPB:
+					mapannounce "quiz_01",.npc$+": Felicidades eres el sobreviviente del evento Bomb Punch xD!!",0;
+					killmonsterall "quiz_01";
+					sleep 2000;
+					mapannounce "quiz_01",.npc$+": Por favor habla con el NPC para recoger tu premio.",0;
+					enablenpc "NPC_Premiador";
+					hideoffnpc "NPC_Premiador";
+					goto BP_finalporingbomba;
+				BP_Lose: 
+					killmonsterall "quiz_01";
+					announce .npc$+": El evento Bomb Punch ha finalizado. Nadie ha sobrevivido >:3",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Nadie sobrevivio al evento "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				BP_finalporingbomba:
+				removemapflag "quiz_01",mf_noskill;
+				set .eventoactivo,0;
+				break;
+			case 7://[------Poring Party-----]
+				announce .npc$+": Es hora de tener una gran Fiesta! ^_^",0;
+				sleep 20000;
+				announce .npc$+": Pero primero debo elegir un lugar... hmmm, veamos...",0;
+				sleep 20000;
+				announce .npc$+": Ok... la Poring Party sera en >"+.mapatesoro$+"< todos estan invitados :D",0;
+				sleep 10000;
+				announce .npc$+": El evento solo durara media hora! Algunos porings tienen Regalos!",0;
+				sleep 5000;
+				setmapflag .mapatesoro$,mf_noskill;
+				killmonsterall .mapatesoro$;
+				monster .mapatesoro$,0,0,"Poring Party",1002,10,"warpremiador::OnMobKilled";
+				monster .mapatesoro$,0,0,"Poring Party",1002,500;
+				monster .mapatesoro$,0,0,"Poring Party",1031,10,"warpremiador::OnMobKilled";
+				monster .mapatesoro$,0,0,"Poring Party",1031,500;
+				monster .mapatesoro$,0,0,"Poring Party",1242,10,"warpremiador::OnMobKilled";
+				monster .mapatesoro$,0,0,"Poring Party",1242,500;
+				monster .mapatesoro$,0,0,"Poring Party",1113,10,"warpremiador::OnMobKilled";
+				monster .mapatesoro$,0,0,"Poring Party",1113,500;
+				set .timerx,0;
+				do{
+					sleep 50000;//1 min
+					if (getmapmobs (.mapatesoro$)<3){//si hay menos de 3 mobs en el mapa termina evento
+						set .timerx,9999;
+						query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termine evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					}
+					set .timerx,.timerx+1;
+				} while(.timerx<30);// 30 min
+				killmonsterall .mapatesoro$;						
+				removemapflag .mapatesoro$,mf_noskill;
+				announce .npc$+": El evento a terminado... quien me ayuda a limpiar?",0;
+				set .eventoactivo,0;
+				break;
+			case 8://[------Mas Exp-----]
+				announce .npc$+": Muy bien! Es hora de subir nivel!!",0;
+				sleep 10000;
+				announce .npc$+": Voy a lanzar un dado e incrementare los rates con ese numero ^_^",0;
+				sleep 10000;
+				//Aplica rates
+				set .@ratebase,rand((getBattleFlag("base_exp_rate")*10)/100,getBattleFlag("base_exp_rate"));
+				set .@ratejob,.@ratebase/2;
+				setBattleFlag "base_exp_rate",getbattleflag("base_exp_rate") + .@ratebase;
+				setBattleFlag "job_exp_rate",getbattleflag("job_exp_rate") + .@ratejob;
+				atcommand "@reloadmobdb";
+				set .@baseexp1, getBattleFlag("base_exp_rate")/100;
+				set .@jobexp1, getBattleFlag("job_exp_rate")/100;
+				set .@ratedrops1, getBattleFlag("item_rate_card")/100;
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Incremente rates a "+.@baseexp1+"x "+.@jobexp1+"x "+.@ratedrops1+"x. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				announce .npc$+": Los rates seran aumentados por 8 horas, ahora son: "+.@baseexp1+"x "+.@jobexp1+"x "+.@ratedrops1+"x ",0;
+				set .timerx,0;
+				do{
+					sleep 60000;//1 min
+					set .timerx,.timerx+1;
+				} while(.timerx<480);// 8 horas
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Restaure rates. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				//Restaura rates
+				setBattleFlag "base_exp_rate",getbattleflag("base_exp_rate") - .@ratebase;
+				setBattleFlag "job_exp_rate",getbattleflag("job_exp_rate") - .@ratejob;
+				atcommand "@reloadmobdb";
+				set .@baseexp1, getBattleFlag("base_exp_rate")/100;
+				set .@jobexp1, getBattleFlag("job_exp_rate")/100;
+				set .@ratedrops1, getBattleFlag("item_rate_card")/100;
+				announce .npc$+": Los rates regresaron a la normalidad, ahora son "+.@baseexp1+"x "+.@jobexp1+"x "+.@ratedrops1+"x ",0;
+				set .eventoactivo,0;
+				break;
+			case 9://[------Dice-----]
+				announce .npc$+": Es hora del evento Dice!",0;
+				sleep 10000;
+				disablenpc "NPC_Premiador#2";
+				hideonnpc "NPC_Premiador#2";
+				sleep 10000;
+				enablenpc "Warper_Eventos";
+				hideoffnpc "Warper_Eventos";
+				callfunc "Aviso_warper";
+				disablenpc "Warper_Eventos";
+				hideonnpc "Warper_Eventos";
+				sleep 2000;
+				mapannounce "quiz_01",.npc$+": Voy a escoger un numero, del 1 al 4. Despues voy a hacer una cuenta regresiva",0;
+				sleep2 9000;
+				mapannounce "quiz_01",.npc$+": Todo lo que tienes que hacer es ir a la casilla del numero que desees antes de que termine de contar.",0;
+				sleep2 9000;
+				mapannounce "quiz_01",.npc$+": Ejemplo, si escojo el numero 4, todos los jugadores de pie en los numeros 1 a 3 seran retornados a la ciudad.",0;
+				sleep2 9000;
+				mapannounce "quiz_01",.npc$+": Vamos a hacer esto una y otra vez hasta que solo quede 1 jugador en el mapa.",0;
+				sleep2 9000;
+				mapannounce "quiz_01",.npc$+": Debes ir dentro de una seccion, porque si te quedas de pie en la escalera u otra parte, quedaras automaticamente descalificado.",0;
+				sleep2 9000;
+				mapannounce "quiz_01",.npc$+": Eso es todo... Ahora vamos a jugar...",0;
+				sleep2 9000;
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Inicie evento con: "+getmapusers("quiz_01")+" Jugadores. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				Dice_Start:
+					if(getmapusers("quiz_01") == 1){ goto Dice_Champ;}
+					if(getmapusers("quiz_01") == 0){ goto Dice_None;}
+					if(getmapusers("quiz_01") > 1) 
+					{
+						mapannounce "quiz_01", .npc$+": hmmm...",0;
+						set $@number, rand(1,4);
+						sleep2 10000;
+						mapannounce "quiz_01",.npc$+": Ya tengo un numero. Por favor, vayan a la casilla del numero que desean!",0;
+						sleep2 10000;
+						mapannounce "quiz_01",.npc$+": 5",0;
+						sleep2 5000;
+						mapannounce "quiz_01",.npc$+": 4",0;
+						sleep2 4000;
+						mapannounce "quiz_01",.npc$+": 3",0;
+						sleep2 3000;
+						mapannounce "quiz_01",.npc$+": 2",0;
+						sleep2 2000;
+						mapannounce "quiz_01",.npc$+": 1",0;
+						sleep2 1000;
+						mapannounce "quiz_01",.npc$+": Se acabo el tiempo.",0;
+						sleep2 1000;
+						mapannounce "quiz_01",.npc$+": El Numero que pense es el "+$@number+".",0;
+						areawarp "quiz_01",182,94,228,88,"prontera",155,182;
+						areawarp "quiz_01",185,87,188,82,"prontera",155,182;
+						areawarp "quiz_01",197,87,200,82,"prontera",155,182;
+						areawarp "quiz_01",209,87,212,82,"prontera",155,182;
+						areawarp "quiz_01",221,87,224,82,"prontera",155,182;
+						if(($@number != 1) && ($@number != 2) && ($@number != 3)){ goto Dice_Lose1;}
+						if(($@number != 1) && ($@number != 2) && ($@number != 4)){ goto Dice_Lose2;}
+						if(($@number != 1) && ($@number != 3) && ($@number != 4)){ goto Dice_Lose3;}
+						if(($@number != 2) && ($@number != 3) && ($@number != 4)){ goto Dice_Lose4;}
+					}
+				Dice_Lose1:
+					areawarp "quiz_01",183,81,191,59,"prontera",155,182;
+					areawarp "quiz_01",195,81,203,59,"prontera",155,182;
+					areawarp "quiz_01",207,81,215,59,"prontera",155,182;
+					goto Dice_Start;
+				Dice_Lose2:
+					areawarp "quiz_01",183,81,191,59,"prontera",155,182;
+					areawarp "quiz_01",195,81,203,59,"prontera",155,182;
+					areawarp "quiz_01",219,81,227,59,"prontera",155,182;;
+					goto Dice_Start;
+				Dice_Lose3:
+					areawarp "quiz_01",183,81,191,59,"prontera",155,182;
+					areawarp "quiz_01",207,81,215,59,"prontera",155,182;
+					areawarp "quiz_01",219,81,227,59,"prontera",155,182;
+					goto Dice_Start;
+				Dice_Lose4:
+					areawarp "quiz_01",195,81,203,59,"prontera",155,182;
+					areawarp "quiz_01",207,81,215,59,"prontera",155,182;
+					areawarp "quiz_01",219,81,227,59,"prontera",155,182;
+					goto Dice_Start;
+				Dice_None:
+					disablenpc "NPC_Premiador#2";
+					hideonnpc "NPC_Premiador#2";
+					announce .npc$+": Nadie gano el evento. Suerte en la proxima",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Evento cancelado, no hay jugadores. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					goto Dice_findice;
+				Dice_Champ:
+					mapannounce "quiz_01",.npc$+": Habla con el NPC, que se encuentra en la parte de arriba porfavor.",0;
+					enablenpc "NPC_Premiador#2";
+					hideoffnpc "NPC_Premiador#2";
+				Dice_findice:
+				set .eventoactivo,0;
+				break;
+			case 10://[------Lotto RoMX-----]
+				announce .npc$+": Ta-Chaaan!! Es hora de ganar items con Lotto RoMX!!",0;
+				sleep 10000;
+				announce .npc$+": Elegire un usuario en linea y simplemente le regalare un item ^_^",0;
+				sleep 10000;
+				Lotto_Otro_nombre:
+				announce .npc$+": Veamos, revisare mi lista...",0;
+				sleep 10000;
+				deletearray .@nombres_online$;
+				query_sql("SELECT `name` FROM `char` WHERE `online`=1",.@nombres_online$);
+				set .@nombre_pj_ganador$,.@nombres_online$[rand(0,getarraysize(.@nombres_online$)-1)];
+				set .@id_ganador_loteria,getcharid(0,.@nombre_pj_ganador$);
+				announce .npc$+": OK...ya tengo el nombre :D",0;
+				sleep 10000;
+				if (checkVending(.@nombre_pj_ganador$)){
+					announce .npc$+": El ganador es: "+.@nombre_pj_ganador$+"!! ... un momento, esta en Vending... elegire otro nombre.",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Elegi a "+.@nombre_pj_ganador$+" pero esta en Vending. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					sleep 10000;
+					goto Lotto_Otro_nombre;
+				}
+				announce .npc$+": "+.@nombre_pj_ganador$+"!! eres el ganador del evento Lotto RoMX, te enviare tu premio por mail en cuanto relogees ^_^",0;
+				sleep 10000;
+				set .@var, rand(1,5);
+				switch(.@var) {
+					case 1:
+						set .@idpremio,12210;//1 bubble gum
+						set .@cantidad,rand(2,5);
+						break;
+					case 2:
+						set .@idpremio,14545;//field manual 300
+						set .@cantidad,rand(3,5);
+						break;	
+					case 3:
+						set .@idpremio,17002;//1 rare candy
+						set .@cantidad,rand(1,2);
+						break;
+					case 4:
+						set .@idpremio,607;//Yggdrasil Berry
+						set .@cantidad,rand(3,9);
+						break;
+					case 5:
+						set .@idpremio,7851;//Wii Raffle Ticket 
+						set .@cantidad,1;
+						break;
+				}
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','El ganador fue "+.@nombre_pj_ganador$+" gano "+.@cantidad+" "+.@idpremio+". "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				query_sql("INSERT INTO `mail` (`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('"+.npc$+"','150000','"+.@nombre_pj_ganador$+"',"+.@id_ganador_loteria+",'Premio Evento','Felicidades, fuiste el ganador del evento Lotto, que disfrutes tu premio.','NULL','1','0','"+.@idpremio+"','"+.@cantidad+"','0','0','1','0','0','0','0')");
+				set .eventoactivo,0;
+				break;
+			case 11://[------Reaction-----]
+				announce .npc$+": Es hora de mostrar tu habilidad con Reaction!!",0;
+				sleep 10000;
+				callfunc "Aviso_warper";
+				sleep 1000;
+				announce .npc$+": Invocare un Totem, el que de click en el momento justo cuando el diga 'RoMX!' sera el ganador.",0;
+				sleep 10000;
+				announce .npc$+": Si das click antes, puedes intentarlo de nuevo xD.",0;
+				sleep 10000;
+				announce .npc$+": Listos?...Totem invocado!",0;
+				sleep 2000;	
+				enablenpc "Totem";
+				hideoffnpc "Totem";
+				moveNPC "Totem",155,99;
+				donpcevent "Totem::OnEnabled";
+				sleep 600000;//10 min
+				moveNPC "Totem",267,30;
+				donpcevent "Totem::OnDisabled";
+				disablenpc "Totem";
+				hideonnpc "Totem";
+				set .eventoactivo,0;
+				break;
+			case 12://[------RoMX Team-----]
+				set .num_elegido,99;
+				set .timerx,0;
+				query_logsql("TRUNCATE `evento_democracia`");
+				announce .npc$+": Es hora de mostrar su fuerza de equipo!!",0;
+				sleep 10000;
+				disablenpc "Warper_Ev_12";
+				hideonnpc "Warper_Ev_12";
+				enablenpc "Totem.";
+				enablenpc "RoMX Team";
+				hideoffnpc "Totem.";
+				hideoffnpc "RoMX Team";
+				donpcevent "RoMX Team::OnActive";
+				callfunc "Aviso_warper";
+				sleep 2000;
+				query_logsql("SELECT COUNT(*) FROM `evento_democracia`", .num_pjs);
+				if (.num_pjs!=.miembros_evento12){
+					announce .npc$+": Evento cancelado. Faltaron participantes .__.",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Evento cancelado No hay suficientes jugadores. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+					donpcevent "RoMX Team::OnNull";
+					goto fin_ev12;
+				}
+				mapannounce "prt_church",.npc$+": Tengo una mision para ustedes, pero necesito un guia.",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": El guia debe encontrar a Totem quien estara oculto en un Dungeon",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": Lamentablemente, el guia no podra usar skills.",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": Solo hay 3 Horas para completar el objetivo.",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": El uso de Teleport estara deshabilitado en todos los niveles del Dungeon.",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": Si se deslogea en el Dungeon, sera regresada a su SavePoint.",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": Cuendo encuentren a Totem, tendran 10 segundos para reclamar su premio despues del guia.",0;
+				sleep 15000;
+				mapannounce "prt_church",.npc$+": Si todo el equipo logra la mision se asignara un Bono especial para todo el servidor, que consiste en cuatro horas de el doble de drops!",0;
+				sleep 15000;
+				mapannounce "prt_church",.npc$+": Ahora seleccionare al guia.",0;
+				sleep 10000;
+				set .num_elegido,rand(0,.miembros_evento12-1);
+				query_logsql("SELECT `uid` FROM `evento_democracia` WHERE `voto` = "+.num_elegido, .nompj_objetivo$);
+				mapannounce "prt_church",.npc$+": "+.nompj_objetivo$+" sera el guia de este evento.",0;
+				sleep 10000;
+				mapannounce "prt_church",.npc$+": Solo "+.nompj_objetivo$+" sabe la localizacion exacta de Totem en el Dungeon.",0;
+				sleep 10000;
+				set .npc_aleatorio_ev12, rand(1,3);
+				switch(.mapas_ev12) {
+					case 1:
+						set .mapatesoro$,"thor_v03";
+						enablenpc "Totem#thor";
+						hideoffnpc "Totem#thor";
+						setarray .mapas_no_return$[0],"thor_v01","thor_v02","thor_v03";
+						setmapflag "thor_v01",mf_noteleport;
+						setmapflag "thor_v02",mf_noteleport;
+						setmapflag "thor_v03",mf_noteleport;
+						monster "thor_v01",0,0,getmonsterinfo(1833,0),1833,45,"mobs_ev12::OnMobKilled";//
+						monster "thor_v01",0,0,getmonsterinfo(1837,0),1837,25,"mobs_ev12::OnMobKilled";
+						monster "thor_v03",0,0,getmonsterinfo(1831,0),1831,60,"mobs_ev12::OnMobKilled";//salamandra
+						monster "thor_v03",0,0,getmonsterinfo(1833,0),1833,40,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#thor",62,67;
+								set .x_ev11,62;
+								set .y_ev11,67;
+								break;
+							case 2:
+								moveNPC "Totem#thor",233,42;
+								set .x_ev11,233;
+								set .y_ev11,42;
+								break;	
+							case 3:
+								moveNPC "Totem#thor",31,211;
+								set .x_ev11,31;
+								set .y_ev11,211;
+								break;
+						}
+						break;
+					case 2:
+						set .mapatesoro$,"prt_maze03";
+						enablenpc "Totem#hidden";
+						hideoffnpc "Totem#hidden";
+						setarray .mapas_no_return$[0],"prt_maze01","prt_maze02","prt_maze03";
+						setmapflag "prt_maze01",mf_noteleport;
+						setmapflag "prt_maze02",mf_noteleport;
+						setmapflag "prt_maze03",mf_noteleport;
+						monster "prt_maze01",0,0,getmonsterinfo(1035,0),1035,30,"mobs_ev12::OnMobKilled";//Hunter Fly
+						monster "prt_maze01",0,0,getmonsterinfo(1037,0),1037,30,"mobs_ev12::OnMobKilled";
+						monster "prt_maze03",0,0,getmonsterinfo(1101,0),1101,25,"mobs_ev12::OnMobKilled";//Baphomet Jr.
+						monster "prt_maze03",0,0,getmonsterinfo(1035,0),1035,30,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#hidden",61,98;
+								set .x_ev11,61;
+								set .y_ev11,98;
+								break;
+							case 2:
+								moveNPC "Totem#hidden",101,98;
+								set .x_ev11,101;
+								set .y_ev11,98;
+								break;	
+							case 3:
+								moveNPC "Totem#hidden",100,53;
+								set .x_ev11,100;
+								set .y_ev11,53;
+								break;
+						}
+						break;	
+					case 3:
+						set .mapatesoro$,"abyss_03";
+						enablenpc "Totem#abyss";
+						hideoffnpc "Totem#abyss";
+						setarray .mapas_no_return$[0],"abyss_01","abyss_02","abyss_03";
+						setmapflag "abyss_01",mf_noteleport;
+						setmapflag "abyss_02",mf_noteleport;
+						setmapflag "abyss_03",mf_noteleport;
+						monster "abyss_01",0,0,getmonsterinfo(1699,0),1699,10,"mobs_ev12::OnMobKilled";//Ancient Mimic
+						monster "abyss_01",0,0,getmonsterinfo(1191,0),1191,10,"mobs_ev12::OnMobKilled";
+						monster "abyss_02",0,0,getmonsterinfo(1716,0),1716,60,"mobs_ev12::OnMobKilled";//Acidus (azul)
+						monster "abyss_02",0,0,getmonsterinfo(1714,0),1714,50,"mobs_ev12::OnMobKilled";
+						monster "abyss_03",0,0,getmonsterinfo(1713,0),1713,30,"mobs_ev12::OnMobKilled";//Acidus (dorado)
+						monster "abyss_03",0,0,getmonsterinfo(1716,0),1716,10,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#abyss",141,120;
+								set .x_ev11,141;
+								set .y_ev11,120;
+								break;
+							case 2:
+								moveNPC "Totem#abyss",66,135;
+								set .x_ev11,66;
+								set .y_ev11,135;
+								break;	
+							case 3:
+								moveNPC "Totem#abyss",58,73;
+								set .x_ev11,58;
+								set .y_ev11,73;
+								break;
+						}
+						break;
+					case 4:
+						set .mapatesoro$,"odin_tem03";
+						enablenpc "Totem#odin";
+						hideoffnpc "Totem#odin";
+						setarray .mapas_no_return$[0],"odin_tem01","odin_tem02","odin_tem03";
+						setmapflag "odin_tem01",mf_noteleport;
+						setmapflag "odin_tem02",mf_noteleport;
+						setmapflag "odin_tem03",mf_noteleport;
+						monster "odin_tem01",0,0,getmonsterinfo(1693,0),1693,10,"mobs_ev12::OnMobKilled";//plasma (Gosth)
+						monster "odin_tem01",0,0,getmonsterinfo(1696,0),1696,10,"mobs_ev12::OnMobKilled";
+						monster "odin_tem02",0,0,getmonsterinfo(1752,0),1752,30,"mobs_ev12::OnMobKilled";//Skogul
+						monster "odin_tem02",0,0,getmonsterinfo(1753,0),1753,30,"mobs_ev12::OnMobKilled";
+						monster "odin_tem03",0,0,getmonsterinfo(1755,0),1755,16,"mobs_ev12::OnMobKilled";//Skeggiold
+						monster "odin_tem03",0,0,getmonsterinfo(1754,0),1754,16,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#odin",345,159;
+								set .x_ev11,345;
+								set .y_ev11,159;
+								break;
+							case 2:
+								moveNPC "Totem#odin",335,289;
+								set .x_ev11,335;
+								set .y_ev11,289;
+								break;	
+							case 3:
+								moveNPC "Totem#odin",277,235;
+								set .x_ev11,277;
+								set .y_ev11,235;
+								break;
+						}
+						break;
+					case 5:
+						set .mapatesoro$,"juperos_02";
+						enablenpc "Totem#juperos";
+						hideoffnpc "Totem#juperos";
+						setarray .mapas_no_return$[0],"juperos_01","juperos_02";
+						setmapflag "juperos_01",mf_noteleport;
+						setmapflag "juperos_02",mf_noteleport;
+						monster "juperos_01",0,0,getmonsterinfo(1672,0),1672,12,"mobs_ev12::OnMobKilled";
+						monster "juperos_01",0,0,getmonsterinfo(1673,0),1673,13,"mobs_ev12::OnMobKilled";
+						monster "juperos_02",0,0,getmonsterinfo(1679,0),1679,50,"mobs_ev12::OnMobKilled";//Venatu (4)
+						monster "juperos_02",0,0,getmonsterinfo(1677,0),1677,50,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#juperos",140,133;
+								set .x_ev11,140;
+								set .y_ev11,133;
+								break;
+							case 2:
+								moveNPC "Totem#juperos",61,162;
+								set .x_ev11,61;
+								set .y_ev11,162;
+								break;	
+							case 3:
+								moveNPC "Totem#juperos",192,105;
+								set .x_ev11,192;
+								set .y_ev11,105;
+								break;
+						}
+						break;
+					case 6:
+						set .mapatesoro$,"gl_cas02";
+						enablenpc "Totem#glas";
+						hideoffnpc "Totem#glas";
+						setarray .mapas_no_return$[0],"glast_01","gl_cas01","gl_cas02";
+						setmapflag "glast_01",mf_noteleport;
+						setmapflag "gl_cas01",mf_noteleport;
+						setmapflag "gl_cas02",mf_noteleport;
+						monster "glast_01",0,0,getmonsterinfo(1259,0),1259,20,"mobs_ev12::OnMobKilled";//Gargoyle
+						monster "gl_cas02",0,0,getmonsterinfo(1163,0),1163,35,"mobs_ev12::OnMobKilled";//Raydric
+						monster "gl_cas02",0,0,getmonsterinfo(1208,0),1208,40,"mobs_ev12::OnMobKilled";
+						monster "gl_cas01",0,0,getmonsterinfo(1195,0),1195,20,"mobs_ev12::OnMobKilled";//Rideword
+						monster "gl_cas01",0,0,getmonsterinfo(1260,0),1260,25,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#glas",44,123;
+								set .x_ev11,44;
+								set .y_ev11,123;
+								break;
+							case 2:
+								moveNPC "Totem#glas",6,193;
+								set .x_ev11,6;
+								set .y_ev11,193;
+								break;	
+							case 3:
+								moveNPC "Totem#glas",24,45;
+								set .x_ev11,24;
+								set .y_ev11,45;
+								break;
+						}
+						break;
+					case 7:
+						set .mapatesoro$,"abbey03";
+						enablenpc "Totem#name";
+						enablenpc "RoMX Team.";
+						hideoffnpc "Totem#name";
+						hideoffnpc "RoMX Team.";
+						setarray .mapas_no_return$[0],"nameless_n","abbey01","abbey02","abbey03";
+						setmapflag "nameless_n",mf_noteleport;
+						setmapflag "abbey01",mf_noteleport;
+						setmapflag "abbey02",mf_noteleport;
+						setmapflag "abbey03",mf_noteleport;
+						monster "abbey01",0,0,"getmonsterinfo(1867,0)",1867,70,"mobs_ev12::OnMobKilled";//Banshee
+						monster "abbey01",0,0,getmonsterinfo(1864,0),1864,30,"mobs_ev12::OnMobKilled";
+						monster "abbey02",0,0,getmonsterinfo(1864,0),1864,50,"mobs_ev12::OnMobKilled";//Zombie Slaughter
+						monster "abbey02",0,0,getmonsterinfo(1869,0),1869,25,"mobs_ev12::OnMobKilled";
+						monster "abbey03",0,0,getmonsterinfo(1870,0),1870,30,"mobs_ev12::OnMobKilled";//Necromancer
+						monster "abbey03",0,0,getmonsterinfo(1867,0),1867,30,"mobs_ev12::OnMobKilled";
+						monster "nameless_n",0,0,getmonsterinfo(1865,0),1865,20,"mobs_ev12::OnMobKilled";//Ragged Zombie
+						monster "nameless_n",0,0,getmonsterinfo(1866,0),1866,30,"mobs_ev12::OnMobKilled";
+						switch(.npc_aleatorio_ev12) {
+							case 1:
+								moveNPC "Totem#name",119,230;
+								set .x_ev11,119;
+								set .y_ev11,230;
+								break;
+							case 2:
+								moveNPC "Totem#name",78,155;
+								set .x_ev11,78;
+								set .y_ev11,155;
+								break;	
+							case 3:
+								moveNPC "Totem#name",53,19;
+								set .x_ev11,53;
+								set .y_ev11,19;
+								break;
+						}
+						break;
+				}//end swith
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','El jugador Guia es: "+.nompj_objetivo$+" y el mapa objetivo es: "+.mapatesoro$+". "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				message .nompj_objetivo$,"TOTEM SE ENCUENTRA EN: "+.mapatesoro$+" "+.x_ev11+", "+.y_ev11;
+				sleep 10000;
+				if (.mapatesoro$=="abbey03"){message .nompj_objetivo$,"EN EL PUENTE DE ve_fild07 HAY UN NPC QUE TE AYUDARA A TI Y A TU EQUIPO A LLEGAR A ABBEY";sleep 10000;}
+				mapannounce "prt_church",.npc$+": El servidor confia en ustedes... Suerte!!",0;
+				sleep 1000;
+				enablenpc "Warper_Ev_12";
+				hideoffnpc "Warper_Ev_12";
+				sleep 1000;
+				donpcevent "Totem.::OnUnloadNPC";
+				sleep 5000;
+				set .llego_objetivo,0;
+				set .numero_ganadores,0;
+				do{
+					sleep 60000;//1 min
+					set .timerx,.timerx+1;
+					if (.llego_objetivo==1){
+						sleep 20000;
+						for (set .@c, 0; .@c < getarraysize(.mapas_no_return$); set .@c, .@c + 1){
+							mapannounce .mapas_no_return$[.@c],.npc$+": Regresando mapa a su estado original.",0;
+							killmonsterall .mapas_no_return$[.@c];
+							sleep 10000;
+						}
+						announce .npc$+": El guia ha cumplido su objetivo.",0;
+						disablenpc "RoMX Team.";
+						hideonnpc "RoMX Team.";
+						query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','El guia cumplio objetivo. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+						sleep 20000;
+						if (.numero_ganadores==.miembros_evento12){
+							announce .npc$+": Todos los miembros del equipo han completado el objetivo.",0;
+							query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Todos los miembros llegaron, duplico rates de drops. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+							set .eventoactivo,1;
+							set .nomevento$, "Doble Drop";
+							sleep 10000;
+							announce .npc$+": Como recompensa se duplicaran los rates de drops por cuatro horas.",0;
+							sleep 10000;
+							setBattleFlag "item_rate_common",getbattleflag("item_rate_common")*2;
+							setBattleFlag "item_rate_use",getbattleflag("item_rate_use")*2;
+							setBattleFlag "item_rate_heal",getbattleflag("item_rate_heal")*2;
+							setBattleFlag "item_rate_equip",getbattleflag("item_rate_equip")*2;
+							setBattleFlag "item_rate_card",getbattleflag("item_rate_card")*2;
+							setBattleFlag "item_rate_common_boss",getbattleflag("item_rate_common_boss")*2;
+							setBattleFlag "item_rate_use_boss",getbattleflag("item_rate_use_boss")*2;
+							setBattleFlag "item_rate_heal_boss",getbattleflag("item_rate_heal_boss")*2;
+							setBattleFlag "item_rate_equip_boss",getbattleflag("item_rate_equip_boss")*2;
+							atcommand "@reloadmobdb";
+							callfunc "flags_ev11";
+							set .timerx,0;
+							do{
+								sleep 60000;//1 min
+								set .timerx,.timerx+1;
+							} while(.timerx<240);// 120 = 2 horas
+							setBattleFlag "item_rate_common",getbattleflag("item_rate_common")/2;
+							setBattleFlag "item_rate_use",getbattleflag("item_rate_use")/2;
+							setBattleFlag "item_rate_heal",getbattleflag("item_rate_heal")/2;
+							setBattleFlag "item_rate_equip",getbattleflag("item_rate_equip")/2;
+							setBattleFlag "item_rate_card",getbattleflag("item_rate_card")/2;
+							setBattleFlag "item_rate_common_boss",getbattleflag("item_rate_common_boss")/2;
+							setBattleFlag "item_rate_use_boss",getbattleflag("item_rate_use_boss")/2;
+							setBattleFlag "item_rate_heal_boss",getbattleflag("item_rate_heal_boss")/2;
+							setBattleFlag "item_rate_equip_boss",getbattleflag("item_rate_equip_boss")/2;
+							atcommand "@reloadmobdb";
+							query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Restauro rates de drops. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+							announce .npc$+": Se restauraron los Rates de Drop a la normalidad.",0;
+							goto fin_ev12;
+						}else{
+							set .timerx,.timerx+9999;
+							sleep 10000;
+							announce .npc$+": Desafortunadamente ha perdido algunos miembros del equipo en su recorrido.",0;
+						}
+					}				
+				} while(.timerx<180);// 2 horas
+				callfunc "flags_ev11";
+				if (.llego_objetivo==0){
+					sleep 20000;
+					for (set .@c, 0; .@c < getarraysize(.mapas_no_return$); set .@c, .@c + 1){
+						mapannounce .mapas_no_return$[.@c],.npc$+": Regresando mapa a su estado original.",0;
+						killmonsterall .mapas_no_return$[.@c];
+						sleep 10000;
+					}
+					sleep 10000;announce .npc$+": El guia ni su equipo han cumplido el objetivo, un dia negro para RoMX",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento, ni el guia ni el equipo llego al objetivo. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");	
+				}
+				fin_ev12:
+				disablenpc "RoMX Team.";
+				disablenpc "RoMX Team";
+				hideonnpc "RoMX Team.";
+				hideonnpc "RoMX Team";
+				enablenpc "Warper_Ev_12";
+				hideoffnpc "Warper_Ev_12";
+				set .eventoactivo,0;
+				break;
+			case 13://[------Democracia-----]
+				query_logsql("TRUNCATE `evento_democracia`");
+				announce .npc$+": Es hora de que ustedes elijan su evento :D!!",0;
+				sleep 10000;
+				announce .npc$+": Hablen con migo y selecciona un evento el menu de votacion.",0;
+				sleep 10000;
+				announce .npc$+": Las votaciones duraran 5 minutos, el evento que tenga mas votos se realizara.",0;
+				sleep 10000;
+				set .timerx,0;
+				do{
+					sleep 60000;//1 min
+					set .timerx,.timerx+1;
+				} while(.timerx<5);// 5 minutos
+				set .@evento_votado[0],0;
+				set .@numero_votos[0],0;
+				query_logsql("SELECT * FROM (SELECT `voto` , COUNT( * ) as moda FROM `evento_democracia` GROUP BY `voto`) `evento_democracia` ORDER BY moda DESC", .@evento_votado, .@numero_votos);
+				set .eventoactivo,0;
+				announce .npc$+": Ya tengo los resultados de la votacion!!",0;
+				sleep 10000;		
+				set .@voto,.@evento_votado[0];	
+				if(.@voto==1){set .@voto,rand(2,12);}
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','El evento ganador es "+.eventos_disponibles$[.@voto]+" con "+.@numero_votos[0]+" votos. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				announce .npc$+": El evento ganador es "+.eventos_disponibles$[.@voto]+" !!",0;
+				sleep 20000;			
+				set .eventoactivo,.@voto;
+				goto eventogmdice;
+				break;
+			case 14://[------Lost-----]
+				disablenpc "Puerta_1_lost";
+				disablenpc "Puerta_2_lost";
+				disablenpc "Puerta_3_lost";
+				disablenpc "Puerta_4_lost";
+				disablenpc "Puerta_5_lost";
+				hideonnpc "Puerta_1_lost";
+				hideonnpc "Puerta_2_lost";
+				hideonnpc "Puerta_3_lost";
+				hideonnpc "Puerta_4_lost";
+				hideonnpc "Puerta_5_lost";
+				callfunc "warps_de_lost";
+				announce .npc$+": El evento Lost esta a punto de comenzar.",0;
+				sleep 10000;
+				enablenpc "Warper_Eventos";
+				hideoffnpc "Warper_Eventos";
+				setmapflag "new_zone04",mf_noskill;
+				callfunc "Aviso_warper";
+				sleep 1000;
+				mapannounce "new_zone04",.npc$+": El evento Lost iniciara en breve.",0;
+				sleep 5000;
+				mapannounce "new_zone04",.npc$+": Las reglas son faciles, solo tienes que encontrar el warp de salida",0;
+				sleep 5000;
+				mapannounce "new_zone04",.npc$+": Tienes una Hora! Puedes intentarlo las veces que quieras!",0;
+				sleep 5000;
+				if(getmapusers("new_zone04") == 0) goto lost_None;
+				mapannounce "new_zone04",.npc$+": Preparate a la cuenta de 3 vamos a comenzar!",0;
+				sleep 3000;
+				mapannounce "new_zone04",.npc$+": 1",0;
+				sleep 3000;
+				mapannounce "new_zone04",.npc$+": 2",0;
+				sleep 3000;
+				mapannounce "new_zone04",.npc$+": 3! AHORA!",0;
+				enablenpc "Puerta_1_lost";
+				enablenpc "Puerta_2_lost";
+				enablenpc "Puerta_3_lost";
+				enablenpc "Puerta_4_lost";
+				enablenpc "Puerta_5_lost";
+				hideoffnpc "Puerta_1_lost";
+				hideoffnpc "Puerta_2_lost";
+				hideoffnpc "Puerta_3_lost";
+				hideoffnpc "Puerta_4_lost";
+				hideoffnpc "Puerta_5_lost";
+				set .timerx,0;
+				do{
+					sleep 60000;//1 min
+					set .timerx,.timerx+1;
+				} while(.timerx<60);// 1 horas
+				goto lost_finevento;
+				lost_None:
+					announce .npc$+": Evento Cancelado, no entro nadie al evento =(",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. NO CONVATIENTES "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				lost_finevento:
+				mapwarp "new_zone04","prontera",155,182;
+				set .eventoactivo,0;
+				break;
+			case 15://[------Novice Race-----]
+				killmonsterall "alde_tt02";
+				setwall "alde_tt02",323,354,24,0,0,"muro_1";
+				announce .npc$+": El evento Novice Race esta a punto de comenzar.",0;
+				sleep 10000;
+				enablenpc "Warper_Eventos";
+				hideoffnpc "Warper_Eventos";
+				setmapflag "alde_tt02",mf_noskill;
+				callfunc "Aviso_warper";
+				disablenpc "Warper_Eventos";
+				hideonnpc "Warper_Eventos";
+				sleep 8000;
+				mapannounce "alde_tt02",.npc$+": Sera una carrera simple, el primero en llegar a el warp final GANA!",0;
+				sleep 8000;
+				mapannounce "alde_tt02",.npc$+": Solo hay un problema! ...",0;
+				sleep 8000;
+				mapannounce "alde_tt02",.npc$+": Ustedes son Mobs y estan en un Hi Rates Novice Grounds!",0;
+				areamonster "alde_tt02",325,377,385,354,"Noob",2563,6;
+				areamonster "alde_tt02",325,377,385,354,"Noob",2564,6;
+				areamonster "alde_tt02",4,91,94,16,"Noob",2563,6;
+				areamonster "alde_tt02",4,91,94,16,"Noob",2564,6;
+				areamonster "alde_tt02",191,235,245,192,"Noob",2563,1;
+				areamonster "alde_tt02",191,235,245,192,"Noob",2564,1;
+				areamonster "alde_tt02",306,57,387,32,"Noob",2563,6;
+				areamonster "alde_tt02",306,57,387,32,"Noob",2564,6;
+				sleep 5000;
+				if(getmapusers("alde_tt02") == 0) goto porace_None;
+				mapannounce "alde_tt02",.npc$+": Preparate a la cuenta de 3 comienza la carrera!",0;
+				sleep 3000;
+				mapannounce "alde_tt02",.npc$+": 1",0;
+				sleep 3000;
+				mapannounce "alde_tt02",.npc$+": 2",0;
+				sleep 3000;
+				mapannounce "alde_tt02",.npc$+": 3! AHORA!",0;
+				delwall "muro_1";
+				set .timerx,0;
+				do{
+					sleep 60000;//1 min
+					if (getmapusers("alde_tt02")==0) set .timerx,9999;//si no hay usuarios en el mapa
+					set .timerx,.timerx+1;
+				} while(.timerx<30);// 30 min
+				goto porace_finevento;
+				porace_None:
+					announce .npc$+": Evento Cancelado, no entro nadie al evento =(",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. NO CONVATIENTES "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				porace_finevento:
+				mapwarp "alde_tt02","prontera",155,182;
+				killmonsterall "alde_tt02";
+				set .eventoactivo,0;
+				break;
+			case 16://[------Invasor-----]
+				// 	[====================Configuracion=======================]
+				//Configuracion de mobs -> 5 primeros nivel facil- 4 siguientes nivel medio- 3 jefes;
+				setarray .ruta0$[0],"glast_01","gef_fild06","gef_fild08","gef_fild07","geffen";		//ruta 0 glast heim
+				setarray .ruta1$[0],"ve_fild03","ve_fild04","ve_fild01","ve_fild02","rachel";		//ruta 1 Thor Volcano
+				setarray .ruta2$[0],"yuno_fild08","yuno_fild07","ein_fild06","yuno_fild04","yuno";		//ruta 2 Yuno
+				setarray .ruta3$[0],"gef_fild03","gef_fild02","prt_fild07","prt_fild08","prontera";		//ruta 3 Prontera
+				setarray .mobs_etapa0,1036,1143,1263,1209,1386,1072,1781,1776,1380,1372,1261,1273,1686,1189,1213,1988;
+				setarray .mobs_etapa1,1132,1259,1736,2017,1029,1037,1140,1130,1045,1282,1782,1415,1627,1118,1676,1376;
+				setarray .mobs_etapa2,1302,1777,1699,2086,1253,1155,1495,1497,1163,1410,1192,1506,1738,1195,1989;
+				setarray .mobs_etapa3,1208,1831,1713,1986,1180,1778,1869,1775,1699,1321,1207,1774,1296,1753;
+				setarray .mobs_etapa4,1219,1839,1720,1990,1641,1830,1643,1645,1921,1870,1700,1755,1711,1704;
+				setarray .miniboss_ev16,2565,2666,2568,2569,2571,2572,2574,2575,2577,2578,2580,2581,2583,2584,2586,2587,2589,2590,2592,2593,2595,2596,2597,2599,2601,2602,2604,2605,2607,2608;
+				setarray .boss_ev16,2567,2570,2573,2576,2579,2582,2585,2588,2591,2594,2597,2600,2603,2606,2609,2501,2494;
+				// 	[====================Inicio de evento=======================]
+				setarray .mobs_ev16,.mobs_etapa0[rand(getarraysize(.mobs_etapa0))],.mobs_etapa0[rand(getarraysize(.mobs_etapa0))],.mobs_etapa0[rand(getarraysize(.mobs_etapa0))],.mobs_etapa0[rand(getarraysize(.mobs_etapa0))],.mobs_etapa0[rand(getarraysize(.mobs_etapa0))],.mobs_etapa1[rand(getarraysize(.mobs_etapa1))],.mobs_etapa2[rand(getarraysize(.mobs_etapa2))],.mobs_etapa3[rand(getarraysize(.mobs_etapa3))],.mobs_etapa4[rand(getarraysize(.mobs_etapa4))];
+				setarray .mini_ev16,.miniboss_ev16[rand(getarraysize(.miniboss_ev16))],.miniboss_ev16[rand(getarraysize(.miniboss_ev16))],.miniboss_ev16[rand(getarraysize(.miniboss_ev16))];
+				set .bigboss_ev16,.boss_ev16[rand(getarraysize(.boss_ev16))];
+				night;
+				for (set .@c, 0; .@c < 4; set .@c, .@c + 1){//aplicador de mapflags en todos los mapas de recorrido
+					set .mapa_actual$,getd(".ruta"+.ruta_seleccionada+"$["+.@c+"]");
+					setmapflag .mapa_actual$,mf_nomemo;
+				}
+				set .objetivo_inv$,getd(".ruta"+.ruta_seleccionada+"$[4]");
+				set .guadian$,"Guardia de "+.objetivo_inv$;
+				announce "*bump*...*bump*...",0;//
+				sleep 10000;
+				announce "Guardia de "+.objetivo_inv$+": Que es eso?",0;
+				sleep 10000;
+				announce "Guardia de "+.objetivo_inv$+": NO PUEDE SER!! Observo una cantidad anormal de monstruos en "+.mapainvacion$[.ruta_seleccionada],0;
+				sleep 20000;				
+				announce "Guardia de "+.objetivo_inv$+": Son demasiados!! Las fuerzas de "+.objetivo_inv$+" no son suficientes para detenerlos! Ocupamos AYUDA!",0;
+				sleep 20000;
+				announce "Guardia de "+.objetivo_inv$+": Todo el que pueda, que se dirija a "+.mapainvacion$[.ruta_seleccionada]+" a detener esta invasion...",0;
+				sleep 20000;
+				announce "Guardia de "+.objetivo_inv$+": Debemos proteger  "+.objetivo_inv$+" a toda costa!",0;
+				sleep 20000;
+				announce "GM Eureka: Vamos mis guerreros, confio en ustedes para derrotarlos!",0;
+				sleep 10000;
+				set .generales_vivos,3;
+				set .@mapa_inc,0;
+				set .jefe_flag,1;
+				do{
+					if(.@mapa_inc==5){goto horda_gano;}//si el mapa es el final pierden
+					set .mapa_actual$,getd(".ruta"+.ruta_seleccionada+"$["+.@mapa_inc+"]");
+					killmonsterall .mapa_actual$;
+					if(.@mapa_inc>0){
+						set .apa_ant,.@mapa_inc-1;
+						set .@mapa_anterior$,getd(".ruta"+.ruta_seleccionada+"$["+.apa_ant+"]");
+						killmonsterall .@mapa_anterior$;
+					}
+					switch(.@mapa_inc) {//cambia mensaje dependiendo de mapa actual
+						case 0:
+							announce "Guardia de "+.objetivo_inv$+": La invasion se esta iniciando en "+.mapa_actual$+" hay que detenerlos! " ,0;
+							break;
+						case 1:
+							announce "Guardia de "+.objetivo_inv$+": Al parecer los monstruos se estan moviendo hacia  "+.mapa_actual$+" ! " ,0;
+							break;
+						case 2:
+							announce "Guardia de "+.objetivo_inv$+": No puede ser! Ya han llegado hasta  "+.mapa_actual$+". Hay que detenerlos! " ,0;
+							break;
+						case 3:
+							announce "Guardia de "+.objetivo_inv$+": Maldicion!!! Han avanzado demasiado hasta "+.mapa_actual$+". Debemos proteger  "+.objetivo_inv$+" a toda costa!! " ,0;
+							break;
+						case 4:
+							announce .npc$+": Protejanse!! Los mobs invaden "+.mapa_actual$+". Usemos nuestras ultimas fuerzas para detenerles! " ,0;
+							break;
+					}
+					sleep 10000;
+					if(.generales_vivos>0){announce .npc$+": Solo hay que derrotar a "+.generales_vivos+" general(es) para que la horda retroceda! " ,0;}
+					setmapflag .mapa_actual$,mf_fog;
+					set .@num_tipos_mobs,5+.@mapa_inc;
+					set .@cantidad_invasor,.@cantidad_invasor/.@num_tipos_mobs;
+					for (set .@c, 0; .@c <  .@num_tipos_mobs; set .@c, .@c + 1){//invocador de invasores	
+						monster .mapa_actual$,0,0,getmonsterinfo(.mobs_ev16[.@c],0),.mobs_ev16[.@c],.@cantidad_invasor;
+					}
+					for (set .@c, 0; .@c < .generales_vivos; set .@c, .@c + 1){//invocador de jefes
+						set .jefe_invasor,.mini_ev16[rand(getarraysize(.mini_ev16))];
+						monster .mapa_actual$,0,0,"General "+getmonsterinfo(.jefe_invasor,0),.jefe_invasor,1,"general_invasor::OnMobKilled";
+					}
+					set .jefe_invasor,.bigboss_ev16;
+					if(.generales_vivos==0){
+							announce "Guardia de "+.objetivo_inv$+": El Coronel ha aparecido" ,0;
+							monster .mapa_actual$,0,0,"Coronel "+getmonsterinfo(.jefe_invasor,0),.jefe_invasor,1,"general_invasor::OnBossKilled";
+					}
+					set .timerx,0;
+					if(.@mapa_inc==4){//si es el ultimo mapa 10 minutos adicionales
+						set .@tiempo_por_mapa,.@tiempo_por_mapa+10;
+					}
+					do{
+						//if(.mapa_actual$=="prontera" && .@mapa_inc==4){donpcevent "Healer::OnTimer31000";}
+						sleep 60000;//1 min
+						//if(.mapa_actual$=="prontera" && .@mapa_inc==4){donpcevent "Healer::OnFin";}
+						set .timerx,.timerx+1;
+						if(.jefe_flag==0){goto horda_repelida;}
+						if(.timerx==8 && .@mapa_inc<4){announce .npc$+": La horda se prepara para avanzar, hay que detenerlos!" ,0;}
+					} while(.timerx<.@tiempo_por_mapa);// 10 minutos por mapa
+					set .@mapa_inc,.@mapa_inc+1;
+					set .@cantidad_invasor,getmapmobs (.mapa_actual$)+(getmapmobs (.mapa_actual$)*.25);//calculo numero de mob del siguiente mapa
+					if(.@mapa_inc==4){set .@cantidad_invasor,500;}//si es el mapa final una orda completa de 500 mobs
+				} while(.jefe_flag!=0);// si los 3 jefes estan vivos repite el ciclo
+				horda_gano://perdieron
+				killmonsterall .mapa_actual$;
+				//donpcevent "Healer::OnEnd";
+				announce .npc$+": "+.objetivo_inv$+" ha caido ante los monstruos... un dia triste para RoMX" ,0;
+				goto fin_even_inv;
+				horda_repelida://ganaron
+				killmonsterall .mapa_actual$;
+				announce .guardian$+": Hemos logrado derrotar a todos los monstruos!!. "+.objetivo_inv$+" ha sido salvada!!" ,0;
+				fin_even_inv:
+				day;
+				for (set .@c, 0; .@c < 5; set .@c, .@c + 1){//quito mapflags en todos los mapas de recorrido
+					set .mapa_actual$,getd(".ruta"+.ruta_seleccionada+"$["+.@c+"]");
+					removemapflag .mapa_actual$,mf_nomemo;
+					removemapflag .mapa_actual$,mf_fog;
+				}
+				set .eventoactivo,0;
+				break;
+			case 17://[------Troll Master-----]
+				donpcevent "GM Eureka::OnEvento17";
+				enablenpc "GM Eureka#troll";
+				hideoffnpc "GM Eureka#troll";
+				moveNPC "GM Eureka#troll",155,92;
+				moveNPC "GM Eureka",0,0;
+				disablenpc "GM Eureka";
+				hideonnpc "GM Eureka";
+				announce .npc$+": Es hora de !$",bc_all;
+				sleep 10000;
+				announce .npc$+": V00000y a ec$egsor un nmeuro, del 1 al &. ua riesrvgeaaaaaaaaa",bc_all;
+				sleep 20000;
+				announce .npc$+": [Insert misspelling here] oods los mr00tsn.us!!",bc_all;
+				sleep 30000;
+				announce "[Iniciando Sistema de Auto-Recuperacion de Eureka]",bc_all,0xE6330A;
+				sleep 20000;
+				announce "[Desactivando sistema de Movimiento y Respuesta escrita]",bc_all,0xE6330A;
+				sleep 20000;
+				announce "[Modo de operacion minimo, rastreando fallas en codigo]",bc_all,0xE6330A;
+				sleep 20000;
+				announce "[Fallas encontradas, 3 objetos inestables localizados]",bc_all,0xE6330A;
+				sleep 20000;
+				switch($ruta){
+					case 1:
+						monster "moc_fild12",0,0,"Picky",1049,3,"evento_17::OnMobKilled1";
+						monster "prt_fild08",0,0,"Poring",1002,3,"evento_17::OnMobKilled2";
+						monster "hu_fild06",0,0,"Holden",1628,3,"evento_17::OnMobKilled3";
+						announce "[Picky en moc_fild12, Poring en prt_fild08 y Holden en hu_fild06]",bc_all,0xE6330A;	
+						break;
+					case 2:
+						monster "beach_dun3",0,0,"Thara Frog",1034,3,"evento_17::OnMobKilled1";
+						monster "xmas_dun01",0,0,"Christmas Cookie",1246,3,"evento_17::OnMobKilled2";
+						monster "pay_fild01",0,0,"Spore",1014,3,"evento_17::OnMobKilled3";
+						announce "[Thara Frog en beach_dun3, Christmas Cookie en xmas_dun01 y Spore en pay_fild01]",bc_all,0xE6330A;
+						break;
+				}
+				sleep 20000;
+				announce "[Estatus: Esperando objetos inestables en Eureka]",bc_all,0xE6330A;
+				sleep 10000;
+				donpcevent "GM Eureka#troll::OnEnabled";
+				set .timerx,0;
+				do{
+					sleep 60000;//1 min
+					set .timerx,.timerx+1;
+				} while(.timerx<60);// 60 minutos
+				if($ev_troll==0){
+					announce "[Sistema de Auto-Recuperacion Finalizado]",bc_all,0xE6330A;
+					enablenpc "GM Eureka";
+					hideoffnpc "GM Eureka";
+					set $ev_troll,1;
+					moveNPC "GM Eureka#troll",267,30;
+					disablenpc "GM Eureka#troll";
+					hideonnpc "GM Eureka#troll";
+					awake "GM Eureka#troll";
+					awake "GM Eureka#troll";
+					awake "GM Eureka#troll";
+					moveNPC "GM Eureka",155,92;
+					set getvariableofnpc(.timerx,"GM Eureka#troll"),999;
+				}
+				set .eventoactivo,0;
+				break;
+			}//end swith
+		}//si hay mas de 8 usuarios on
+		else {
+			set .timerx,0;
+			set .esperausaurios,1;
+			do{
+				sleep 60000;//1 min
+				set .timerx,.timerx+1;
+			} while(.timerx<20);// 20 minutos
+			goto iniciaevento;
+		}//end else
+	set .eventoniciado,0;
+}
+end;
+
+//Anuncio cuando un usuario logea
+OnPCLoginEvent:
+set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+atcommand "@main on";
+	if(.eventoniciado == 1) {
+		sleep2 3000;
+		if(.eventoactivo==17){
+			announce "[Estatus: Esperando objetos inestables en Eureka]",bc_all,0xE6330A;
+			sleep2 6000;
+			switch($ruta){
+				case 1:
+					announce "[Picky en moc_fild12, Poring en prt_fild08 y Holden en hu_fild06]",bc_self,0xE6330A;	
+					break;
+				case 2:
+					announce "[Thara Frog en beach_dun3, Christmas Cookie en xmas_dun01 y Spore en pay_fild01]",bc_self,0xE6330A;
+					break;
+			}
+		}else{
+			announce .npc$+": Bienvenido a RoMX, el evento >"+.eventos_disponibles$[.eventoactivo]+"<, esta activo!",bc_self,0x0FCFFA;
+			switch(.eventoactivo) {
+				case 1://parte del evento 12....ahumento de drops
+					sleep2 6000;
+					set .@tiemporestante,480-.timerx;
+					if (.@tiemporestante>400) set .@mensajeti$,"recien empezo";
+					else if (.@tiemporestante>150 && .@tiemporestante<399) set .@mensajeti$,"va a la mitad";
+						else if (.@tiemporestante>60 && .@tiemporestante<149) set .@mensajeti$,"esta por terminar";
+					else if (.@tiemporestante<59) set .@mensajeti$,"terminara en menos de una hora";
+					announce .npc$+": El evento >"+.@mensajeti$+"<",bc_self,0x0FCFFA;
+					break;
+				case 5:
+					setarray .tipo_fight$[0],"Novice","No Renacidos","2os Jobs","Todo Vale";
+					set .@tipo_pelea,getvariableofnpc(.numero_fight,"GMEventos");
+					sleep2 6000;
+					announce .npc$+": Las inscripciones estan abiertas para los >"+.tipo_fight$[.@tipo_pelea]+"<",bc_self,0x0FCFFA;
+					break;
+				case 4:
+						sleep2 6000;
+					announce .npc$+": El mapa donde esta el tesoro es >"+.mapatesoro$+"<",bc_self,0x0FCFFA;
+					break;
+				case 7:	
+					sleep2 6000;
+					announce .npc$+": La Poring Party esta en  >"+.mapatesoro$+"<, solo faltas tu!",bc_self,0x0FCFFA;
+					break;
+				case 8:
+					sleep2 6000;
+						set .@tiemporestante,480-.timerx;
+					if (.@tiemporestante>400) set .@mensajeti$,"recien empezo";
+					else if (.@tiemporestante>150 && .@tiemporestante<399) set .@mensajeti$,"va a la mitad";
+					else if (.@tiemporestante>60 && .@tiemporestante<149) set .@mensajeti$,"esta por terminar";
+					else if (.@tiemporestante<59) set .@mensajeti$,"terminara en menos de una hora";
+					announce .npc$+": El evento >"+.@mensajeti$+"<",bc_self,0x0FCFFA;
+					break;
+				case 12:
+					query_logsql("SELECT `uid` FROM `evento_democracia`", .nombr_elegidos_ev12$);
+					getmapxy(.@mapaarrow$,.@x,.@y,0);
+					for (set .@c, 0; .@c < getarraysize(.nombr_elegidos_ev12$); set .@c, .@c + 1){
+						if(.nombr_elegidos_ev12$[.@c]==strcharinfo(0)){//si es el miembro de los elegidos
+							for (set .@d, 0; .@d < getarraysize(.mapas_no_return$); set .@d, .@d + 1){
+									if (.mapas_no_return$[.@d]==.@mapaarrow$){//si esta en un mapa del evento
+									dispbottom .npc$+" : No puedes relogear en el mapa Objetivo.";
+									warp "SavePoint",0,0;
+								}
+							}
+						}
+					}
+					query_logsql("SELECT `uid` FROM `evento_democracia` WHERE `voto` = "+.num_elegido, .nombr_objetivo$);
+					if (.nombr_objetivo$==strcharinfo(0)){//si es el jugador objetivo
+						sleep2 6000;
+						announce .npc$+": Recuerda, el Mapa Objetivo es >"+.mapatesoro$+"<",bc_self,0x0FCFFA;
+					}
+					break;
+			}		
+		}
+	}
+	if (agitcheck()==1){
+		sleep2 1000;
+		announce .anuncio_woe$,bc_self,0xECFA0F;
+	}
+end;
+
+//al cambiar un mapa
+OnPCLoadMapEvent:
+	callfunc "sin_flechas_ni_balas";
+	end;
+
+//GM Panel al Wispear
+OnWhisperGlobal:
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	if(getgmlevel() >= .gm) {
+		mes .npc$;
+		mes "Hola ^^";
+		if(!.eventoniciado) {
+			mes "En este momento ^880000NO hay evento en progreso^000000.";
+			if (.esperausaurios==0){
+				set .@tiempogm,$TItiempogm - (gettimetick(2) / 60);
+				if(!.@tiempogm) set .@tiempogm$,"unos segundos";
+				else if(.@tiempogm < 60) set .@tiempogm$,.@tiempogm+" minutos";
+				else {
+					set .@tiempogm,.@tiempogm / 60;
+					if(.@tiempogm < 24) set .@tiempogm$,.@tiempogm+" horas";
+						else set .@tiempogm$,(.@tiempogm / 24)+" dias";
+				}
+				mes "El siguiente evento automatico iniciara en "+.@tiempogm$+".";
+			}
+			else{
+				mes "^880000Estoy esperando para iniciar evento.^000000";
+				mes "El timer marca: ^880000"+.timerx+"^000000 Min.";
+			}
+			next;
+			set .@b,select("^880000Salir^000000","Iniciar un evento Automatico.") - 1;
+			mes .npc$;
+			if(.@b) {
+				mes "Selecciona un evento.";
+				next;
+				set .eventoactivo,select("^880000Aleatorio^000000","Poring Catcher","MVP Conquer","Treasure Hunter","The Fight Club","Bomb Punch","Poring Party","Mas Exp","Dice","Lotto RoMX","Reaction","RoMX Team","Democracia","Lost","Novice Race","Invasion","Troll Master");
+				switch(.eventoactivo) {
+					case 1:
+						set .eventoactivo,rand(2,16);
+						break;
+					case 3:
+						mes .npc$;
+						mes "Selecciona el MVP";
+						next;
+						for( set .@i,0; .@i <= getarraysize(.idmobevento)-1; set .@i,.@i+1 ){
+							set .@menu$, .@menu$ +"["+getmonsterinfo(.idmobevento[.@i],0)+"]";
+							set .@menu$, .@menu$ + ":";
+						}
+						set .@num_free,select(.@menu$)-1;
+						set .mobfeo,.idmobevento[.@num_free];
+						break;
+					case 4:
+						mes .npc$;
+						mes "Selecciona la ciudad.";
+						next;
+						for( set .@i,0; .@i <= getarraysize(.mapasdetesoro$)-1; set .@i,.@i+1 ){
+							set .@menu$, .@menu$ +"["+.mapasdetesoro$[.@i]+"]";
+							set .@menu$, .@menu$ + ":";
+						}
+						set .@num_free,select(.@menu$)-1;
+						set .mapatesoro$,.mapasdetesoro$[.@num_free];
+						break;
+					case 7:
+						mes .npc$;
+						mes "Selecciona la ciudad.";
+						next;
+						for( set .@i,0; .@i <= getarraysize(.mapasdetesoro$)-1; set .@i,.@i+1 ){
+							set .@menu$, .@menu$ +"["+.mapasdetesoro$[.@i]+"]";
+							set .@menu$, .@menu$ + ":";
+						}
+						set .@num_free,select(.@menu$)-1;
+						set .mapatesoro$,.mapasdetesoro$[.@num_free];
+						break;
+					case 5:
+						mes .npc$;
+						mes "Selecciona el tipo de pelea.";
+						next;
+						for( set .@i,0; .@i <= getarraysize(.tipo_fight$)-1; set .@i,.@i+1 ){
+							set .@menu$, .@menu$ +"["+.tipo_fight$[.@i]+"]";
+							set .@menu$, .@menu$ + ":";
+						}
+						set .numero_fight,select(.@menu$)-1;
+						break;
+					case 12:
+						mes .npc$;
+						mes "Selecciona el Dugdeon destino.";
+						next;
+						set .mapas_ev12,select("Thors Volcano","Labyrinth Forest","Abyss Lakes","Odin Temple","Juperos","Glast Heim","Nameles");
+						break;
+					case 16:
+						mes .npc$;
+						mes "Selecciona Ruta de Invacion.";
+						next;
+						set .ruta_seleccionada,select("Glast Heim","Thor Volcano","Kiel Academy","Orc Camp")-1;
+						break;
+				}
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Inicio evento "+.eventoactivo+". "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				set .timerx,9999;
+				set $TItiempogm,0;
+				set .gmdice,1;
+				awake "GMEventos";
+				next;
+				mes .npc$;
+				mes "El evento a sido iniciado.";
+				close;
+			}
+		}
+		else {
+			mes "El evento ^880000"+.nomevento$+"^000000, esta en progreso.";
+			mes "El timer de evento marca: ^880000"+.timerx+"^000000 Min.";
+			if(.eventoactivo==2 || .eventoactivo==3 || .eventoactivo==4 || .eventoactivo==8 || .eventoactivo==12 || .eventoactivo==1 || .eventoactivo==14){
+				mes "Quieres cancelar el evento?";
+				set .@cancelar,select("Si","No");
+				if(.@cancelar==1){
+						announce .npc$+": Evento cancelado por el amargado de "+strcharinfo(0),0;
+						query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Cancelo evento "+.eventoactivo+". "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+						set .timerx,9999;
+						awake "GMEventos";
+						next;
+						mes .npc$;
+						mes "El evento a sido cancelado.";
+						close;
+				}
+			}
+		}
+	}
+next;
+mes .npc$;
+mes "Bye ^^";
+close;
+
+Onpremio_ev17:
+	mes "Selecciona un evento.";
+	next;
+	set .eventoactivo,select("^880000Aleatorio^000000","Poring Catcher","MVP Conquer","Treasure Hunter","The Fight Club","Bomb Punch","Poring Party","Mas Exp","Dice","Lotto RoMX","Reaction","RoMX Team","Democracia","Lost","Novice Race","Invasion");
+	switch(.eventoactivo) {
+		case 1:
+			set .eventoactivo,rand(2,16);
+			break;
+		case 3:
+			mes .npc$;
+			mes "Selecciona el MVP";
+			next;
+			for( set .@i,0; .@i <= getarraysize(.idmobevento)-1; set .@i,.@i+1 ){
+				set .@menu$, .@menu$ +"["+getmonsterinfo(.idmobevento[.@i],0)+"]";
+				set .@menu$, .@menu$ + ":";
+			}
+			set .@num_free,select(.@menu$)-1;
+			set .mobfeo,.idmobevento[.@num_free];
+			break;
+		case 4:
+			mes .npc$;
+			mes "Selecciona la ciudad.";
+			next;
+			for( set .@i,0; .@i <= getarraysize(.mapasdetesoro$)-1; set .@i,.@i+1 ){
+				set .@menu$, .@menu$ +"["+.mapasdetesoro$[.@i]+"]";
+				set .@menu$, .@menu$ + ":";
+			}
+			set .@num_free,select(.@menu$)-1;
+			set .mapatesoro$,.mapasdetesoro$[.@num_free];
+			break;
+		case 7:
+			mes .npc$;
+			mes "Selecciona la ciudad.";
+			next;
+			for( set .@i,0; .@i <= getarraysize(.mapasdetesoro$)-1; set .@i,.@i+1 ){
+				set .@menu$, .@menu$ +"["+.mapasdetesoro$[.@i]+"]";
+				set .@menu$, .@menu$ + ":";
+			}
+			set .@num_free,select(.@menu$)-1;
+			set .mapatesoro$,.mapasdetesoro$[.@num_free];
+			break;
+		case 5:
+			mes .npc$;
+			mes "Selecciona el tipo de pelea.";
+			next;
+			for( set .@i,0; .@i <= getarraysize(.tipo_fight$)-1; set .@i,.@i+1 ){
+				set .@menu$, .@menu$ +"["+.tipo_fight$[.@i]+"]";
+				set .@menu$, .@menu$ + ":";
+			}
+			set .numero_fight,select(.@menu$)-1;
+			break;
+		case 12:
+			mes .npc$;
+			mes "Selecciona el Dugdeon destino.";
+			next;
+			set .mapas_ev12,select("Thors Volcano","Labyrinth Forest","Abyss Lakes","Odin Temple","Juperos","Glast Heim","Nameles");
+			break;
+		case 16:
+			mes .npc$;
+			mes "Selecciona Ruta de Invacion.";
+			next;
+			set .ruta_seleccionada,select("Glast Heim","Thor Volcano","Kiel Academy","Orc Camp")-1;
+			break;
+	}
+	query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Inicio evento "+.eventoactivo+". "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+	announce .npc$+": Bien hecho "+strcharinfo(0)+".",0;
+	set .timerx,9999;
+	set $TItiempogm,0;
+	set .gmdice,1;
+	awake "GMEventos";
+	enablenpc "GM Eureka";
+	moveNPC "GM Eureka",155,92;
+	hideoffnpc "GM Eureka";
+	doevent "GM Eureka::OnInit";
+	warp "prontera",155,182;
+	close;
+}//fin script
+
+// 	[====================Funciones=======================]
+//funcion de anunciador
+function	script	Aviso_warper	{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(getvariableofnpc(.eventoactivo,"GMEventos")) {
+		case 5:
+			setarray .tipo_fight$[0],"Novice","No Renacidos","2os Jobs","Todo Vale";
+			set .@tipo_pelea,getvariableofnpc(.numero_fight,"GMEventos");
+			announce .npc$+": El evento comenzara en 4 minutos.",0;
+			sleep 60000;
+			announce .npc$+": Aquellos "+.tipo_fight$[.@tipo_pelea]+" que quieran participar, por favor dirijanse al centro de Prontera y entren en el portal.",0;
+			sleep 60000;
+			announce .npc$+": El evento comenzara en 2 minutos",0;
+			sleep 15000;
+			announce .npc$+": Aquellos "+.tipo_fight$[.@tipo_pelea]+" que quieran participar, por favor dirijanse al centro de Prontera y entren en el portal.",0;
+			sleep 45000;
+			announce .npc$+": El evento iniciara en 1 minuto",0;
+			sleep 15000;
+			announce .npc$+": Ultimos 30 segundos.",0;
+			sleep 10000;
+			announce .npc$+": Si quieres participar por favor entra en el portal al sur de la fuente de Prontera.",0;
+			sleep 10000;
+			announce .npc$+": Ultimos 10 segundos.",0;
+			sleep 5000;
+			announce .npc$+": 5.",0;
+			sleep 1000;
+			announce .npc$+": 4.",0;
+			sleep 1000;
+			announce .npc$+": 3.",0;
+			sleep 1000;
+			announce .npc$+": 2.",0;
+			sleep 1000;
+			announce .npc$+": 1.",0;
+			sleep 1000;
+			break;
+		case 11:
+			announce .npc$+": El evento comenzara en 4 minutos.",0;
+			sleep 60000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse a Prontera cerca de mi.",0;
+			sleep 60000;
+			announce .npc$+": El evento comenzara en 2 minutos",0;
+			sleep 15000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse a Prontera cerca de mi.",0;
+			sleep 45000;
+			announce .npc$+": El evento iniciara en 1 minuto",0;
+			sleep 15000;
+			announce .npc$+": Ultimos 30 segundos.",0;
+			sleep 10000;
+			announce .npc$+": Si quieres participar por favor ven cerca de mi.",0;
+			sleep 10000;
+			announce .npc$+": Ultimos 10 segundos.",0;
+			sleep 5000;
+			announce .npc$+": 5.",0;
+			sleep 1000;
+			announce .npc$+": 4.",0;
+			sleep 1000;
+			announce .npc$+": 3.",0;
+			sleep 1000;
+			announce .npc$+": 2.",0;
+			sleep 1000;
+			announce .npc$+": 1.",0;
+			sleep 1000;
+			break;
+		case 12://texto de llamado a evento 12
+			announce .npc$+": El evento comenzara en 6 minutos.",0;
+			sleep 60000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse dentro de la iglesia de Prontera.",0;
+			sleep 60000;
+			announce .npc$+": El evento comenzara en 4 minutos.",0;
+			sleep 60000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse dentro de la iglesia de Prontera.",0;
+			sleep 60000;
+			announce .npc$+": El evento comenzara en 2 minutos",0;
+			sleep 15000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse dentro de la iglesia de Prontera.",0;
+			sleep 45000;
+			announce .npc$+": El evento iniciara en 1 minuto",0;
+			sleep 15000;
+			announce .npc$+": Ultimos 30 segundos.",0;
+			sleep 10000;
+			announce .npc$+": Si quieres participar por favor busca el anuncio a la izquierda del altar.",0;
+			sleep 10000;
+			announce .npc$+": Ultimos 10 segundos.",0;
+			sleep 5000;
+			announce .npc$+": 5.",0;
+			sleep 1000;
+			announce .npc$+": 4.",0;
+			sleep 1000;
+			announce .npc$+": 3.",0;
+			sleep 1000;
+			announce .npc$+": 2.",0;
+			sleep 1000;
+			announce .npc$+": 1.",0;
+			sleep 15000;
+			break;
+		default:
+			announce .npc$+": El evento comenzara en 4 minutos.",0;
+			sleep 60000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse a Prontera y entren en el portal, al sur de la fuente.",0;
+			sleep 60000;
+			announce .npc$+": El evento comenzara en 2 minutos",0;
+			sleep 15000;
+			announce .npc$+": Aquellos que quieran participar, por favor dirijanse a Prontera y entren en el portal, al sur de la fuente.",0;
+			sleep 45000;
+			announce .npc$+": El evento iniciara en 1 minuto",0;
+			sleep 15000;
+			announce .npc$+": Ultimos 30 segundos.",0;
+			sleep 10000;
+			announce .npc$+": Si quieres participar por favor entra en el portal al sur de la fuente de Prontera.",0;
+			sleep 10000;
+			announce .npc$+": Ultimos 10 segundos.",0;
+			sleep 5000;
+			announce .npc$+": 5.",0;
+			sleep 1000;
+			announce .npc$+": 4.",0;
+			sleep 1000;
+			announce .npc$+": 3.",0;
+			sleep 1000;
+			announce .npc$+": 2.",0;
+			sleep 1000;
+			announce .npc$+": 1.",0;
+			sleep 1000;
+			break;
+	}
+return;
+}
+
+function	script	Premios_disponibles	{
+	set .@var, rand(1,14);
+	switch(.@var) {
+		case 1:
+			set .x_num,rand(30,100);
+			atcommand "@cash " + .x_num;//Cash Point
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" Cash points. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 2:
+			getitem 12210,rand(1,3);//1 bubble gum
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano Bubble Gum. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 3:
+			set .x_num,rand(1,3);
+			getitem 14545,.x_num;//field manual 300
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" Field manual 300. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 4:
+			set .x_num,rand(5,10);
+			getitem 607,.x_num;//Yggdrasil Berry
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" Yggdrasil Berry. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 5:
+			set .x_num,rand(10,80);
+			atcommand "@cash " + .x_num;//Cash Point
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" Cash Points. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 6:
+			getitem 17002,rand(1,2);//1 rare candy
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano rare candy. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 7:
+			getitem 616,rand(1,2);//1 oca
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano OCA. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 8:
+			set .x_num,rand(1,10);
+			getitem 14500,.x_num;//Life Insurrance Certificate
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" Angeling Potion. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 9:
+			set .x_num,rand(1,8);
+			getitem 12412,.x_num;//HE Bubble Gum
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" HE Bubble Gum. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 10:
+			set .x_num,rand(1,3);
+			getitem 7621,.x_num;//token of sigfried
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano "+.x_num+" Random Quiver. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 11:
+			getitem 14005,rand(1,2);//Poison Bottle 5 Box
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano Poison Bottle 5 Box. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 12:
+			getitem 13989,rand(1,2);//Acid Bomb 10 Box
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano Acid Bomb 10 Box. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 13:
+			getitem 17021,rand(1,2);//Costume Box
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano Costume Box. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		case 14:
+			getitem 7230,1;//Platinum
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano Platinum. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			break;
+		default:
+			break;
+	}
+	return;
+}
+
+function	script	flags_ev11	{
+	switch(getvariableofnpc(.mapas_ev12,"GMEventos")) {
+		case 1:
+			removemapflag "thor_v01",mf_noteleport;
+			removemapflag "thor_v02",mf_noteleport;
+			removemapflag "thor_v03",mf_noteleport;
+			break;
+		case 2:
+			removemapflag "prt_maze01",mf_noteleport;
+			removemapflag "prt_maze02",mf_noteleport;
+			removemapflag "prt_maze03",mf_noteleport;
+			break;	
+		case 3:
+			removemapflag "abyss_01",mf_noteleport;
+			removemapflag "abyss_02",mf_noteleport;
+			removemapflag "abyss_03",mf_noteleport;
+			break;
+		case 4:
+			removemapflag "odin_tem01",mf_noteleport;
+			removemapflag "odin_tem02",mf_noteleport;
+			removemapflag "odin_tem03",mf_noteleport;
+			break;
+		case 5:
+			removemapflag "juperos_01",mf_noteleport;
+			removemapflag "juperos_02",mf_noteleport;
+			break;
+		case 6:
+			removemapflag "glast_01",mf_noteleport;
+			removemapflag "gl_cas01",mf_noteleport;
+			removemapflag "gl_cas02",mf_noteleport;
+			break;
+		case 7:
+			removemapflag "nameless_n",mf_noteleport;
+			removemapflag "abbey01",mf_noteleport;
+			removemapflag "abbey02",mf_noteleport;
+			removemapflag "abbey03",mf_noteleport;
+			break;	
+	}//end swith
+	return;
+}
+
+
+function	script	sin_flechas_ni_balas	{
+	if (getvariableofnpc(.eventoniciado,"GMEventos") == 1){
+		getmapxy(.@mapaarrow$,.@x,.@y,0);
+		if(getvariableofnpc(.eventoactivo,"GMEventos")==7 && getvariableofnpc(.mapatesoro$,"GMEventos")==.@mapaarrow$){sc_start SC__GROOMY,60000,3;goto FUNC_REVISA;}//si es poring party
+		if(getvariableofnpc(.eventoactivo,"GMEventos")==2 && "quiz_02"==.@mapaarrow$){ goto FUNC_REVISA;}//si es poring catcher
+		if(getvariableofnpc(.eventoactivo,"GMEventos")==6 && "quiz_01"==.@mapaarrow$){sc_start SC__GROOMY,60000,3; goto FUNC_REVISA;}//si es poring bomb
+		if(getvariableofnpc(.eventoactivo,"GMEventos")==15 && "alde_tt02"==.@mapaarrow$){sc_start SC__GROOMY,60000,3; goto FUNC_REVISA;}//si es Novice Race
+		if(getvariableofnpc(.eventoactivo,"GMEventos")==12){goto FUNC_EVENTO12;}//si es evento  Romx team
+	}
+	end;
+
+FUNC_EVENTO12:
+	set .@num_temp,getvariableofnpc(.num_elegido,"GMEventos");
+	query_logsql("SELECT `uid` FROM `evento_democracia` WHERE `voto` = "+.@num_temp, .nombr_objetivo$);
+	if (.nombr_objetivo$[0]==strcharinfo(0)){//si es el jugador objetivo
+		setoption Option_xmas,1;
+		if(.@mapaarrow$==getvariableofnpc(.mapatesoro$,"GMEventos")){
+			set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+			viewpoint 1,getvariableofnpc(.x_ev11,"GMEventos"),getvariableofnpc(.y_ev11,"GMEventos"),1,0xFFFF00;
+		}
+	}
+	end;
+
+
+FUNC_REVISA:
+	sc_end sc_all;
+	if(isequippedcnt(1750,1766,1767,1755,1754,1761,1752,1760,1759,1772,1757,1770,1769,1765,1763,1762,1764,1751,1768,1753,1756,1758,13200,13201,13202,13206,13203,13207,13204,13205)>0){nude;}
+	end;
+}
+
+function	script	warp_no_ganador_lost	{
+	setarray .mensaje_lost$[0],"Creo que no era por ese warp xD","mmm... creo que estas perdido :P",".___.U","Que suerte!! Regresaste al principio xD";
+	dispbottom getvariableofnpc(.npc$,"GMEventos")+" : "+.mensaje_lost$[rand(0,getarraysize(.mensaje_lost$)-1)];
+	warp "new_zone04",100,15;
+	return;
+}
+
+function	script	warps_de_lost	{
+	setarray .fila_a_x$[0],"Warp_lost_X#2","Warp_lost_X#3","Warp_lost_X#4","Warp_lost_X#5","Warp_lost_X#6","Warp_lost_X#7","Warp_lost_X#8","Warp_lost_X#9","Warp_lost_X#10",
+				"Warp_lost_X#11","Warp_lost_X#12","Warp_lost_X#13","Warp_lost_X#14","Warp_lost_X#15","Warp_lost_X#16","Warp_lost_X#17","Warp_lost_X#18","Warp_lost_X#19","Warp_lost_X#20",
+				"Warp_lost_X#21","Warp_lost_X#22","Warp_lost_X#23","Warp_lost_X#24","Warp_lost_X#25","Warp_lost_X#26","Warp_lost_X#27","Warp_lost_X#28","Warp_lost_X#29","Warp_lost_X#30",
+				"Warp_lost_X#31","Warp_lost_X#32","Warp_lost_X#33","Warp_lost_X#34","Warp_lost_X#35","Warp_lost_X#36","Warp_lost_X#37","Warp_lost_X#38","Warp_lost_X#39","Warp_lost_X#40",
+				"Warp_lost_X#41","Warp_lost_X#42","Warp_lost_X#43","Warp_lost_X#44","Warp_lost_X#45","Warp_lost_X#46","Warp_lost_X#47","Warp_lost_X#48","Warp_lost_X#49","Warp_lost_X#50",
+				"Warp_lost_X#51","Warp_lost_X#52","Warp_lost_X#53","Warp_lost_X#54","Warp_lost_X#55","Warp_lost_X#56","Warp_lost_X#57","Warp_lost_X#58","Warp_lost_X#59","Warp_lost_X#60","Warp_lost_X";
+	setarray .fila_a$[0],"Warp_lost_A#1","Warp_lost_A#2","Warp_lost_A#3","Warp_lost_A#4","Warp_lost_A#5";
+	setarray .fila_x[0],8,19,31,19,48,59,71,59,88,99,111,99,128,139,151,139,168,179,191,179;
+	setarray .fila_y[0],60,71,60,48,60,71,60,48,60,71,60,48,60,71,60,48,60,71,60,48;
+	//llenamos fila a 1
+	for (set .@b, 0; .@b < 5; set .@b, .@b + 1){
+		set .ran,rand(0,getarraysize(.fila_a$)-1);//obtenmos el warp que usaremos en la fila A
+		set .cruz,rand(0,3);//lugar onde estara el warp qeu si funciona
+		for (set .@c, 0; .@c < 4; set .@c, .@c + 1){
+			switch(.@c) {
+				case 0:
+					if(.@c==.cruz){moveNPC .fila_a$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 1:
+					if(.@c==.cruz){moveNPC .fila_a$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 2:
+					if(.@c==.cruz){moveNPC .fila_a$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 3:
+					if(.@c==.cruz){moveNPC .fila_a$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+				break;	//40
+			}
+		}
+		deletearray .fila_a$[.ran],1;
+		deletearray .fila_x[0],4;
+		deletearray .fila_y[0],4;
+	}
+	setarray .fila_b$[0],"Warp_lost_B#1","Warp_lost_B#2","Warp_lost_B#3","Warp_lost_B#4","Warp_lost_B#5";
+	setarray .fila_x[0],8,19,31,19,48,59,71,59,88,99,111,99,128,139,151,139,168,179,191,179;
+	setarray .fila_y[0],100,111,100,88,100,111,100,88,100,111,100,88,100,111,100,88,100,111,100,88;
+	for (set .@b, 0; .@b < 5; set .@b, .@b + 1){
+		set .ran,rand(0,getarraysize(.fila_b$)-1);//obtenmos el warp que usaremos en la fila A
+		set .cruz,rand(0,3);//lugar onde estara el warp qeu si funciona
+		for (set .@c, 0; .@c < 4; set .@c, .@c + 1){
+			switch(.@c) {
+				case 0:
+					if(.@c==.cruz){moveNPC .fila_b$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 1:
+					if(.@c==.cruz){moveNPC .fila_b$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 2:
+					if(.@c==.cruz){moveNPC .fila_b$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 3:
+					if(.@c==.cruz){moveNPC .fila_b$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+				break;	//40
+				}
+		}
+		deletearray .fila_b$[.ran],1;
+		deletearray .fila_x[0],4;
+		deletearray .fila_y[0],4;
+	}
+	setarray .fila_c$[0],"Warp_lost_C#1","Warp_lost_C#2","Warp_lost_C#3","Warp_lost_C#4","Warp_lost_C#5";
+	setarray .fila_x[0],8,19,31,19,48,59,71,59,88,99,111,99,128,139,151,139,168,179,191,179;
+	setarray .fila_y[0],140,151,140,128,140,151,140,128,140,151,140,128,140,151,140,128,140,151,140,128;
+	for (set .@b, 0; .@b < 5; set .@b, .@b + 1){
+		set .ran,rand(0,getarraysize(.fila_c$)-1);//obtenmos el warp que usaremos en la fila A
+		set .cruz,rand(0,3);//lugar onde estara el warp qeu si funciona
+		for (set .@c, 0; .@c < 4; set .@c, .@c + 1){
+			switch(.@c) {
+				case 0:
+					if(.@c==.cruz){moveNPC .fila_c$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 1:
+					if(.@c==.cruz){moveNPC .fila_c$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 2:
+					if(.@c==.cruz){moveNPC .fila_c$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 3:
+					if(.@c==.cruz){moveNPC .fila_c$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+				break;	//40
+				}
+		}
+		deletearray .fila_c$[.ran],1;
+		deletearray .fila_x[0],4;
+		deletearray .fila_y[0],4;
+	}
+	setarray .fila_d$[0],"Warp_lost_D#1","Warp_lost_D#2","Warp_lost_D#3","Warp_lost_D#4","Warp_lost_D#5";
+	setarray .fila_x[0],8,19,31,19,48,59,71,59,88,99,111,99,128,139,151,139,168,179,191,179;
+	setarray .fila_y[0],180,191,180,168,180,191,180,168,180,191,180,168,180,191,180,168,180,191,180,168;
+	for (set .@b, 0; .@b < 5; set .@b, .@b + 1){
+		set .ran,rand(0,getarraysize(.fila_d$)-1);//obtenmos el warp que usaremos en la fila A
+		set .cruz,rand(0,3);//lugar onde estara el warp qeu si funciona
+		for (set .@c, 0; .@c < 4; set .@c, .@c + 1){
+			switch(.@c) {
+				case 0:
+					if(.@c==.cruz){moveNPC .fila_d$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 1:
+					if(.@c==.cruz){moveNPC .fila_d$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 2:
+					if(.@c==.cruz){moveNPC .fila_d$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+					break;
+				case 3:
+					if(.@c==.cruz){moveNPC .fila_d$[.ran],.fila_x[.@c],.fila_y[.@c];}else{moveNPC .fila_a_x$[0],.fila_x[.@c],.fila_y[.@c];deletearray .fila_a_x$[0],1;}
+				break;	//40
+				}
+		}
+		deletearray .fila_d$[.ran],1;
+		deletearray .fila_x[0],4;
+		deletearray .fila_y[0],4;
+	}
+	return;
+}
+
+
+// 	[====================Premiadores=======================]
+//Premiador del evento 6
+quiz_01,42,369,3	script	NPC_Premiador#0::NPC_Premiador	864,{
+set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+announce .npc$+": Tenemos un ganador! bien hecho "+strcharinfo(0)+".",0;
+callfunc "Premios_disponibles";
+sc_end sc_all;
+warp "prontera",155,182;
+end;
+}
+
+//clones del mismo npc en los demas eventos
+
+pvp_n_1-5,99,100,6	duplicate(NPC_Premiador)	NPC_Premiador#1	864 //evento 5
+quiz_01,204,90,6	duplicate(NPC_Premiador)	NPC_Premiador#2	864 //evento 9
+	
+
+-	script	warpremiador	-1,{
+OnMobKilled:
+	if (getvariableofnpc(.eventoactivo,"GMEventos")!=7){
+		set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+		announce .npc$+": Tenemos un ganador! bien hecho "+strcharinfo(0)+".",0;
+		query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+	}
+	callfunc "Premios_disponibles";
+	if (getvariableofnpc(.eventoactivo,"GMEventos")==2){mapwarp "quiz_02","prontera",155,182;}
+}
+
+-	script	evento_17	-1,{
+OnMobKilled1:
+	if (getvariableofnpc(.eventoniciado,"GMEventos") == 1 && getvariableofnpc(.eventoactivo,"GMEventos")==17){
+		rentitem 7793,3600;
+		if($ruta==1){monster "moc_fild12",0,0,"Picky",1049,2,"evento_17::OnMobKilled1";}else{monster "beach_dun3",0,0,"Thara Frog",1034,2,"evento_17::OnMobKilled1";}
+		announce "[>Golden Apple< encontrado, Mob multiplicado]",bc_all,0xE6330A;
+	}
+	end;
+OnMobKilled2:
+	if (getvariableofnpc(.eventoniciado,"GMEventos") == 1 && getvariableofnpc(.eventoactivo,"GMEventos")==17){
+		rentitem 7405,3600;
+		if($ruta==1){monster "prt_fild08",0,0,"Poring",1002,2,"evento_17::OnMobKilled2";}else{monster "xmas_dun01",0,0,"Christmas Cookie",1246,2,"evento_17::OnMobKilled2";}
+		announce "[>Crushed Can< encontrado, Mob multiplicado]",bc_all,0xE6330A;
+	}
+	end;
+OnMobKilled3:
+	if (getvariableofnpc(.eventoniciado,"GMEventos") == 1 && getvariableofnpc(.eventoactivo,"GMEventos")==17){
+		rentitem 7853,3600;
+		if($ruta==1){monster "hu_fild06",0,0,"Holden",1628,2,"evento_17::OnMobKilled3";}else{monster "pay_fild01",0,0,"Spore",1014,2,"evento_17::OnMobKilled3";}	
+		announce "[>Nano< encontrado, Mob multiplicado]",bc_all,0xE6330A;
+	}
+	end;	
+}
+
+// 	[====================Warper=======================]
+
+prontera,155,182,0	script	Warper_Eventos	45,1,1,{
+	end;
+OnTouch:
+	set .@numevento,getvariableofnpc(.eventoactivo,"GMEventos"); //obtiene el numero del evento
+	if (.@numevento==6 || .@numevento==15){
+			if (gethominfo(2)!="null"){
+				warp "SavePoint",0,0;
+				dispbottom "No puedes entrar con Homunculo.";				
+				close;
+			}
+			if(checkriding()){
+				warp "SavePoint",0,0;
+				dispbottom "No puedes entrar con Montura.";				
+				close;
+			}
+	}
+	switch(.@numevento) {
+		case 5:
+			setarray .tipo_fight$[0],"Novice","No Renacidos","2os Jobs","Todo Vale";
+			set .@tipo_pelea,getvariableofnpc(.numero_fight,"GMEventos");
+			switch(.@tipo_pelea) {
+				case 0:
+					if(Class!=0 && BaseLevel != 1){//novices nivel 1
+						warp "SavePoint",0,0;
+						dispbottom "No cumples con los requerimientos del evento!.";
+						close;
+					}
+					break;
+				case 1:
+					if(Upper > 1){//no renacidos
+						warp "SavePoint",0,0;
+						dispbottom "Solo Personajes No Renacidos!.";				
+						close;
+					}
+					break;
+				case 2:
+					if(Upper > 3){
+						warp "SavePoint",0,0;
+						dispbottom "Solo Personajes 2os Job";
+						close;
+					}
+					break;
+			}
+			sc_end sc_all;
+			set #kill_point,0;
+			warp "pvp_n_1-5",99,100;
+			break;
+		case 9:
+			sc_end sc_all;
+			warp "quiz_01",204,90;
+			break;
+		case 6:
+			sc_end sc_all;
+			warp "quiz_01",42,369;
+			break;
+		case 2:
+			sc_end sc_all;
+			warp "quiz_02",304,251;
+			break;
+		case 14:
+			sc_end sc_all;
+			warp "new_zone04",100,15;
+			break;
+		case 15:
+			setarray .porings[0],1002,1113,1857,1031,1049,1063,1894,1051,1007,1010,1052,1005,1105,1160;
+			sc_end sc_all;
+			nude;
+			sc_start SC__GROOMY,30000,3;
+			sc_start SC_STRIPWEAPON,30000,5;
+			sc_start SC_STRIPSHIELD,30000,5;
+			sc_start SC_STRIPARMOR,30000,5;
+			sc_start SC_STRIPHELM,30000,5;
+			disguise .porings[rand(0,getarraysize(.porings)-1)];
+			warp "alde_tt02",317,365;
+			break;
+	}
+}
+
+//evento oring warper
+
+alde_tt02,378,45,0	script	Warp_porace_salida	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	announce .npc$+": Tenemos un ganador! bien hecho "+strcharinfo(0)+".",0;
+	query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+	callfunc "Premios_disponibles";
+	mapwarp "alde_tt02","prontera",155,182;
+	set getvariableofnpc(.timerx,"GMEventos"),9999;
+	awake "GMEventos";
+}
+
+alde_tt02,385,367,0	script	Warp_porace#1	45,1,1,{
+	warp "alde_tt02",4,91;
+	percentheal 100,100;
+}
+
+alde_tt02,94,19,0	script	Warp_porace#2	45,1,1,{
+	warp "alde_tt02",184,226;
+	percentheal 100,100;
+}
+
+alde_tt02,251,200,0	script	Warp_porace#3	45,1,1,{
+	warp "alde_tt02",306,46;
+	percentheal 100,100;
+}
+
+//evento lost
+new_zone04,92,20,0	script	Puerta_1_lost	45,1,1,{
+	warp "new_zone04",19,57;
+	end;
+
+OnInit:
+	//delwaitingroom;
+	//waitingroom " - Puerta 1 - ",0;
+	disablenpc "Puerta_1_lost";
+	hideonnpc "Puerta_1_lost";
+	end;
+}
+
+new_zone04,96,20,0	script	Puerta_2_lost	45,1,1,{
+	warp "new_zone04",60,57;
+	end;
+
+OnInit:
+	//delwaitingroom;
+	//waitingroom " - Puerta 2 - ",0;
+	disablenpc "Puerta_2_lost";
+	hideonnpc "Puerta_2_lost";
+	end;
+}
+
+new_zone04,100,20,0	script	Puerta_3_lost	45,1,1,{
+	warp "new_zone04",99,57;
+	end;
+
+OnInit:
+	//delwaitingroom;
+	//waitingroom " - Puerta 3 - ",0;
+	disablenpc "Puerta_3_lost";
+	hideonnpc "Puerta_3_lost";
+	end;
+}
+
+new_zone04,104,20,0	script	Puerta_4_lost	45,1,1,{
+	warp "new_zone04",140,57;
+	end;
+
+OnInit:
+	//delwaitingroom;
+	//waitingroom " - Puerta 4 - ",0;
+	disablenpc "Puerta_4_lost";
+	hideonnpc "Puerta_4_lost";
+	end;
+}
+
+new_zone04,108,20,0	script	Puerta_5_lost	45,1,1,{
+	warp "new_zone04",180,57;
+	end;
+
+OnInit:
+	//delwaitingroom;
+	//waitingroom " - Puerta 5 - ",0;
+	disablenpc "Puerta_5_lost";
+	hideonnpc "Puerta_5_lost";
+	end;
+}
+
+//1
+new_zone04,19,57,0	script	Warp_lost_A#1	45,1,1,{
+	warp "new_zone04",19,97;
+}
+
+new_zone04,19,97,0	script	Warp_lost_B#1	45,1,1,{
+	warp "new_zone04",19,139;
+}
+
+new_zone04,19,139,0	script	Warp_lost_C#1	45,1,1,{
+	warp "new_zone04",19,180;
+}
+
+new_zone04,19,180,0	script	Warp_lost_D#1	45,1,1,{//warp ganador de el evento!
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	announce .npc$+": Tenemos un ganador! bien hecho "+strcharinfo(0)+".",0;
+	query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Gano evento. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+	callfunc "Premios_disponibles";
+	disablenpc "Warper_Eventos";
+	hideonnpc "Warper_Eventos";
+	mapwarp "new_zone04","prontera",155,182;
+	set getvariableofnpc(.timerx,"GMEventos"),9999;
+	awake "GMEventos";
+}
+//2
+new_zone04,60,57,0	script	Warp_lost_A#2	45,1,1,{
+	warp "new_zone04",60,97;
+}
+
+new_zone04,60,97,0	script	Warp_lost_B#2	45,1,1,{
+	warp "new_zone04",60,139;
+}
+
+new_zone04,60,139,0	script	Warp_lost_C#2	45,1,1,{
+	warp "new_zone04",60,180;
+}
+
+new_zone04,60,180,0	script	Warp_lost_D#2	45,1,1,{
+	callfunc "warp_no_ganador_lost";
+}
+//3
+new_zone04,99,57,0	script	Warp_lost_A#3	45,1,1,{
+	warp "new_zone04",99,97;
+}
+
+new_zone04,99,97,0	script	Warp_lost_B#3	45,1,1,{
+	warp "new_zone04",99,139;
+}
+
+new_zone04,99,139,0	script	Warp_lost_C#3	45,1,1,{
+	warp "new_zone04",99,180;
+}
+
+new_zone04,99,180,0	script	Warp_lost_D#3	45,1,1,{
+	callfunc "warp_no_ganador_lost";
+}
+//4
+new_zone04,140,57,0	script	Warp_lost_A#4	45,1,1,{
+	warp "new_zone04",140,97;
+}
+
+new_zone04,140,97,0	script	Warp_lost_B#4	45,1,1,{
+	warp "new_zone04",140,139;
+}
+
+new_zone04,140,139,0	script	Warp_lost_C#4	45,1,1,{
+	warp "new_zone04",140,180;
+}
+
+new_zone04,140,180,0	script	Warp_lost_D#4	45,1,1,{
+	callfunc "warp_no_ganador_lost";
+}
+//5
+new_zone04,180,57,0	script	Warp_lost_A#5	45,1,1,{
+	warp "new_zone04",180,97;
+}
+
+new_zone04,180,97,0	script	Warp_lost_B#5	45,1,1,{
+	warp "new_zone04",180,139;
+}
+
+new_zone04,180,139,0	script	Warp_lost_C#5	45,1,1,{
+	warp "new_zone04",180,180;
+}
+
+new_zone04,180,180,0	script	Warp_lost_D#5	45,1,1,{
+	callfunc "warp_no_ganador_lost";
+}
+
+
+//evento 17 Troll Master
+alde_tt03,2,397,4	script	GM Eureka#Premiadora	2562,{
+	announce "[Eliminando fallas, proceso de recuperacion manual iniciado]",bc_all,0xE6330A;
+	progressbar "10FF00",10;
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	mes .npc$;
+	mes "Muchas gracias por ayudarme.";
+	mes "Como recompensa especial podras elegir el siguiente evento!";
+	next;
+	delitem 7793,1;
+	delitem 7405,1;
+	delitem 7853,1;
+	doevent "GMEventos::Onpremio_ev17";
+}
+prontera,267,30,4	script	GM Eureka#troll	2562,8,8,{
+set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+M_inicio:
+	mes .npc$;
+	mes "Que $%$!&* quieres "+strcharinfo(0)+"?!";
+	menu "^ff0000Votar por un Evento^000000",m_troll,"Informacion del GM",m_gm,"^8500C2Sistema de Brochetas^000000",m_troll,"Cambio de Nombre",m_nombre,"Nada, solo paseaba mi dinosaurio",M_CANCEL;
+	end;
+
+m_gm:
+	setarray .@nombres$,"Eureka","GM","Rare candy";
+	set .@nom$,.@nombres$[rand(getarraysize(.@nombres$))];
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	next;
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	next;
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	next;
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	mes .@nom$+" is a lie";
+	close;
+
+
+m_troll:
+	next;
+	mes .npc$;
+	mes "   _^";
+	heal -70000,300;
+	specialeffect2 32;
+	emotion e_kis;
+	close;
+	end;
+
+m_nombre:
+	next;
+	mes .npc$;
+	mes "Este servicio tiene un costo de ^0000FF  Fish Point^000000";
+	mes " ";
+	mes "Te gustaria que cambie tu nombre?";
+	mes " ";
+	next;
+	set @lol, select ( "S1", "NO, MALDITA ESTAFADORA!", "Dame Rare Candy" );
+	mes .npc$;
+	mes " ";
+	mes "Por favor introduce tu nuevo nombre nuevo que sea nuevo";
+	mes "-El nombre debe tener por lo menos 4 letras egipcias con acentos.";
+	mes "-El nombre no puede tener mas letras que el alfabeto binario.";
+	next;
+	input .@name$;
+	setarray .@nombres$,"Nob Master","Mary Quita","Lola Meraz","Ana Mier de Cilla","Paco Gerlo","Benito Camela","Zoila Cerda","Rosa Meltroso","Elvio Lado","Zoila Vaca","Elsa Pito","Woundednab";
+	set .@nom$,.@nombres$[rand(getarraysize(.@nombres$))];
+	announce getvariableofnpc(.npc$,"GMEventos")+" : El usuario "+strcharinfo(0)+" ha decidido cambiar su nombre a "+.@nom$+"",0,0x0099FF;
+	atcommand "@fakename "+.@nom$;
+	close;
+	end;
+
+M_CANCEL:
+	next;
+	mes .npc$;
+	mes "Bye  ^_^";
+	heal -70000,300;
+	specialeffect2 32;
+	emotion e_kis;
+	close;
+
+OnEnabled:
+	set $ev_troll,0;
+	do{	
+	sleep2 rand(10000,30000);
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(6)){
+		case 0:
+			announce .npc$+": Es hora de jugar MLP Conquer C:",bc_all,0x0ECE03;
+			killmonsterall "guild_vs3";
+			sleep 10000;
+			setarray .@a1$,"una banana","una demanda","un abrazo","herpes","un litro de jugo","un chilion de dolares";
+			set .@nom$,.@a1$[rand(getarraysize(.@a1$))];
+			announce .npc$+": Invocare un Moustro en la sala PVP, el que lo mate recibira "+.@nom$,bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": hmmuu... que Moustro Elegire?...",bc_all,0x0ECE03;
+			sleep 10000;
+			setarray .@a2$,"Assassin Cross Eremes","Nidhoggr's Shadow","Pori Pori","Valkyrie Randgris","Tu mama","Chuck Norris";
+			set .@nom$,.@a2$[rand(getarraysize(.@a2$))];
+			announce .npc$+": Muy bien! Invocare en a: "+.@nom$,bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": El Moustro estara solo por 1.5 kilosegundos, ustedes pueden! :3",bc_all,0x0ECE03;
+			monster "guild_vs3",0,0,.@nom$,1750,1;
+			set .timerx,0;
+			do{
+				sleep 50000;//1 min
+				if (getmapmobs ("guild_vs3")==0) set .timerx,9999;//si no hay mobs en el mapa termina evento
+				set .timerx,.timerx+1;
+			} while(.timerx<2);
+			killmonsterall "guild_vs3";
+			break;
+		case 1:
+			announce .npc$+": Es hora de buscar un tesoro! :o",bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": Escrdeone un Tureasre Box en aguln lguar.",bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": hmm... en dnd$oe la eocendsre?...",bc_all,0x0ECE03;
+			sleep 10000;
+			setarray .@a3$,"Piso 100 de Endless","Narnia","Thanatos Tower","Bio Lab F3","la casa de Erilas","algun lugar";
+			set .@nom$,.@a3$[rand(getarraysize(.@a3$))];
+			announce .npc$+": Muy bien!... escondere el Tesoro en "+.@nom$+"!",bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": El Tesoro solo estara por -"+rand(999999)+" nanosegundos, Suerte :D",bc_all,0x0ECE03;
+			break;
+		case 2:
+			announce .npc$+": Es hora de tener una gran F! ^_n",bc_all,0x0ECE03;
+			sleep 20000;
+			announce .npc$+": Pero primero debo elegir un lugar... hmmm, veamos...",bc_all,0x0ECE03;
+			sleep 20000;
+			announce .npc$+": Ok... la Poring P% sera en >Prontera< todos estan invitados :D",bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": El evento solo durara "+rand(999999)+" horas! que se diviertan!",bc_all,0x0ECE03;
+			sleep 5000;
+			monster "prontera",0,0,"Party Hard",2561,500;
+			monster "prontera",0,0,"Party Hard",1904,500;
+			set .timerx,0;
+			do{
+				sleep 50000;//1 min
+				set .timerx,.timerx+1;
+			} while(.timerx<2);
+			break;
+		case 3:
+			announce .npc$+": Muy bien! Es hora de subir #!!",bc_all,0x0ECE03;
+			sleep 10000;
+			setarray .@a4$,"una jirafa","un novice","un icosaedro","el servidor por la ventana","me por las escaleras","una mandarina";
+			set .@nom$,.@a4$[rand(getarraysize(.@a4$))];
+
+			announce .npc$+": Voy a lanzar "+.@nom$+" e incrementare los rates con eso ^_X",bc_all,0x0ECE03;
+			sleep 10000;
+			//Aplica rates
+			set .@ratebase,rand(100,1000);
+			setBattleFlag "base_exp_rate",.@ratebase;
+			setBattleFlag "job_exp_rate",.@ratebase;
+			atcommand "@reloadmobdb";
+			set .@baseexp1, getBattleFlag("base_exp_rate")/100;
+			set .@jobexp1, getBattleFlag("job_exp_rate")/100;
+			set .@ratedrops1, getBattleFlag("item_rate_card")/100;
+			announce .npc$+": Los rates seran $& por "+rand(999999)+" horas, ahora son: "+.@baseexp1+"x "+.@jobexp1+"x "+.@ratedrops1+"x ",bc_all,0x0ECE03;
+			set .timerx,0;
+			do{
+				sleep 60000;//1 min
+				set .timerx,.timerx+1;
+			} while(.timerx<3);//
+			//Restaura rates
+			setBattleFlag "base_exp_rate",2000;
+			setBattleFlag "job_exp_rate",2000;
+			atcommand "@reloadmobdb";
+			set .@baseexp1, getBattleFlag("base_exp_rate")/100;
+			set .@jobexp1, getBattleFlag("job_exp_rate")/100;
+			set .@ratedrops1, getBattleFlag("item_rate_card")/100;
+			announce .npc$+": Los rteas rsgoeraern a la nolardmiad, ahora son "+.@baseexp1+"x "+.@jobexp1+"x "+.@ratedrops1+"x ",bc_all,0x0ECE03;
+			break;	
+		case 4:
+			announce .npc$+": Pe-Chaaan!! Es hora de ganar con Lotototo RoMX!!",bc_all,0x0ECE03;
+			sleep 10000;
+			announce .npc$+": Elegire un usuario en linea y simplemente le &aa% =_^",bc_all,0x0ECE03;
+			sleep 10000;
+			Lotto_Otro_nombre:
+			announce .npc$+": Veamos, revisare mi la los lista...",bc_all,0x0ECE03;
+			sleep 10000;
+			deletearray .@nombres_online$;
+			query_sql("SELECT `name` FROM `char` WHERE `online`=1",.@nombres_online$);
+			set .@nombre_pj_ganador$,.@nombres_online$[rand(0,getarraysize(.@nombres_online$)-1)];
+			set .@id_ganador_loteria,getcharid(0,.@nombre_pj_ganador$);
+			announce .npc$+": OK...ya tengo el nombre :D",bc_all,0x0ECE03;
+			sleep 10000;
+			if (.@id_ganador_loteria==0){
+				announce .npc$+": El ganador es: "+.@nombre_pj_ganador$+"!! ... un momento, esta en ... elegire otro nombre.",bc_all,0x0ECE03;
+				sleep 10000;
+				goto Lotto_Otro_nombre;
+			}
+			announce .npc$+": "+.@nombre_pj_ganador$+"!! eres el ganador del [Insert the name of the event here] ^w^",bc_all,0x0ECE03;
+			set .@id_ganador_loteria,getcharid(3,.@nombre_pj_ganador$);
+			attachrid .@id_ganador_loteria;
+			atcommand "@die";//+.@nombre_pj_ganador$;
+			detachrid;
+			break;
+		case 5:
+			announce .npc$+": And believe me I am still alive (8) I'm doing science and I'm still alive (8)...",bc_all,0x0ECE03;
+			sleep 10000;
+			break;
+		}	
+	} while ($ev_troll==0);
+	end;
+
+OnTouch:
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	if (countitem(7793)>=1 && countitem(7405)>=1 && countitem(7853)>=1){
+		callfunc "Premios_disponibles";
+		set $ev_troll,1;
+		moveNPC "GM Eureka#troll",267,30;
+		disablenpc "GM Eureka#troll";
+		hideonnpc "GM Eureka#troll";
+		awake "GM Eureka#troll";
+		awake "GM Eureka#troll";
+		awake "GM Eureka#troll";
+		set getvariableofnpc(.timerx,"GMEventos"),999;
+		set getvariableofnpc(.timerx,"GM Eureka#troll"),999;
+		awake "GMEventos";
+		sc_end sc_all;
+		warp "alde_tt03",5,394;
+		end;
+	}
+	set no_dopadora,no_dopadora+1;
+	setarray .@a3$,"prt_fild00","mjolnir_11","moc_fild18","prt_fild10","pay_fild04";
+	set .@nom$,.@a3$[rand(getarraysize(.@a3$))];
+	if (no_dopadora==4){dispbottom getvariableofnpc(.npc$,"GMEventos")+" : NO SOY ME MOLESTES!!";warp .@nom$,0,0;set no_dopadora,0;}
+	if(getequipid(1)!=5136 && getvariableofnpc(.eventoactivo,"GMEventos")!=12){setoption Option_xmas,0;}
+	if (rand(3)==1){
+		npctalk "Vamos "+strcharinfo(0)+"!! tu puedes ^_^";
+		emotion e_heh;
+		specialeffect2 83;
+		sc_start SC_SLEEP,10000,10;
+		sc_start SC_CONFUSION,10000,10;
+		sc_start SC_STONE,10000,10;
+		sc_start SC_DECREASEAGI,300000,10;
+		sc_start SC_CURSE,300000,10;
+		sc_start SC_STRIPWEAPON,10000,5;
+		sc_start SC_STRIPSHIELD,10000,5;
+		sc_start SC_STRIPARMOR,10000,5;
+		sc_start SC_STRIPHELM,10000,5;
+		sc_start SC_CP_WEAPON,10000,5;
+		sc_start SC_CP_SHIELD,10000,5;
+		sc_start SC_CP_ARMOR,10000,5;
+		sc_start SC_CP_HELM,10000,5;
+		sc_start SC_FREEZING,10000,5;
+		sc_start SC_MAGICMUSHROOM,30000,5;
+	}
+	end;
+
+}//fin script
+
+//chat box
+prt_church,83,121,4	script	RoMX Team	857,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	mes "Lista de participantes RoMX Team";
+	mes " ";
+	query_logsql("SELECT COUNT(*) FROM `evento_democracia`", .num_activos);
+	if (.num_activos==0){close;}
+	query_logsql("SELECT `uid` FROM `evento_democracia` WHERE `voto` = "+getvariableofnpc(.num_elegido,"GMEventos"), .nombr_objetivo$);
+	query_logsql("SELECT `uid` FROM `evento_democracia`", .nombr_activos$);
+	for (set .@c, 0; .@c < getarraysize(.nombr_activos$); set .@c, .@c + 1){
+		set .num_temporal_ev12,.@c+1;
+		if (.nombr_objetivo$==.nombr_activos$[.@c]){mes "^880000"+.num_temporal_ev12+" - "+.nombr_activos$[.@c]+".^000000";
+		}else{
+		mes .num_temporal_ev12+" - "+.nombr_activos$[.@c];}
+	}
+	set .minutos_pasan,120-getvariableofnpc(.timerx,"GMEventos");
+	mes " ";
+	mes "Restan "+.minutos_pasan+" Minutos para cumplir el objetivo.";
+	if (.nombr_objetivo$==strcharinfo(0)){//si es el jugador objetivo
+		next;
+		mes "El mapa del objetivo es: "+getvariableofnpc(.mapatesoro$,"GMEventos");
+		mes " ";
+		mes strcharinfo(0)+" renuncias a ser el Guia?";
+		mes " ";
+		mes "^880000Recuerda que si renuncias, el evento se dara por terminado.^000000";
+		set .pregunta_ev12,select("No, seguire adelante","Si, renuncio a ser el guia");
+		if (.pregunta_ev12==1) {close;}
+		announce .npc$+": El guia a renunciado, evento cancelado u_u",0;
+		set getvariableofnpc(.timerx,"GMEventos"),999;
+		awake "GMEventos";
+	}
+	close;
+end;
+
+OnActive:
+	delwaitingroom;
+	set .usuarios_maximos,getvariableofnpc(.miembros_evento12,"GMEventos");
+	waitingroom " - RoMX Team! - ",.usuarios_maximos,"RoMX Team::OnStart",.usuarios_maximos;
+	end;
+
+OnStart:
+	warpwaitingpc "prt_church",33,171;
+	delwaitingroom;
+	for (set .@c, 0; .@c < getvariableofnpc(.miembros_evento12,"GMEventos"); set .@c, .@c + 1){
+		set .nombr_pj$, rid2name($@warpwaitingpc[.@c]);
+		query_logsql("INSERT INTO `evento_democracia` (`uid`,`voto`,`ip`) VALUES ('"+.nombr_pj$+"',"+.@c+",'no_ip')");
+		sleep 800;
+	}
+	end;
+
+OnNull:
+	delwaitingroom;
+	end;
+}
+
+
+//warper evento 12
+prt_church,37,172,0	script	Warper_Ev_12	45,1,1,{
+	end;
+OnTouch:
+	warp "prt_church",88,121;
+}
+
+
+
+// 	[====================Otros=======================]
+//evento 11
+prontera,267,30,5	script	Totem#prontera::Totem	406,{//406
+if(getvariableofnpc(.eventoactivo,"GMEventos")==11){
+	if (.re_status==1) {
+			set .re_status,0;
+			set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+			announce .npc$+": Tenemos un ganador! bien hecho "+strcharinfo(0)+".",0;
+			callfunc "Premios_disponibles";
+			awake "GMEventos";
+	} else {
+			dispbottom "JA! JA! tienes pesimos reflejos xD!.";
+			warp "Random",0,0;
+	}
+}else{//evento 12
+	query_logsql("SELECT `uid` FROM `evento_democracia` WHERE `voto` = "+getvariableofnpc(.num_elegido,"GMEventos"), .nombr_objetivo$);
+	if (.nombr_objetivo$==strcharinfo(0)){//si es el jugador objetivo
+		mes "Totem";
+		mes "Quieres reclamar tu Premio en este momento?";
+		mes "^880000Recuerda que si reclamar tu premio ahora tu equipo solo tendra 10 segundos para reclamarlo.^000000";
+		set .pregunta_ev12,select("No, esperare a mi equipo","Si estoy list@");
+		if (.pregunta_ev12==1) {close;}
+		query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Llego guia y activo Totem. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+		set getvariableofnpc(.llego_objetivo,"GMEventos"),1;
+		set getvariableofnpc(.numero_ganadores,"GMEventos"),1;
+		npctalk "El guia ha llegado";
+		callfunc "Premios_disponibles";
+		warp "prt_church",88,121;
+		sleep 1000;
+		npctalk "Esperando al Resto del equipo.";
+		sleep 5000;
+		npctalk "10";
+		sleep 1000;
+		npctalk "9";
+		sleep 1000;
+		npctalk "8";
+		sleep 1000;
+		npctalk "7";
+		sleep 1000;
+		npctalk "6";
+		sleep 1000;
+		npctalk "5";
+		sleep 1000;
+		npctalk "4";
+		sleep 1000;
+		npctalk "3";
+		sleep 1000;
+		npctalk "2";
+		sleep 1000;
+		npctalk "1";
+		sleep 500;
+		disablenpc "Totem#thor";
+		disablenpc "Totem#hidden";
+		disablenpc "Totem#abyss";
+		disablenpc "Totem#odin";
+		disablenpc "Totem#juperos";
+		disablenpc "Totem#glas";
+		hideonnpc "Totem#thor";
+		hideonnpc "Totem#hidden";
+		hideonnpc "Totem#abyss";
+		hideonnpc "Totem#odin";
+		hideonnpc "Totem#juperos";
+		hideonnpc "Totem#glas";
+		sleep 70000;
+		end;
+	}
+	else{
+		if (getvariableofnpc(.llego_objetivo,"GMEventos")==1){//si el elegido a llegado
+			query_logsql("SELECT `uid` FROM `evento_democracia`", .nombr_pjs$);
+			set .@miembro_grupo,0;
+			for (set .@c, 0; .@c < getarraysize(.nombr_pjs$); set .@c, .@c + 1){
+				if(.nombr_pjs$[.@c]==strcharinfo(0)){set .@miembro_grupo,1;}//si es el miembro de los elegidos
+			}
+			if (.@miembro_grupo==1){
+				npctalk "Bien hecho "+strcharinfo(0);
+				warp "prt_church",88,121;//query_sql ("UPDATE `evento_democracia` SET `uid`='"+getcharid(0)+"' WHERE `uid`='"+strcharinfo(0)+"'");
+				set getvariableofnpc(.numero_ganadores,"GMEventos"),getvariableofnpc(.numero_ganadores,"GMEventos")+1;
+				callfunc "Premios_disponibles";
+			}
+			else{emotion 20;}
+		}else{emotion 20;}
+	}
+	end;
+}
+end;
+
+OnEnabled:
+		set .re_status,0;
+		do{	
+			sleep2 rand(1000,30000);
+			switch(rand(0,8)){
+				case 0:
+					npctalk "Click Ahora!";
+					specialeffect 17;
+					break;
+				case 1:
+					emotion e_no1;
+					break;
+				case 2:
+					set .re_status,1;
+					npctalk "RoMX!";
+					specialeffect 17;
+					specialeffect 28;
+					specialeffect 30;
+					break;
+				case 3:
+					npctalk "MXRo!";
+					specialeffect 28;
+					break;	
+				case 4:
+					npctalk "LOL!";
+					specialeffect 30;
+					break;
+				case 5:
+					npctalk "Mira como los tengo Eureka xD!";
+					donpcevent "GM Eureka::OnEvento11_2";
+					break;
+				case 6:
+					npctalk "RoMeo!";
+					break;
+				case 7:
+					npctalk "RuMex!";
+					break;
+				case 8:
+					donpcevent "GM Eureka::OnEvento11_1";
+					break;
+			}
+		} while (.re_status==0);
+	end;
+
+OnDisabled:
+	set .re_status,2;
+	end;
+
+}//fin script
+
+//clones del mismo npc en los demas lugares
+thor_v03,144,36,6	duplicate(Totem)	Totem#thor	406
+prt_maze03,45,194,6	duplicate(Totem)	Totem#hidden	406
+abyss_03,28,100,6	duplicate(Totem)	Totem#abyss	406
+odin_tem03,193,305,6	duplicate(Totem)	Totem#odin	406
+juperos_02,142,12,6	duplicate(Totem)	Totem#juperos	406
+gl_cas02,120,89,6	duplicate(Totem)	Totem#glas	406
+abbey03,233,147,6	duplicate(Totem)	Totem#name	406
+
+prt_church,33,177,6	script	Totem.	406,{//evento 12
+	emotion e_scissors;
+	end;
+
+OnUnloadNPC:
+	specialeffect 316;
+	sleep 100;
+	specialeffect 30;
+	disablenpc "Totem.";
+	hideonnpc "Totem.";
+	end;
+}
+
+prt_church,27,177,4	script	GM Eureka.	2562,{//evento 12
+	end;
+}
+
+//warper de salida de Lost
+new_zone04,99,8,3	script	Kafra Employee#lost	117,{//
+	mes "[Kafra Employee]";	
+	mes "Quieres salir de este mapa?";
+	if(select("No","Si")==1){close;}	
+	warp "SavePoint",0,0;
+end;
+}
+
+//warper nameles evento 12
+ve_fild07,130,134,3	script	RoMX Team.	946,{//
+	query_logsql("SELECT `uid` FROM `evento_democracia`", .nombr_pjs$);
+	set .@miembro_grupo,0;
+	for (set .@c, 0; .@c < getarraysize(.nombr_pjs$); set .@c, .@c + 1){
+		if(.nombr_pjs$[.@c]==strcharinfo(0)){//si es el miembro de los elegidos
+			warp "nameless_n",257,215;
+		}else{emotion 20;}
+	}
+}
+
+//del evento Poring Catcher
+-	script	poringlose	-1,{
+OnMobKilled:
+	announce " "+strcharinfo(0)+" ha sido eliminad@ del evento! :3",bc_all;
+	warp "prontera",155,182;
+}	
+
+//Codigo de Poring Bomba
+-	script	bomblose	-1,{
+OnMobDied:
+	if (getmapmobs("quiz_01")<50){
+		areamonster "quiz_01", 23, 361, 38, 376, "Timed Bomb",1904,1,"bomblose::OnMobDied";
+		areamonster "quiz_01", 45, 362, 60, 376, "Timed Bomb",1904,1,"bomblose::OnMobDied";
+	}
+	end;
+}
+
+//del evento de mobs ev12
+-	script	mobs_ev12	-1,{
+OnMobKilled:
+	if (getvariableofnpc(.eventoactivo,"GMEventos") == 12){
+		set .@calculador_mobs,rand(0,1);
+		getmapxy(@mapname$,@mapx,@mapy,0,strcharinfo(0));
+		if(@mapname$=="thor_v01"){
+				if(.@calculador_mobs==1){monster "thor_v01",0,0,getmonsterinfo(1833,0),1833,1,"mobs_ev12::OnMobKilled";}else{monster "thor_v01",0,0,getmonsterinfo(1837,0),1837,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="thor_v03"){
+				if(.@calculador_mobs==1){monster "thor_v03",0,0,getmonsterinfo(1831,0),1831,1,"mobs_ev12::OnMobKilled";}else{monster "thor_v03",0,0,getmonsterinfo(1833,0),1833,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="prt_maze01"){
+				if(.@calculador_mobs==1){monster "prt_maze01",0,0,getmonsterinfo(1035,0),1035,1,"mobs_ev12::OnMobKilled";}else{monster "prt_maze01",0,0,getmonsterinfo(1037,0),1037,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="prt_maze03"){
+				if(.@calculador_mobs==1){monster "prt_maze03",0,0,getmonsterinfo(1101,0),1101,1,"mobs_ev12::OnMobKilled";}else{monster "prt_maze03",0,0,getmonsterinfo(1035,0),1035,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="abyss_01"){
+				if(.@calculador_mobs==1){monster "abyss_01",0,0,getmonsterinfo(1699,0),1699,1,"mobs_ev12::OnMobKilled";}else{monster "abyss_01",0,0,getmonsterinfo(1191,0),1191,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="abyss_02"){
+				if(.@calculador_mobs==1){monster "abyss_02",0,0,getmonsterinfo(1716,0),1716,1,"mobs_ev12::OnMobKilled";}else{monster "abyss_02",0,0,getmonsterinfo(1714,0),1714,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="abyss_03"){
+				if(.@calculador_mobs==1){monster "abyss_03",0,0,getmonsterinfo(1713,0),1713,1,"mobs_ev12::OnMobKilled";}else{monster "abyss_03",0,0,getmonsterinfo(1716,0),1716,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="odin_tem01"){
+				if(.@calculador_mobs==1){monster "odin_tem01",0,0,getmonsterinfo(1693,0),1693,1,"mobs_ev12::OnMobKilled";}else{monster "odin_tem01",0,0,getmonsterinfo(1696,0),1696,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="odin_tem02"){
+				if(.@calculador_mobs==1){monster "odin_tem02",0,0,getmonsterinfo(1752,0),1752,1,"mobs_ev12::OnMobKilled";}else{monster "odin_tem02",0,0,getmonsterinfo(1753,0),1753,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="odin_tem03"){
+				if(.@calculador_mobs==1){monster "odin_tem03",0,0,getmonsterinfo(1755,0),1755,1,"mobs_ev12::OnMobKilled";}else{monster "odin_tem03",0,0,getmonsterinfo(1754,0),1754,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="juperos_01"){
+				if(.@calculador_mobs==1){monster "juperos_01",0,0,getmonsterinfo(1672,0),1672,1,"mobs_ev12::OnMobKilled";}else{monster "juperos_01",0,0,getmonsterinfo(1673,0),1673,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="juperos_02"){
+				if(.@calculador_mobs==1){monster "juperos_02",0,0,getmonsterinfo(1678,0),1678,1,"mobs_ev12::OnMobKilled";}else{monster "juperos_02",0,0,getmonsterinfo(1677,0),1677,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="glast_01"){
+				monster "glast_01",0,0,getmonsterinfo(1259,0),1259,1,"mobs_ev12_gl::OnMobKilled";
+		}else if(@mapname$=="gl_cas02"){
+				if(.@calculador_mobs==1){monster "gl_cas02",0,0,getmonsterinfo(1163,0),1163,1,"mobs_ev12_gl::OnMobKilled";}else{monster "gl_cas02",0,0,getmonsterinfo(1208,0),1208,1,"mobs_ev12_gl::OnMobKilled";}
+		}else if(@mapname$=="gl_cas01"){
+				if(.@calculador_mobs==1){monster "gl_cas01",0,0,getmonsterinfo(1195,0),1195,1,"mobs_ev12::OnMobKilled";}else{monster "gl_cas01",0,0,getmonsterinfo(1260,0),1260,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="abbey01"){
+				if(.@calculador_mobs==1){monster "abbey01",0,0,getmonsterinfo(1867,0),1867,1,"mobs_ev12::OnMobKilled";}else{monster "abbey01",0,0,getmonsterinfo(1864,0),1864,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="abbey02"){
+				if(.@calculador_mobs==1){monster "abbey02",0,0,getmonsterinfo(1864,0),1864,1,"mobs_ev12::OnMobKilled";}else{monster "abbey02",0,0,getmonsterinfo(1869,0),1869,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="abbey03"){
+				if(.@calculador_mobs==1){monster "abbey03",0,0,getmonsterinfo(1870,0),1870,1,"mobs_ev12::OnMobKilled";}else{monster "abbey03",0,0,getmonsterinfo(1867,0),1867,1,"mobs_ev12::OnMobKilled";}
+		}else if(@mapname$=="nameless_n"){
+				if(.@calculador_mobs==1){monster "nameless_n",0,0,getmonsterinfo(1865,0),1865,1,"mobs_ev12::OnMobKilled";}else{monster "nameless_n",0,0,getmonsterinfo(1866,0),1866,1,"mobs_ev12::OnMobKilled";}
+		}//end if
+	}//end if
+}
+
+-	script	general_invasor	-1,{
+OnMobKilled:
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	announce .npc$+": "+strcharinfo(0)+" ha derrotado a un general!",0;
+	set getvariableofnpc(.generales_vivos,"GMEventos"),getvariableofnpc(.generales_vivos,"GMEventos")-1;
+	query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Mato un general. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+	callfunc "Premios_disponibles";
+	if(getvariableofnpc(.generales_vivos,"GMEventos")==0){
+		set .@jefe_invasor,getvariableofnpc(.bigboss_ev16,"GMEventos");
+		announce "Guardia de "+getvariableofnpc(.objetivo_inv$,"GMEventos")+": El Coronel ha aparecido" ,0;
+		monster getvariableofnpc(.mapa_actual$,"GMEventos"),0,0,"Coronel "+getmonsterinfo(.@jefe_invasor,0),.@jefe_invasor,1,"general_invasor::OnBossKilled";
+	}
+	awake "GMEventos";
+	end;
+
+OnBossKilled:
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	announce .npc$+": "+strcharinfo(0)+" ha derrotado al Coronel!",0;
+	set getvariableofnpc(.jefe_flag,"GMEventos"),0;
+	query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Mato un general. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+	callfunc "Premios_disponibles";	
+	awake "GMEventos";
+	end;
+}
+
+//Cuendo pj muere
+-	script	Killa_warp	-1,{
+
+OnPCDieEvent:
+	if (getvariableofnpc(.eventoniciado,"GMEventos") == 1){
+		getmapxy(.@mapuhp$,.@x,.@y,0);
+		if(.@mapuhp$=="pvp_n_1-5")//evento Ultimo Hombre en Pie
+		{
+			set #kill_point, 0;
+			atcommand "@sound toasty";
+			announce " "+strcharinfo(0)+" ha sido eliminad@ del evento!",bc_all;
+			atcommand "@alive";
+			warp "prontera",155,182;
+			end;
+		}
+		if (.@mapuhp$=="quiz_01") {//evento poring bomba
+			atcommand "@sound toasty";
+			mapannounce "quiz_01","Que desastre!! Las bombas se han multiplicado!!",0;
+			areamonster "quiz_01", 23, 361, 38, 376, "Timed Bomb",1904,1,"bomblose::OnMobDied";
+			areamonster "quiz_01", 45, 362, 60, 376, "Timed Bomb",2561,1,"bomblose::OnMobDied";
+			announce " "+strcharinfo(0)+" ha sido eliminad@ del evento!",bc_all;
+			atcommand "@alive";
+			warp "prontera",155,182;
+			end;
+		}
+	}
+OnPCKillEvent:
+	getmapxy(.@mapuhp$,.@x,.@y,0);
+	if(.@mapuhp$=="pvp_n_1-5"){//evento Ultimo Hombre en Pie
+		set #kill_point,#kill_point+1;
+		if ( #kill_point % 3 == 0) {
+			if ( #kill_point == 3) {atcommand "@sound killingspree";}
+			if ( #kill_point == 6) {atcommand "@sound dominating";}
+			if ( #kill_point == 9) {atcommand "@sound unstoppable";}
+			announce ""+strcharinfo(0)+" a hecho 4 Asesinatos consecutivos!! Se le otorgara un Premio extra.",bc_all;
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','A hecho 4 Asesinatos consecutivos. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+			atcommand "@cash 20";
+			end;
+		}
+	}
+}
+
+// -- Mapflags
+quiz_02	mapflag	nowarp
+quiz_02	mapflag	nowarpto
+quiz_02	mapflag	noteleport
+quiz_02	mapflag	nosave
+quiz_02	mapflag	nomemo
+quiz_02	mapflag	nobranch
+quiz_02	mapflag	noloot
+quiz_02	mapflag	noskill
+quiz_02	mapflag	nopenalty
+pvp_n_1-5	mapflag	nowarp
+pvp_n_1-5	mapflag	nowarpto
+pvp_n_1-5	mapflag	noteleport
+pvp_n_1-5	mapflag	nosave
+pvp_n_1-5	mapflag	nomemo
+pvp_n_1-5	mapflag	nobranch
+pvp_n_1-5	mapflag	pvp_noparty
+pvp_n_1-5	mapflag	pvp_noguild
+pvp_n_1-5	mapflag	gvg_noparty
+pvp_n_1-5	mapflag	partylock
+pvp_n_1-5	mapflag	restricted	4
+quiz_01	mapflag	nowarpto
+quiz_01	mapflag	noskill
+quiz_01	mapflag	nowarp
+quiz_01	mapflag	noteleport
+quiz_01	mapflag	nomemo
+quiz_01	mapflag	nosave	SavePoint
+quiz_01	mapflag	nobranch
+quiz_01	mapflag	noicewall
+quiz_01	mapflag	nopenalty
+quiz_01	mapflag	nobranch
+quiz_01	mapflag	noexp
+quiz_01	mapflag	noreturn
+quiz_01	mapflag	pvp_noparty
+new_zone04	mapflag	nowarp
+new_zone04	mapflag	nowarpto
+new_zone04	mapflag	noteleport
+new_zone04	mapflag	nosave
+new_zone04	mapflag	nomemo
+new_zone04	mapflag	nobranch
+new_zone04	mapflag	nopenalty
+alde_tt02	mapflag	nowarp
+alde_tt02	mapflag	nowarpto
+alde_tt02	mapflag	noteleport
+alde_tt02	mapflag	nosave
+alde_tt02	mapflag	nomemo
+alde_tt02	mapflag	nobranch
+alde_tt02	mapflag	noloot
+alde_tt02	mapflag	noskill
+alde_tt02	mapflag	nopenalty
+alde_tt02	mapflag	noreturn
+alde_tt02	mapflag	loadevent
+morocc	mapflag	loadevent
+payon	mapflag	loadevent
+izlude	mapflag	loadevent
+geffen	mapflag	loadevent
+alberta	mapflag	loadevent
+comodo	mapflag	loadevent
+yuno	mapflag	loadevent
+quiz_02	mapflag	loadevent
+pvp_n_1-5	mapflag	loadevent
+quiz_01	mapflag	loadevent
+new_zone04	mapflag	loadevent
+alde_tt03	mapflag	nomemo
+alde_tt03	mapflag	nowarp
+alde_tt03	mapflag	nowarpto
+alde_tt03	mapflag	noteleport
+alde_tt03	mapflag	nosave
+alde_tt03	mapflag	nomemo
+alde_tt03	mapflag	nobranch
+alde_tt03	mapflag	noloot
+alde_tt03	mapflag	noskill
+alde_tt03	mapflag	nopenalty
+alde_tt03	mapflag	noreturn
+

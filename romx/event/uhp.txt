@@ -1,0 +1,239 @@
+// [========================================================]
+// [===========       The Last Man Standing      ===========]
+// [========================================================]
+// [ Version 3                                              ]
+// [========================================================]
+// [ Original script by: iTouch                             ]
+// [========================================================]
+// [ Description:                                           ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ - Warp to map pvp                                      ]
+// [ - 6 randomly prices to winer.                          ]
+// [ - GM Control Panel whispering to NPC:LMS               ]
+// [========================================================]
+// [                                                        ]
+// [                                                        ]
+// [ - Translated into Spanish by haunter94.                ]
+// [========================================================]
+-	script	LMS#disable	-1,{
+OnInit:
+disablenpc "Fight Club Manager";
+disablenpc "All Job Manager";
+end;
+}
+
+-	script	LMS	-1,{
+
+OnStart:
+OnClock1200:// 12 PM
+OnClock1900://7 PM Edit this to what ever you want. note : OnClock0000 is 12 midnight and OnClock1200 is 12 Noon
+goto startlmsevent;
+
+OnWhisperGlobal:
+	if(getgmlevel() >= 99) {
+		set .@n$,"^008888Ultimo Hombre en Pie^000000";
+		mes .@n$;
+		mes "Este es el panel de Ultimo Hombre en Pie.";
+		mes "Quieres activar el evento en este momento?.";
+		set .@b,select("^880000Salir^000000","Iniciar evento.") - 1;
+		mes .@n$;
+		if(.@b) {
+			doevent "LMS::OnStart";
+			mes "El evento a iniciado.";
+			close;
+		}
+		mes "Adios.";
+		close;
+	}
+	end;
+
+startlmsevent:
+announce "Fight Club Manager: El evento Ultimo Hombre en Pie esta a punto de comenzar.",0;
+sleep2 60000;
+announce "Fight Club Manager: Aquellos que quieren jugar, dirijase por favor a Prontera y entren en el portal, frente a la fuente.",0;
+sleep2 20000;
+announce "Fight Club Manager: En 1 minuto el portal desaparecera.",0;
+sleep2 20000;
+announce "Fight Club Manager: Por favor, vayan a Prontera y entren en el portal si quieres participar.",0;
+enablenpc "All Job Manager";
+setmapflag "pvp_n_1-5",mf_noskill;
+pvpoff "pvp_n_1-5";
+initnpctimer;
+end;
+
+OnTimer30000:
+announce "Fight Club Manager: Ultimos 30 segundos.",0;
+sleep2 5000;
+announce "Fight Club Manager: Si quieres participar favor entra en el portal frente a la fuente de prontera.",0;
+end;
+
+OnTimer50000:
+announce "Fight Club Manager: Ultimos 10 segundos.",0;
+end;
+
+OnTimer55000:
+announce "Fight Club Manager: 5.",0;
+end;
+
+OnTimer56000:
+announce "Fight Club Manager: 4.",0;
+end;
+
+OnTimer57000:
+announce "Fight Club Manager: 3.",0;
+end;
+
+OnTimer58000:
+announce "Fight Club Manager: 2.",0;
+end;
+
+OnTimer59000:
+announce "Fight Club Manager: 1.",0;
+end;
+
+OnTimer60000:
+announce "Fight Club Manager: Se acabo el tiempo.",0;
+end;
+
+OnTimer61000:
+disablenpc "All Job Manager";
+donpcevent "Fight Club Manager::OnEnable";
+stopnpctimer;
+end;
+}
+//---------All Job Registration---------------
+prontera,155,182,0	script	All Job Manager	45,1,1,{
+	end;
+OnTouch:
+		warp "pvp_n_1-5",99,100;
+		set #kill_point,0;
+		sc_end sc_all;
+		end;
+ }
+
+//--------------------------
+
+//--------------------------
+pvp_n_1-5,99,100,6	script	Fight Club Manager	808,{
+
+mes "[Fight Club Manager]";
+mes "Felicidades. Has ganado.";
+next;
+announce "Fight Club Manager: Tenemos un ganador! bien hecho "+strcharinfo(0)+".",0;
+set var, rand(1,6);
+if (var==1) {getitem 7539,3;}//3 porin coin
+else if (var==2) {getitem 12210,1;}//1 bubble gum
+else if (var==3) {getitem 14545,2;}//2 field manual 300
+else if (var==4) {getitem 17002,1;}//1 rare candy
+else if (var==5) {getitem 7539,5;}//5 Porin coins
+else if (var==6) {getitem 607,5;}//5 Yggdrasil Berry
+mes "Ahora debes Regresar";
+warp "prontera",155,182;
+disablenpc "Fight Club Manager";
+close;
+end;
+OnEnable:
+pvpoff "pvp_n_1-5";
+mapannounce "pvp_n_1-5","Fight Club Manager: El evento Ultimo Hombre en Pie se iniciara en breve.",0;
+sleep2 10000;
+mapannounce "pvp_n_1-5","Fight Club Manager: Pero antes de empezar les dire un pocos recordatorios.",0;
+sleep2 10000;
+mapannounce "pvp_n_1-5","Fight Club Manager: El Uso de skills Cloaking, Hidin, Chase Walk estan estrictamente prohibidos.",0;
+sleep2 10000;
+mapannounce "pvp_n_1-5","Fight Club Manager: Solo el Ultimo Hombre en Pie sera el ganador!",0;
+sleep2 10000;
+mapannounce "pvp_n_1-5","Fight Club Manager: Que estamos esperando?...Que comienze la diversion!!",0;
+sleep2 10000;
+goto L_Start;
+end;
+L_Start:
+if(getmapusers("pvp_n_1-5") == 1) goto L_Champ;
+if(getmapusers("pvp_n_1-5") == 0) goto L_None;
+if(getmapusers("pvp_n_1-5") > 1) {
+mapannounce "pvp_n_1-5","Fight Club Manager: Preparate a la cuenta de 5 vamos a empezar!....",0;
+sleep2 10000;
+mapannounce "pvp_n_1-5","Fight Club Manager: 5",0;
+sleep2 5000;
+mapannounce "pvp_n_1-5","Fight Club Manager: 4",0;
+sleep2 4000;
+mapannounce "pvp_n_1-5","Fight Club Manager: 3",0;
+sleep2 3000;
+mapannounce "pvp_n_1-5","Fight Club Manager: 2",0;
+sleep2 2000;
+mapannounce "pvp_n_1-5","Fight Club Manager: 1",0;
+sleep2 1000;
+removemapflag "pvp_n_1-5",mf_noskill;
+pvpon "pvp_n_1-5";	
+goto timer;
+end;
+}
+timer:
+initnpctimer;
+end;
+
+OnTimer1000:
+end;
+
+OnTimer1100:
+if(getmapusers("pvp_n_1-5") == 1) goto L_Champ;
+if(getmapusers("pvp_n_1-5") > 2) goto timer;
+if(getmapusers("pvp_n_1-5") == 2) goto champ;
+stopnpctimer;
+end;
+
+champ:
+announce "Fight Club Manager: Los ultimos 2 valientes guerreros siguen vivos!",0;
+sleep2 10000;
+if(getmapusers("pvp_n_1-5") == 1) goto L_Champ;
+if(getmapusers("pvp_n_1-5") > 1) goto timer;
+end;
+
+L_Champ:
+mapannounce "pvp_n_1-5","Fight Club Manager: Por favor hablar conmigo para obtener tu premio.",0;
+pvpoff "pvp_n_1-5";
+enablenpc "Fight Club Manager";
+end;
+
+L_None:
+announce "Fight Club Manager: Evento Cancelado, no hay oponentes.",0;
+disablenpc "Fight Club Manager";
+pvpoff "pvp_n_1-5";
+end;
+}
+//----- Die = warp prt -----
+-	script	Killa_warp	-1,{
+
+OnPCDieEvent:
+	getmapxy(.@mapuhp$,.@x,.@y,0);
+	if(.@mapuhp$=="pvp_n_1-5")
+	{
+		set #kill_point, 0;
+		announce " "+strcharinfo(0)+" muert@, y fuera del evento!.",bc_all;
+		atcommand "@alive";	
+		warp "prontera",155,182;
+		end;
+	}
+OnPCKillEvent:
+	getmapxy(.@mapuhp$,.@x,.@y,0);
+	if(.@mapuhp$=="pvp_n_1-5")
+	{
+	set #kill_point,#kill_point+1;
+	if ( #kill_point % 4 == 0) {
+	announce ""+strcharinfo(0)+" a hecho 4 Asesinatos consecutivos!! Se le otorgara un Premio extra.",bc_all;
+	getitem 7539,1;//1 Porin coin
+	end;
+	}
+	}
+}
+
+
+// == Mapflags
+pvp_n_1-5	mapflag	nowarp
+pvp_n_1-5	mapflag	nowarpto
+pvp_n_1-5	mapflag	noteleport
+pvp_n_1-5	mapflag	nosave
+pvp_n_1-5	mapflag	nomemo
+pvp_n_1-5	mapflag	nobranch
+pvp_n_1-5	mapflag	pvp_noparty
+pvp_n_1-5	mapflag	restricted	1

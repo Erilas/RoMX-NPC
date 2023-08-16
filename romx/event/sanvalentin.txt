@@ -1,0 +1,147 @@
+//============================================================ 
+prontera,147,107,5	script	NPC San Valentin	408,{
+set .@npc$,"[^FF0000NPC San Valentin^000000]";
+set .@idtemp,getcharid(3);
+if (variablevalentin==getcharid(3)){ goto M_REPETIDO;}
+query_sql("SELECT COUNT( * ) FROM `global_reg_value` WHERE `value` LIKE '" + .@idtemp + "' AND `str` LIKE 'variablevalentin'", .@repe);
+if (.@repe>0){ goto M_REPETIDO;}
+switch (questvalentin) {
+	case 1:
+		mes .@npc$;
+		mes "Hola "+strcharinfo(0)+".";
+		mes "Me traes los items que te necesito?";
+		switch (select("Si!:Olvide la lista...:Nop")){
+			case 1:
+				if(countitem(7189)<1 || countitem(953)<1 || countitem(929)<1 || countitem(7097)<1 || countitem(994)<1 || countitem(7561)<1 || countitem(950)<1 || countitem(748)<1 || countitem(580)<1) goto M_NOITEMS;
+				delitem 7189,1;
+				delitem 953,1;
+				delitem 929,1;
+				delitem 7097,1;
+				delitem 994,1;
+				delitem 7561,1;
+				delitem 950,1;
+				delitem 748,1;
+				delitem 580,1;
+				next;
+				mes .@npc$;
+				mes "Ok...intentare hacer tus regalos :p";
+				specialeffect 26;
+				next;
+				mes .@npc$;
+				mes "auch!...";
+				specialeffect 32;
+				next;
+				mes .@npc$;
+				mes "humm...";
+				specialeffect 101;
+				next;
+				mes .@npc$;
+				mes "...wooo";
+				specialeffect 297;
+				specialeffect 301;
+				next;
+				mes .@npc$;
+				mes "...eso corre por mi cuenta";
+				specialeffect 306;
+				next;
+				mes .@npc$;
+				mes ":D";
+				specialeffect 608;
+				next;
+				mes .@npc$;
+				mes "X_x";
+				specialeffect 622;
+				next;
+				mes .@npc$;
+				mes "O_o";
+				specialeffect 424;
+				specialeffect 503;
+				next;
+				specialeffect 709;
+				mes "Listo...aqui tienes ^^U";
+				set variablevalentin,getcharid(3);
+				query_sql("INSERT INTO `global_reg_value` (`char_id`,`str`,`value`,`type`,`account_id`) VALUES ('" +.@idtemp+"','variablevalentin','" +.@idtemp+"','2','0')");
+				getitem 17002,1;//rare candy
+				getitem 13804,1;//I Love You Firecracker Box
+				getitem 597,10;//Lovely Choco-Tart
+				getitem 5548,1;//Rose Of Crimson
+				getitem 13806,1;//Valentine's Day Firecracker Box
+				if (Sex==0){
+					getitem 12373,1;//Boy's Pure Heart
+					getitem 5338,1;//Bf Recruiter Hat 
+				}
+				else {
+					getitem 12370,1;//Romance Of Girl
+					getitem 5346,1;//Gf Recruiter Hat
+				}
+				getexp 50000,0;
+				next;
+				mes .@npc$;
+				specialeffect 363;
+				mes "Feliz dia de San Valentin! ^^";
+				close;
+				break;
+			case 2:
+				next;
+				mes .@npc$;
+				mes "¬¬U";
+				mes "ok....aqui esta de nuevo la lista, esta ves recuerdala.";
+				callfunc "itemsvalentin";
+				close;
+				break;
+			case 3:
+				next;
+				mes .@npc$;
+				mes "emmm...ok estare por aki un tiempo.";
+				mes "Suerte!.";
+				next;
+				close;
+				break;
+		}//end switch
+		break;//end case 1
+	default:
+		mes .@npc$;
+		mes "Hola "+strcharinfo(0)+".";
+		mes "El GM me encomendo darte unos items en conmemoracion a el 14 de Febrero ^^";
+		next;
+		mes .@npc$;
+		mes "Pero no me dio los items para cerarlos ¬¬U";
+		mes "Me ayudarias a consegirlos?";
+		if (select("Claro:No!")==2){ close;}
+		next;
+		mes .@npc$;
+		mes "Muy bien =D";
+		mes "Los items que necesito son los siguientes:";
+		callfunc "itemsvalentin";
+		set questvalentin,1;
+		next;
+		mes .@npc$;
+		mes "En cuanto me entregues los items tratare de hacer tus regalos.";
+		mes "Suerte "+strcharinfo(0)+" ^^";
+		close;
+		break;
+}//end switch
+M_REPETIDO:
+	next;
+	mes .@npc$;
+	mes "Espero te los items que te hice los hayas regalado a esa persona especial ^^";
+	close;	
+M_NOITEMS:
+	next;
+	mes .@npc$;
+  	mes "No tienes los items necesarios =(";
+	close;
+}//end script
+
+function	script	itemsvalentin	{
+mes "1 ^FF0000Bread^000000";
+mes "1 ^FF0000Witherless Rose^000000";
+mes "1 ^FF0000Wooden Heart^000000";
+mes "1 ^FF0000Stone Heart^000000";
+mes "1 ^FF0000Immortal Heart^000000";
+mes "1 ^FF0000Burning Heart^000000";
+mes "1 ^FF0000Flame Heart^000000";
+mes "1 ^FF0000Glacial Heart^000000";
+mes "1 ^FF0000Heart of Mermaid^000000";
+return (0);
+}

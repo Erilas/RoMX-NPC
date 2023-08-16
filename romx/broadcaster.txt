@@ -1,0 +1,195 @@
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+prontera,115,86,6	script	Cartel de Votos	837,{
+	set @header$,"[^0000ffCartel de Votos^000000]";
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	mes @header$;
+	mes "Aqui puedes acceder al sistema de votacion de RoMX, con el cual puedes proponer temas para el servidor y votar por ellos.";
+	next;
+	if(#prop==0){
+		mes @header$;
+		mes "Para acceder a este sistema, es necesario ser Nivel 50 y dar un UNICO pago de ^0000FF10 Cash Point!^000000 por cuenta";
+		next;
+		mes @header$;
+		mes "Quieres acceder al sistema de propuestas?";
+		switch ( select ("Si", "No, gracias.")) {
+			case 1:
+				if(#CASHPOINTS < 10 && BaseLevel < 50) {goto nozenybc;}
+				atcommand "@cash -10";
+				set #prop,1;
+				next;
+				mes @header$;
+				mes "Ok todo parece en orden ^^";
+				break;
+			case 2:
+				next;
+				mes @header$;
+				mes "Claro, regresa cuando quieras ^^";
+				close;
+				break;		
+		}
+	}
+	principal:
+	next;
+	mes @header$;
+	mes "En que puedo ayudarte?";
+	next;
+	switch(select("Ver propuestas Activas:Agregar Una propuesta:Resultados")){
+		case 1:
+			mes @header$;
+			mes "Estas son las propuestas activas actualmente:";
+			set #propuestas_vot,$propuestas_vot;
+			deletearray @nombre$;
+			deletearray @prop_id$;
+			set @menu_prop$,"";
+			query_sql("select `propuesta`,`id` from `propuestas` where activa=1", @nombre$,@prop_id);
+			for(set @i,0;@i<getarraysize(@nombre$);set @i,@i+1){
+				set @menu_prop$,@menu_prop$+":"+@nombre$[@i];
+			}
+			set @prop_num,select(@menu_prop$)-2;
+			set @nombre_prop$,@nombre$[@prop_num];
+			set @id_prop,@prop_id[@prop_num];
+			next;
+			mes @header$;
+			mes "propuesta:";
+			mes "_______________________________";
+			mes "^0000ff"+@nombre_prop$+"^000000";
+			mes "_______________________________";
+			deletearray @voto;
+			deletearray @id_votado;
+			query_sql("select `voto`, `id` from `votos_prop` where `id_prop`="+@id_prop+" AND `cuenta`="+getcharid(3)+" AND `ip`='"+#ip$+"'", @voto, @id_votado);
+			set @menu_vot$,"A Favor:En Contra";
+			if(@voto==1){set @menu_vot$,"^0000ffA Favor^000000:En Contra";}
+			if(@voto==2){set @menu_vot$,"A Favor:^0000ffEn Contra^000000";}
+			set @nuevo_vot,select(@menu_vot$);
+			next;
+			mes @header$;
+			if(@nuevo_vot==1){set @mensaje$,"A Favor";}else{set @mensaje$,"En Contra";}
+			mes "Confirmas que estas ^0000ff"+@mensaje$+"^000000 de la propuesta: ";
+			mes "^0000ff"+@nombre_prop$+"^000000";
+			set @menu_vot$,"Si:No";
+			set @nuevo_vot2,select(@menu_vot$);
+			if(@nuevo_vot2==1){
+				if(@voto==0){query_sql("INSERT INTO `votos_prop`(`id_prop`,`voto`,`cuenta`,`ip`) VALUES("+@id_prop+","+@nuevo_vot+","+getcharid(3)+",'"+#ip$+"')");}else{query_sql ("UPDATE `votos_prop` SET `voto` = "+@nuevo_vot+" WHERE `id` = "+@id_votado);}
+				next;
+				mes @header$;
+				mes "Gracias por tu voto!";
+				next;
+				goto principal;
+				close;
+			}else{
+				next;
+				mes @header$;
+				mes "Regresa cuando te decidas ^^";
+				next;
+				goto principal;
+				close;
+			}
+			close;
+			break;
+		case 2:
+			nueva_prop:
+			next;
+			mes @header$;
+			mes "Que propones?";
+			mes "Se lo mas breve posible porfavor (de 4 a 24 letras).";
+			input .@opc_nueva$;
+			if (getstrlen(.@opc_nueva$)<4) {
+				dispbottom "El propuesta debe tener por lo menos 4 letras.";
+				goto nueva_prop;
+			} else if (getstrlen(.@opc_nueva$)>24) {
+				dispbottom "El propuesta no puede tener mas de 24 letras.";
+				goto nueva_prop;
+			}
+			set .@Tfinal, gettimetick(2)+1296000;
+			query_sql("INSERT INTO `propuestas`(`propuesta`,`Fin_propuesta`,`Cuenta_Vinculada`,`Activa`) VALUES('"+.@opc_nueva$+"',"+.@Tfinal+","+getcharid(3)+",1)");
+			set $propuestas_vot,$propuestas_vot+1;
+			next;
+			mes @header$;
+			mes "Tu propuesta fue agregada.";
+			mes "La propuesta tiene un tiempo limite de votacion de 15 dias.";
+			mes "No olvides votar!";
+			next;
+			goto principal;
+			close;
+			break;
+		case 3:
+			resumen_prop:
+			mes @header$;
+			mes "Estas son las propuestas inactivas de las que puedes ver los resultados:";
+			deletearray @nombre$;
+			deletearray @prop_id$;
+			set @menu_prop$,"";
+			query_sql("select `propuesta`,`id` from `propuestas` where activa=0", @nombre$,@prop_id);
+			for(set @i,0;@i<getarraysize(@nombre$);set @i,@i+1){
+				set @menu_prop$,@menu_prop$+":"+@nombre$[@i];
+			}
+			set @prop_num,select(@menu_prop$)-2;
+			set @nombre_prop$,@nombre$[@prop_num];
+			set @id_prop,@prop_id[@prop_num];
+			query_sql("select COUNT(`voto`) from `votos_prop` where id_prop="+@id_prop, @total);
+			query_sql("select COUNT(`voto`) from `votos_prop` where id_prop="+@id_prop+" AND voto=1", @votos_si);
+			set @votos_no,@total-@votos_si;
+			set @porciento_si,(@votos_si*100)/@total;
+			set @porciento_no,(@votos_no*100)/@total;
+			next;
+			mes @header$;
+			mes "Resultados de la propuesta:";
+			mes "_______________________________";
+			mes @nombre_prop$;
+			mes "_______________________________";
+			mes "Votos A Favor: ^0000ff"+@votos_si+"^000000";
+			mes "Votos En Contra: ^ff0000"+@votos_no+"^000000";
+			mes "Total de votos: ^FF0000"+@total+"^000000";
+			mes "_______________________________";
+			mes callfunc("barra",@porciento_si)+" "+@porciento_si+"% A favor";
+			mes callfunc("barra",@porciento_no)+" "+@porciento_no+"% En Contra";
+			next;
+			goto resumen_prop;
+			close;
+			break;
+	}
+
+nozenybc:
+   mes "No tienes suficiente cash TwT";
+   mes "Regresa cuando tengas mas solvencia :D";
+   close;
+
+OnPCLoadMapEvent:
+	if($propuestas_vot!=#propuestas_vot && #prop==1 && strcharinfo(3)=="prontera"){
+		showevent 0,2;
+		announce "Hay nuevas propuestas que no as revisado!",bc_self,0x0FCFFA;
+	}
+	end;
+
+
+}
+
+function	script	barra	{
+	set .@num,getarg(0)/10;
+	for (set .@c, 0; .@c < 10; set .@c, .@c + 1) {
+		if(.@c<.@num){set .@text$,.@text$+"^0DB800[]^000000";}else{set .@text$,.@text$+"[]";}
+	}
+	return (.@text$);
+}
+
+//------------------------------------------------------------
+
+-	script	broad	-1,{
+
+OnInit:
+	query_sql("SELECT COUNT(id) FROM `broadcaster`",.@cuenta);
+	while(1) {
+		query_sql ("UPDATE `propuestas` SET `activa`=0 WHERE `Fin_propuesta`<"+gettimetick(2));
+		set .timer_prop,0;
+	        do{
+			sleep 60000;//1 min
+			set .timer_prop,.timer_prop+1;
+		} while(.timer_prop<50);// 30 minutos
+		set $consejos,$consejos+1;
+		if($consejos>.@cuenta){set $consejos,1;}
+	        query_sql("SELECT `mensaje` FROM `broadcaster` WHERE `id`="+$consejos, .@mensaje$);
+		announce .@mensaje$,0,0xB1FB17;
+		deletearray .@mensaje$;
+	}
+}
+prontera	mapflag	loadevent

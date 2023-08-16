@@ -1,0 +1,50 @@
+function	script	DN_FUN	{
+set @dnid,17001; // Death Note ID
+	if (agitcheck() || agitcheck2()) goto WoE;
+	if(dn_used>gettimetick(2) || dn_in>gettimetick(2)-1) goto Ausd;
+// == Aditional sets =================
+set @kt,40; // Kill Timer [In seconds]
+set @dt,300; // Delay between each Death Note [In seconds]
+// ===================================
+	input @player$;
+	set @var1,getcharid(0,@player$);
+	set @var2,getcharid(3,@player$);
+Count:
+	dispbottom "En "+@kt+" segundos, "+@player$+" morira";
+	if(!dn_in) {
+	set dn_in,gettimetick(2)+@kt;
+	}
+	sleep2 10000;
+	set @kt,@kt-10;
+	if(@kt>0) goto Count;
+	set dn_in,0;
+	if(checkVending(@player$)) goto Vend;
+	if(!isloggedin(@var2,@var1)) goto NoLog;
+	if (agitcheck() || agitcheck2()) goto WoE;
+	atcommand "@kill "+@player$;
+	announce "Alguien escribio "+@player$+" en un Death Note",bc_all,"0xFF0000";
+	set dn_used,gettimetick(2)+@dt;
+	end;
+Vend:
+	dispbottom @player$+" esta en autotrade, asi que no puedes usar el Death Note";
+	getitem @dnid,1;
+	end;
+NoLog:
+	dispbottom @player$+" no esta conectado, asi que no puedes usar el Death Note";
+	getitem @dnid,1;
+	end;
+WoE:
+	dispbottom "Un Death Note no puede ser usado durante War of Emperium";
+	getitem @dnid,1;
+	end;
+Ausd:
+	set @tem1,dn_in-gettimetick(2);
+	set @tem2,dn_used-gettimetick(2);
+	if(dn_in) {
+	dispbottom "En "+@tem1+" segundos, "+@player$+" morira";
+	} else {
+	dispbottom "Podras usar el Death Note en "+@tem2+" segundos";
+	}
+	getitem @dnid,1;
+	end;
+}

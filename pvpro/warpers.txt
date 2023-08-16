@@ -1,0 +1,299 @@
+// [========================================================]
+turbo_room,76,89,5	script	PvP Warper#uno	418,{//sala libre
+	if (getmapusers("pvp_y_1-5") >= 50) goto Sorry;
+	warp "pvp_y_1-5",0,0;
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#uno::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "Comun [" + getmapusers("pvp_y_1-5") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,71,94,5	script	PvP Warper#dos	413,{//sala primer job
+	if (getmapusers("guild_vs2") >= 50) goto Sorry;
+	if (Class == Job_Knight || Class == Job_Crusader || Class == Job_Wizard || Class == Job_Sage || Class == Job_Hunter || Class == Job_Bard || Class == Job_Dancer || Class == Job_Blacksmith || Class == Job_Alchemist || Class == Job_Assassin || Class == Job_Rogue || Class == Job_Priest || Class == Job_Monk) {
+	warp "guild_vs2",0,0;
+	}else{
+		mes "[PVP Warper]";
+		mes "Perdona, Esta sala es solo para 1er Job.";
+	}
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#dos::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "1er Job [" + getmapusers("guild_vs2") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,66,89,5	script	PvP Warper#tres	415,{//sala segundo job
+	if (getmapusers("guild_vs1") >= 50) goto Sorry;
+	if (Class == Job_Lord_Knight || Class == Job_Paladin || Class == Job_High_Wizard || Class == Job_Professor || Class == Job_Sniper || Class == Job_Clow || Class == Job_Gypsy || Class == Job_Whitesmith || Class == Job_Creator || Class == Job_Assassin_Cross || Class == Job_Stalker || Class == Job_High_Priest || Class == Job_Champion){
+	warp "guild_vs1",0,0;
+	}else{
+		mes "[PVP Warper]";
+		mes "Perdona, Esta sala es solo para 2os Job.";
+	}
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#tres::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "2os Job [" + getmapusers("guild_vs1") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,71,84,5	script	PvP Warper#cuatro	414,{//sala tercer job
+	if (getmapusers("pvp_n_7-5") >= 50) goto Sorry;
+	if (Class == JOB_RUNE_KNIGHT_T || Class == Job_Sura_T || Class == JOB_ARCH_BISHOP_T || Class == JOB_SHADOW_CHASER_T || Class == JOB_GUILLOTINE_CROSS_T || Class == JOB_GENETIC_T || Class == JOB_MECHANIC_T || Class == JOB_WANDERER_T || Class == JOB_MINSTREL_T || Class == JOB_RANGER_T || Class == JOB_SORCERER_T || Class == JOB_WARLOCK_T || Class == JOB_ROYAL_GUARD_T){
+	warp "pvp_n_7-5",0,0;
+	}else{
+		mes "[PVP Warper]";
+		mes "Perdona, Esta sala es solo para 3os Job.";
+	}
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#cuatro::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "3os Job [" + getmapusers("pvp_n_7-5") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+
+turbo_room,77,79,5	script	PvP Warper#diez	745,{//sala gvg
+	if (getmapusers("guild_vs3") >= 50) goto Sorry;
+	warp "guild_vs3",0,0;
+	end;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#diez::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "GvG [" + getmapusers("guild_vs3") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+// [========================================================]
+//SALAS SIN DOPAS
+// [========================================================]
+
+turbo_room,123,89,4	script	PvP Warper#cinco	418,{//sala libre
+	if (getmapusers("pvp_y_2-5") >= 50) goto Sorry;
+	sc_end sc_all;
+	warp "pvp_y_2-5",0,0;
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#cinco::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "Comun [" + getmapusers("pvp_y_2-5") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,128,94,4	script	PvP Warper#seis	413,{//sala primer job
+	if (getmapusers("guild_vs2-1") >= 50) goto Sorry;
+	if (Class == Job_Knight || Class == Job_Crusader || Class == Job_Wizard || Class == Job_Sage || Class == Job_Hunter || Class == Job_Bard || Class == Job_Dancer || Class == Job_Blacksmith || Class == Job_Alchemist || Class == Job_Assassin || Class == Job_Rogue || Class == Job_Priest || Class == Job_Monk) {
+	sc_end sc_all;
+	warp "guild_vs2-1",0,0;
+	}else{
+		mes "[PVP Warper]";
+		mes "Perdona, Esta sala es solo para 1er Job.";
+	}
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#seis::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "1er Job [" + getmapusers("guild_vs2-1") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,134,89,4	script	PvP Warper#siete	415,{//sala segundo job
+	if (getmapusers("guild_vs1-1") >= 50) goto Sorry;
+	if (Class == Job_Lord_Knight || Class == Job_Paladin || Class == Job_High_Wizard || Class == Job_Professor || Class == Job_Sniper || Class == Job_Clow || Class == Job_Gypsy || Class == Job_Whitesmith || Class == Job_Creator || Class == 
+Job_Assassin_Cross || Class == Job_Stalker || Class == Job_High_Priest || Class == Job_Champion){
+	sc_end sc_all;
+	warp "guild_vs1-1",0,0;
+	}else{
+		mes "[PVP Warper]";
+		mes "Perdona, Esta sala es solo para 2os Job.";
+	}
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#siete::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "2os Job [" + getmapusers("guild_vs1-1") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,128,84,4	script	PvP Warper#ocho	414,{//sala tercer job
+	if (getmapusers("pvp_n_8-5") >= 50) goto Sorry;
+	if (Class == JOB_RUNE_KNIGHT_T || Class == Job_Sura_T || Class == JOB_ARCH_BISHOP_T || Class == JOB_SHADOW_CHASER_T || Class == JOB_GUILLOTINE_CROSS_T || Class == JOB_GENETIC_T || Class == JOB_MECHANIC_T || Class == JOB_WANDERER_T || Class == JOB_MINSTREL_T || Class == JOB_RANGER_T || Class == JOB_SORCERER_T || Class == JOB_WARLOCK_T || Class == JOB_ROYAL_GUARD_T){
+	sc_end sc_all;
+	warp "pvp_n_8-5",0,0;
+	}else{
+		mes "[PVP Warper]";
+		mes "Perdona, Esta sala es solo para 3os Job.";
+	}
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#ocho::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "3os Job [" + getmapusers("pvp_n_8-5") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+turbo_room,122,79,4	script	PvP Warper#nueve	745,{//sala gvg
+	if (getmapusers("guild_vs5") >= 50) goto Sorry;
+	sc_end sc_all;
+	warp "guild_vs5",0,0;
+	end;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper#nueve::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "GvG [" + getmapusers("guild_vs5") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+
+
+guild_vs5	mapflag	gvg
+
+//npc salida
+pvp_y_1-5,159,95,4	script	Asistente	405,{
+	set .@nombre$, "[^FF0000Asistente^000000]";
+	mes .@nombre$;
+	mes "En que puedo ayudarle?";
+	getmapxy(.@mapa$,.@x,.@y,0);
+	next;
+	switch (select("Abrir Storage","Salir de PVP")){
+		case 1:
+			close2;
+			openstorage;
+			break;
+		case 2:
+			if (checkoption(0x000400) || checkoption(0x2) || checkoption(0x4) || checkoption(0x40)){mes "No puedo atenderte si estas oculto...";close;}
+			mapannounce .@mapa$,"El jugador [" + strcharinfo(0) + "] saldra en 10 Segundos.",bc_blue;
+			close2;
+			progressbar "ffff00",10;
+			warp "SavePoint",0,0;
+			break;
+	}//end switch
+	close;
+end;
+}
+
+//duplicados
+pvp_y_2-5,159,95,4	duplicate(Asistente)	Asistente#01	405
+guild_vs2,49,49,4	duplicate(Asistente)	Asistente#02	405
+guild_vs1,49,50,4	duplicate(Asistente)	Asistente#03	405
+pvp_n_7-5,99,100,4	duplicate(Asistente)	Asistente#04	405
+guild_vs3,50,49,4	duplicate(Asistente)	Asistente#05	405
+guild_vs2-1,49,50,4	duplicate(Asistente)	Asistente#06	405
+guild_vs1-1,49,50,4	duplicate(Asistente)	Asistente#07	405
+pvp_n_8-5,99,100,4	duplicate(Asistente)	Asistente#08	405
+guild_vs5,48,50,4	duplicate(Asistente)	Asistente#09	405

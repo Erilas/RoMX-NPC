@@ -1,0 +1,103 @@
+//
+turbo_room,99,100,5	script	Healer	950,5,5,{
+	
+OnTouch:
+	switch($id_ran){
+
+		case 2://angelin
+			sc_start SC_GLORIA,400000,5;
+			sc_start SC_CONCENTRATION,400000,5;
+			sc_start SC_ASPERSIO,180000,5;
+			break;
+
+		case 3://spirit
+			switch ( BaseJob ) {
+				case Job_Knight:
+				case Job_Lord_Knight:
+					sc_start4 SC_SPIRIT,400000,10,452,0,0; break;
+				case Job_Crusader:
+				case Job_Paladin:
+					sc_start4 SC_SPIRIT,400000,10,450,0,0; break;
+				case Job_Assassin:
+				case Job_Assassin_Cross:
+					sc_start4 SC_SPIRIT,400000,10,457,0,0; break;
+				case Job_Rogue:
+				case Job_Stalker:    
+					sc_start4 SC_SPIRIT,400000,10,456,0,0; break;
+				case Job_Blacksmith:
+				case Job_Whitesmith:
+					sc_start4 SC_SPIRIT,400000,10,458,0,0; break;
+				case Job_Alchemist:
+				case Job_Creator:
+					sc_start4 SC_SPIRIT,400000,10,445,0,0; break;
+				case Job_Hunter:
+				case Job_Sniper:
+					sc_start4 SC_SPIRIT,400000,10,460,0,0; break;
+				case Job_Bard:
+				case Job_Clown:
+				case Job_Dancer:
+				case Job_Gypsy:
+					sc_start4 SC_SPIRIT,400000,10,455,0,0; break;
+				case Job_Priest:
+				case Job_High_Priest:
+					sc_start4 SC_SPIRIT,400000,10,454,0,0; break;
+				case Job_Monk:
+				caseJob_Champion:
+					sc_start4 SC_SPIRIT,400000,10,447,0,0; break;
+				case Job_Wizard:
+				case Job_High_Wizard:
+					sc_start4 SC_SPIRIT,400000,10,453,0,0; break;
+				case Job_Sage:
+				case Job_Professor:
+					sc_start4 SC_SPIRIT,400000,10,449,0,0; break;
+				case Job_Soul_Linker:
+					sc_start4 SC_SPIRIT,400000,10,461,0,0; break;
+				case Job_Star_Gladiator:
+					sc_start4 SC_SPIRIT,400000,10,448,0,0; break;
+				case Job_SuperNovice:
+					sc_start4 SC_SPIRIT,400000,10,451,0,0; break;
+				default:
+					if ( upper == 1 ){sc_start4 SC_SPIRIT,400000,10,494,0,0; break;}
+			}
+			break;
+
+		case 4://valky
+			sc_start SC_ASSUMPTIO,400000,5;
+			sc_start SC_NEN,400000,5;
+			sc_start SC_SECRAMENT,400000,5;
+			sc_start SC_WINDWALK,400000,5;
+			break;
+	}   
+
+	specialeffect2 83;
+	sc_start SC_BLESSING,400000,10;
+	sc_start SC_INCREASEAGI,400000,10;
+	sc_start SC_MAGNIFICAT,400000,5;
+	sc_start SC_ANGELUS,400000,10;
+	sc_start SC_IMPOSITIO,400000,5;    
+	percentheal 100,100;
+	if (gethominfo(2)!="null"){
+		if(gethominfo(6) != 99){
+			atcommand "@homlvup 99";
+		}
+	}
+	//atcommand "@cash 100";
+	end;
+
+Oninit:
+OnTimer300000:
+	setarray .@look[1],950,948,802,811;
+	npcspeed 160;
+	if(rand(0,1)==1){
+		set .@x,96+rand(8);
+		set .@y,96+rand(8);
+		npcwalkto .@x,.@y;
+	}
+	if(rand(0,200)==1){
+		set $id_ran,rand(getarraysize(.@look));
+		setnpcdisplay("Healer", "Healer", .@look[$id_ran], rand(0,2));
+	}
+	stopnpctimer;
+	initnpctimer;
+	end;
+}

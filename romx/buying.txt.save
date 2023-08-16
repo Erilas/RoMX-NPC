@@ -1,0 +1,78 @@
+//
+alberta_in,13,72,5	script	Cat Merchant	496,{
+	if (getskilllv("ALL_BUYING_STORE") == 1) {goto M_skill_ok;}
+	mes "[Gato Mercante]";
+	mes "...";
+	mes "Tengo tanta hambre...";
+	if (select("Puedo ayudarte en algo?","Mejor paso de largo") == 2) {
+		close2;
+		emotion e_sob;
+		end;
+	}
+	next;
+	mes "[Gato Mercante]";
+	mes "Pues... de tanto viajar se me a pasado comprar algo para comer";
+	mes "Los de mi clase trabajamos mucho y saben de estas situaciones.";
+	if (getskilllv(41)>1) {
+		next;
+		mes "[Gato Mercante]";
+		mes "Que te parece un trato entre negociantes?";
+		mes "Yo te mostrare un nuevo skill a cambio de... mmm ...";
+		mes "10 Fresh Fish?";
+	}else{
+		next;
+		mes "[Gato Mercante]";
+		mes "Tu nunca lo entenderas, no eres mercante.";
+		mes "Ni siquiera puedes poner una tienda!";
+		close;
+	}
+	if (select("Claro, aqui tienes","Es muy caro!!") == 2) {
+		next;
+		mes "[Gato Mercante]";
+		mes "Como buen vendedor no cambiare mi oferta.";
+		mes "Mientras segire con hambre...";
+		close2;
+		emotion e_sob;
+		end;
+	}
+	if(countitem(579)<10) goto M_NOITEMS;
+	next;
+	mes "[Gato Mercante]";
+	mes "Un trato es un trato";
+	delitem 579,10;
+	skill 2535,1,0; // Open Buying Store
+	mes "Ahora ya sabes un skill llamado Open Buying Store";
+	if (select("Y eso que es?, me explicas?","Muchas gracias!") == 2) {goto M_adios;}
+	next;
+	mes "[Gato Mercante]";
+	mes "Con esta skill puedes abrir una tienda para comprar hasta 5 tipos de items.";
+	mes "Debes tener al menos 1 item para poder comprarlos y solo funciona con consumibles e items de tipo Etc.";
+	next;
+	mes "[Gato Mercante]";
+	mes "Requiere un Bulk Buyer Shop License, se compra con un tipo llamado Purchasing Team en la guild de Merchants.";
+	goto M_adios;
+
+M_skill_ok:
+	mes "[Gato Mercante]";
+	mes "Gracias, esos pescados estaban deliciosos!";
+	close2;
+	emotion e_rice;
+	end;
+
+M_adios:
+	next;
+	mes "[Gato Mercante]";
+	mes "Gracias a ti por fin comere algo hoy!";
+	mes "Adios!";
+	close2;
+	emotion e_rice;
+	end;
+
+M_NOITEMS:
+	next;
+	mes "[Gato Mercante]";
+	mes "Crees poder estafar a tan buen vendedor!?";
+	mes "Tu no tienes Fresh Fish!";
+	close;
+	end;
+}

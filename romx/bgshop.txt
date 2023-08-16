@@ -1,0 +1,211 @@
+bat_room,160,148,3	script	Telma	701,{
+	mes "[Telma]";
+	mes "Welcome, mighty warrior.";
+	mes "Do you need supplies for your battles?";
+	mes "I can exchange supplies for your badges...";
+	next;
+	mes "[Telma]";
+	mes "What kind of Badge would you like to use?.";
+	next;
+	menu "Bravery Badge",M_BRAVERY,"Valor Badge",M_VALOR,"Cancel",M_CANCEL;
+
+M_BRAVERY:
+	menu "100 Condensed White Potion",BRAVERY_1,"90 Blue Potions",BRAVERY_2,"5 Poison Bottles",BRAVERY_3,"20 Bottle Grenades",BRAVERY_4,"20 Acid Bottles",BRAVERY_5,"10 Speed Potions",BRAVERY_6,"10 Large Physical Defense Potions",BRAVERY_7,"10 Large Magical Defense Potions",BRAVERY_8,"Cancel",M_CANCEL;
+
+M_VALOR:
+	menu "100 Condensed White Potion",VALOR_1,"90 Blue Potions",VALOR_2,"5 Poison Bottles",VALOR_3,"20 Bottle Grenades",VALOR_4,"20 Acid Bottles",VALOR_5,"10 Speed Potions",VALOR_6,"10 Large Physical Defense Potions",VALOR_7,"10 Large Magical Defense Potions",VALOR_8,"Cancel",M_CANCEL;
+
+
+BRAVERY_1:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15904,100,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_2:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15905,90,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_3:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15906,5,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_4:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15907,20,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_5:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15908,20,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_6:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15909,10,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_7:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15910,10,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+BRAVERY_8:
+	if(countitem(7828)<1) goto M_NOITEMS1;
+	delitem 7828,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15911,10,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_1:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15904,100,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_2:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15905,90,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_3:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15906,5,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_4:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15907,20,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_5:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15908,20,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_6:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15909,10,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_7:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15910,10,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+VALOR_8:
+	if(countitem(7829)<1) goto M_NOITEMS2;
+	delitem 7829,1;
+	mes "[Telma]";
+	mes "Give me a second.....";
+	next;
+	getitem2 15911,10,1,0,0, 254, 0, 152627 & 0xFFFF, 152627 >> 0x10;
+	mes "[Telma]";
+	mes "Here you go!";
+	close;
+
+M_NOITEMS1:
+	mes "[Telma]";
+	mes "You don't have any Bravery Medals.";
+	mes "Please come back another time...";
+	close;
+
+M_NOITEMS2:
+	mes "[Telma]";
+	mes "You don't have any Valor Medals.";
+	mes "Please come back another time...";
+	close;
+
+M_CANCEL:
+	mes "[Telma]";
+	mes "May your blades never dull...";
+	close;
+}

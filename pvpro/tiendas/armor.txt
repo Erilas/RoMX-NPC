@@ -1,0 +1,284 @@
+//[========================================================]                                                    
+turbo_room,123,128,3	script	Armors Shop	745,{
+	set .@tienda$,"Armors Shop";
+	setarray .@tiendas$[1],"Accesory","Armor","Footgear","Garment","Upper Headgear","Middle Lower Headgear","Lower Headgear","Middle Head","Shield","Mechanic Accesory";
+	set @n$,"~ ^00B200"+.@tienda$+"^000000 ~";
+	function DEBUG_MES;
+	function RESET;
+	mes @n$;
+	mes "Hola, solo quiero avisarte que esta tienda funciona con ^999999Cash Points en lugar de Zeny.^000000";
+	mes "^FF0000(asi que la cantidad de Zeny mostrada representa la cantidad de Cash Points necesarios.)";
+	next;
+	dispbottom "Actualmente tienes " + #CASHPOINTS + " Cash Points.";
+	mes @n$;
+	mes "Por favor dime que tienda deseas ver.";
+	set .@menu,select("Accesory:Armor:Footgear:Garment:Upper Headgear:Middle Lower Headgear:Lower Headgear:Middle Head:Shield:Mechanic Accesory");
+	close2;
+	callshop .@tiendas$[.@menu],1;
+	npcshopattach .@tiendas$[.@menu];
+end;
+
+OnWhisperGlobal:
+	if(getgmlevel() > 3) {
+		set @n$,"~ ^00B200Armor Shop^000000 ~";
+		mes @n$;
+		mes "Hola, en que te puedo ayudar patron?";
+		next;
+		switch(select("Agregar Item y precio:Eliminar Item de tienda")){
+			case 1:
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000ID del item^000000.";
+				next;
+				input @item_id;
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000Precio^000000 del item.";
+				input @price;		
+				next;
+				mes @n$;
+				mes "Tipo de item?";
+				set .@menu,select("Accesory:Armor:Footgear:Garment:Upper Headgear:Middle Lower Headgear:Lower Headgear:Middle Head:Shield:Mechanic Accesory");
+				setarray .@tiendas$[1],"Accesory","Armor","Footgear","Garment","Upper Headgear","Middle  Lower Headgear","Lower Headgear","Middle Head","Shield","Mechanic Accesory";
+				next;
+				mes @n$;
+				mes "Confirma:";
+				mes "^FF0000Item: " + getitemname(@item_id);
+				mes "ID: " + @item_id;
+				mes "Precio: " + @price + "^000000";
+				mes "Es correcto?";
+				next;
+				if(!(select("- No!:- Si") -1)){ 
+					mes @n$; 
+					mes "Accion cancelada."; 
+				} else {
+					query_sql "INSERT INTO `dynamic_shop` ( `id` , `precio`, `tipo` ) VALUES ('"+@item_id+"' , '"+@price+"', '"+.@tiendas$[.@menu]+"' )";
+					npcshopadditem .@tiendas$[.@menu], @item_id, @price;
+					mes @n$;
+					mes "El item a sido agregado a la tienda!";
+				}
+				next;
+				break;
+			case 2:
+				RESET(1);
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000ID del item^000000.";
+				next;
+				input @item_id;
+				next;
+				query_sql("SELECT `id` FROM `dynamic_shop` WHERE `id`="+@item_id, @id_all);
+				if(!@id_all[0]){
+					set @admin_menu,0;
+					mes @n$;
+					mes "^FF0000Ese ID no existe en la teinda^000000";
+					next;
+				} else {
+					mes @n$;
+					mes "Confirmas borrar el item ^FF0000"+@item_id+" - "+getitemname
+(@item_id)+"^000000?";
+					next;
+					if(select("No:Si") -1){ 
+						query_sql("DELETE FROM `dynamic_shop` WHERE `id`="+@item_id);
+						npcshopdelitem .@tienda$, @item_id;
+						mes @n$;
+						mes "El item fue eliminado.";
+						close;
+					}
+				}
+				break;			
+		}//switch
+	}//end if
+	close;
+	end;
+	
+OnBuyItem:
+
+	set @price, 0;
+	set @quantity, 0;
+
+	RESET(1);
+
+	query_sql "SELECT `tipo` FROM `dynamic_shop` WHERE `id`='"+@bought_nameid+"'", @tipo$;
+
+	query_sql "SELECT `id`, `precio`, `cantidad` FROM `dynamic_shop` WHERE `tipo`='"+@tipo$+"' ORDER BY precio ASC", @id_all, @price_all, @cantidad;
+	
+	if(!@id_all[0]) DEBUG_MES(0);
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1)
+		for( set @z, 0; @z < getarraysize(@id_all); set @z, @z + 1)
+			if(@id_all[@z] == @bought_nameid[@i])
+				set @quantity, @quantity + (@price_all[@z] * @bought_quantity[@i]);
+		mes "~ ^999999Cuenta^000000 ~";
+	
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) 
+		mes "^FF0000" + getitemname(@bought_nameid[@i]) + ": " + @bought_quantity[@i] + "^000000";
+		mes "Este item te costara ^999999" + @quantity + " Cash Points^000000!";
+	mes "Quieres completar la compra?";
+	if (getiteminfo(@bought_nameid,2)==5){set @menu_cash$,"No, gracias:Si, lo compro:Probarmelo";}else{set @menu_cash$,"No, gracias:Si, lo compro";}
+	next;
+	switch(select(@menu_cash$)){
+		case 1:
+			RESET(0);
+			mes @n$; mes "Compra cancelada.";
+			close;
+			break;
+		case 2:
+			if(#CASHPOINTS < @quantity){
+				RESET(0);
+				mes @n$;
+				mes "Lo siento, no tienes suficientes ^999999Cash Pointss^000000...";
+				close;
+			} else {
+				atcommand "@cash -"+ @quantity;
+				for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) 
+				getitem @bought_nameid[@i], @bought_quantity[@i];
+				RESET(0);
+			}
+			break;
+		case 3:
+			mes "OK...te lo presto unos segundos, cuidalo mucho.";
+			addtimer 20000,strnpcinfo(3)+"::OnCerrar";
+			set .@hattest,.@pos-1;
+			switch (getiteminfo(@bought_nameid,5)) {
+				case 256: 
+					unequip EQI_HEAD_TOP;
+					changelook 5, getiteminfo(@bought_nameid,11);
+					set @i, 1;
+					break;
+				case 512: // Mid Headgear
+					unequip EQI_HEAD_MID;
+					changelook 4, getiteminfo(@bought_nameid,11);
+					set @i, 2;
+					break;
+				case 1: // Low Headgear
+					unequip EQI_HEAD_LOW;
+					changelook 3, getiteminfo(@bought_nameid,11);
+					set @i, 3;
+					break;
+				case 513: //medio + inferior
+					unequip EQI_HEAD_MID;
+					unequip EQI_HEAD_LOW;
+					changelook 4, getiteminfo(@bought_nameid,11);
+					set @i, 2;
+					break;
+				case 768: //superior + medio
+					unequip EQI_HEAD_TOP;
+					unequip EQI_HEAD_MID;
+					changelook 5, getiteminfo(@bought_nameid,11);
+					set @i, 1;
+					break;
+				case 769: //todos los slots de cabeza
+					unequip EQI_HEAD_TOP;
+					unequip EQI_HEAD_MID;
+					unequip EQI_HEAD_LOW;
+					changelook 5, getiteminfo(@bought_nameid,11);
+					set @i, 1;
+					break;
+				default:
+					mes "^FF0000Este item no puede probarce...^000000";
+					close;
+			} // End switch
+			dispbottom "La prueba del item " + getitemname(@bought_nameid) + " durara 20 segundos.";
+			close;
+			break;
+	}
+	mes @n$;
+	mes "Gracias por apoyar nuestro servidor!";
+	close;
+	
+
+// ( -------------------------- Functions: --------------------------- ) \\
+
+	function DEBUG_MES {
+
+	// ( ----- If the SQL-DBs are empty ----- ) \\
+	// ( ------- getarg(0) - Player --------- ) \\
+	// ( ------- getarg(1) - Admin ---------- ) \\
+
+		if(!getarg(0)){
+
+			mes @n$;
+			mes "^FF0000Error de Base de Datos.^000000";
+			mes "Por favor intenta de nuevo en un rato.";
+			mes "Si esta no es la primera ves que ve este mensaje, por favor reportelo al GM!";
+			close;
+			
+		} else {
+		
+			mes @n$;
+			mes "^FF0000Error de Base de Datos.^000000";
+			mes "Asegurece de que la tabla existe o no este vacia!";
+			close;
+			
+		}
+		
+	}
+
+	function RESET {
+
+	// ( ---------------------- Reset of the Variables -------------------- ) \\
+	// ( -------- getarg(0) - 1 for SQL-RESET; 0 for OnBuyItem-RESET. ----- ) \\
+
+		if(getarg(0)){
+		
+			deletearray @id_all, getarraysize(@id_all);
+			deletearray @price_all, getarraysize(@price_all);
+			
+		} else {
+		
+			deletearray @bought_quantity, getarraysize(@bought_quantity);
+			deletearray @bought_nameid, getarraysize(@bought_nameid);
+
+		}
+		
+		return;
+
+	}
+	
+// ( ------------------------------------------------------------------ ) \\
+
+OnCerrar:
+	switch (@i) {
+		case 1:
+			changelook 5, 0;
+			break;
+		case 2:
+			changelook 4, 0;
+			break;
+		case 3:
+			changelook 3, 0;
+			break;
+		default:
+			break;
+	} // End switch
+	deltimer strnpcinfo(3)+"::OnCerrar";
+	set @i, 0;
+	set @eqid, 0;
+	close;
+	end;
+
+OnInit:
+	setarray .@tiendas$[0],"Accesory","Armor","Footgear","Garment","Upper Headgear","Middle Lower Headgear","Lower Headgear","Middle Head","Shield","Mechanic Accesory";
+
+	for( set .@i, 0; .@i < getarraysize(.@tiendas$); set .@i, .@i + 1){
+	  	npcshopdelitem .@tiendas$[.@i], 512;
+		query_sql "SELECT `id`, `precio` FROM `dynamic_shop` WHERE `tipo`='"+.@tiendas$[.@i]+"' ORDER BY `precio` ASC", .id_all, .price_all;
+	
+		for( set .y, 0; .y < getarraysize(.id_all); set .y, .y + 1 ) {
+			npcshopadditem .@tiendas$[.@i], .id_all[.y], .price_all[.y];
+		}
+		deletearray .id_all;
+		deletearray .price_all;
+	}
+	end;
+	
+}
+
+//[=======================Dummy-Shop=================================]                                                    
+-	shop	Accesory	-1,512:20
+-	shop	Armor	-1,512:20
+-	shop	Footgear	-1,512:20
+-	shop	Garment	-1,512:20
+-	shop	Upper Headgear	-1,512:20
+-	shop	Middle Lower Headgear	-1,512:20
+-	shop	Lower Headgear	-1,512:20
+-	shop	Middle Head	-1,512:20
+-	shop	Shield	-1,512:20
+-	shop	Mechanic Accesory	-1,512:20

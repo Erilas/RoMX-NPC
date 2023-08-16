@@ -1,0 +1,312 @@
+prontera,174,205,6	script	Cesar	410,{
+
+set .@npc$,"[Cesar]";
+
+if(primera>0 && tercera==0){
+mes .@npc$;
+mes "Ya espero que me traigas el regalo.";
+close;
+}
+
+if(primera==0){
+mes .@npc$;
+mes "...";
+next;
+mes .@npc$;
+mes "(Murmurando..)";
+next;
+switch (select("Hola...")){
+}
+mes .@npc$;
+mes "aaah hola!, disculpa... estaba pensando en...";
+next;
+mes .@npc$;
+mes "Estoy enamorado de una chica, y quisiera tener una cita con ella en San Valentin.";
+mes "...";
+next;
+mes .@npc$;
+mes "Ya se!! Tú me ayudaras :D";
+next;
+Switch (select("Claro...¿En que?:Estoy ocupado")) 	{
+	case 1:
+	mes .@npc$;
+	mes "Graaaaaaaaaaaaacias!!!";
+	next;
+	break;
+
+	case 2:
+	mes .@npc$;
+	mes ":( esta bien...";
+	close;
+	break;
+	}
+mes .@npc$;
+mes "He pensado en algo para que quiera salir conmigo...";
+next;
+mes .@npc$;
+mes "Queria regalarle una hermosa rosa, pero no se donde conseguir una.";
+next;
+mes .@npc$;
+mes "¿Podrias ayudarme? He oido que hay una floreria por aqui, pero no se donde...";
+next;
+switch (select("No hay problema:Disculpa pero no")){
+	case 1:
+	mes .@npc$;
+	mes "Gracias, estare esperandote :D";
+	set primera,primera+1;
+	close;
+	break;
+	
+	case 2:
+	mes .@npc$;
+	mes "Esta bien, alguien mas querra ayudarme...espero...";
+	close;
+	break;
+	}
+}
+
+if(tercera>0 && cuarta==0){
+if(countitem(744)>=1){
+	mes .@npc$;
+	mes "Un ramo de rosas.";
+	mes "Que hermoso regalo!!";
+	emotion 3;
+	next;
+	mes .@npc$;
+	mes "Por favor llevaselo a ^FF2E00Valentina^000000.";
+	next;
+	mes .@npc$;
+	mes "Ah, y por favor llevale esto tambien.";
+	getitem 7942,1;
+	set cuarta,cuarta+1;
+	next;
+	mes .@npc$;
+	mes "Espero le guste.";
+	emotion 40;
+	close;
+	}
+else{
+	mes .@npc$;
+	mes "Ya espero que me traigas el regalo.";
+	close;
+}
+}
+
+if(cuarta>0 && quinta==0){
+mes .@npc$;
+mes "¿Ya lo entregaste?";
+next;
+mes .@npc$;
+mes "Cuando lo entregues cuentame que te dijo.";
+emotion 40;
+close;
+}
+
+if(quinta>0 && sexta==0){
+mes .@npc$;
+mes "¿La entregaste? ¿Que dijo?";
+next;
+mes "...";
+next;
+mes .@npc$;
+mes "¿En serio dijo eso? Que alegria :D";
+mes "Creo que ire a arreglarme un poco...";
+next;
+mes .@npc$;
+mes "Muchas gracias por todo.";
+mes "Gracias a ti tendre una cita con ella.";
+next;
+if(#rosa==0){
+mes .@npc$;
+mes "Toma esto, es un regalo por todas las molestias que te cause.";
+getitem 5548,1;
+set sexta,sexta+1;
+set #rosa,#rosa+1;
+close;
+}else{
+mes .@npc$;
+mes "Toma esto, es un regalo por todas las molestias que te cause.";
+getitem 558,1;
+set sexta,sexta+1;
+close;
+}
+}
+
+if(sexta>0){
+mes .@npc$;
+mes "Muchas gracias por todo!";
+emotion 15;
+close;
+}
+
+end;
+}
+
+
+prontera,180,205,5	script	Valentina	91,{
+set .@npc$,"[Valentina]";
+
+if(cuarta==0){
+mes .@npc$;
+mes "Hola, ¿Como estas?";
+close;
+}
+
+
+if(cuarta>0 && quinta==0){
+if(countitem(744)>0 && countitem(7942)>0){
+mes .@npc$;
+mes "Hola, ¿En que puedo ayudarte?";
+next;
+switch(select("Eres hermosa:Tengo algo para ti")){
+	case 1:
+	mes .@npc$;
+	mes "Gracias.";
+	emotion 18;
+	close;
+	}
+mes .@npc$;
+mes "¿Y eso que es?";
+next;
+switch(select("Lo manda Cesar:Es de mi parte")){
+	case 2:
+	mes .@npc$;
+	mes "Que eres tierno.";
+	emotion 30;
+	close;
+	}
+mes .@npc$;
+mes "¿De Cesar? Que hermoso este ramo de rosas.";
+emotion 3;
+mes "Espera, leere la carta.";
+delitem 7942,1;
+delitem 744,1;
+next;
+mes .@npc$;
+mes "...";
+next;
+mes .@npc$;
+mes "...";
+next;
+mes .@npc$;
+mes "QUE HERMOOOOSO!!!";
+emotion 38;
+next;
+mes .@npc$;
+mes "Cesar siempre me ha gustado, pero el siempre ha sido muy timido.";
+mes "Me alegra que me mandara esta carta.";
+next;
+mes .@npc$;
+mes "Dile que lo estare esperando aqui.";
+mes "Y muchas gracias a ti.";
+emotion 40;
+set quinta,quinta+1;
+close;
+
+}
+else{
+mes .@npc$;
+mes "Hola, ¿Como estas?";
+close;
+}
+}
+
+if(quinta>0 && sexta==0){
+mes .@npc$;
+mes "Muchas gracias por traerme el regalo de Cesar.";
+close;
+}
+
+if(sexta>0){
+mes .@npc$;
+mes "Muchas gracias por todo!";
+emotion 15;
+close;
+}
+
+end;
+}
+
+prontera,177,211,5	script	Florista	423,{
+set .@npc$,"[Florista]";
+
+if(primera==0 && segunda==0 && tercera==0){
+mes .@npc$;
+mes "Hola :D";
+close;
+}
+
+if (primera>0 && segunda==0 && tercera ==0){
+mes .@npc$;
+mes "Hola :D, ¿en que puedo ayudarte?";
+next;
+switch(select("Busco rosas:Solo saludaba")){
+	case 1:
+	mes .@npc$;
+	mes "Claro....emmm...";
+	next;
+	mes .@npc$;
+	mes "...";
+	next;
+	mes .@npc$;
+	mes "Se me acabaron...";
+	emotion 4;
+	next;
+	mes .@npc$;
+	mes "Pero si me traes unas rosas puedo fabricar un ramo especial para ti.";
+	emotion 3;
+	mes "Para crearlo ocupo ^FF2E0010 Witherless Rose^000000. Cuando los tengas me dices.";
+	set segunda,segunda+1;
+	close;
+	break;
+
+	case 2:
+	mes .@npc$;
+	mes "Ah! Un gusto saludarte :D";
+	close;
+	break;
+	
+	}
+}
+
+if(primera>0 && segunda>0 && tercera==0){
+
+	if(countitem(748)>=10){
+	delitem 748,10;
+	mes .@npc$;
+	mes "Gracias, ya lo fabrico.";
+	next;
+	set tercera,tercera+1;
+	mes .@npc$;
+	mes "Un segundo...";
+	next;
+	mes .@npc$;
+	mes "...";
+	next;
+	mes .@npc$;
+	mes "Aqui esta :D";
+	emotion 18;
+	getitem 744,1;
+	next;
+	mes .@npc$;
+	mes "Espero te halla gustado. Nos vemos!";
+	close; 
+	
+	}
+	else{
+	mes .@npc$;
+	mes "Trae ^FF2E0010 Witherless Rose^000000 para fabricarte un hermoso ramo.";
+	close;
+	}
+}
+
+if(primera>0 && segunda>0 && tercera>0){
+mes .@npc$;
+mes "Espero te gustara el ramo.";
+close;
+}
+
+
+end;
+}
+

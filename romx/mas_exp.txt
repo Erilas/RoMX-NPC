@@ -1,0 +1,10 @@
+-	script	expmas	-1,{
+OnNPCKillEvent:
+	if(BaseLevel>=100){
+		set @exp_base,getmonsterinfo(killedrid,3);
+		set @exp_job,getmonsterinfo(killedrid,4);
+		set BaseExp,BaseExp+@exp_base;
+		set JobExp,JobExp+@exp_job;
+	}
+	end;
+}

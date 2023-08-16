@@ -1,0 +1,125 @@
+//============================================================ 
+prontera,147,111,5	script	Donacion	790,{
+
+set @npc$,"[Teleton Navidenio]";
+
+mes @npc$;
+mes "Hola "+strcharinfo(0)+".";
+mes "Feliz Navidad.";
+specialeffect2 686;
+emotion 18;
+next;
+mes "Estoy recaudando fondos para ayudar a Santa en esta navidad.";
+mes "Le cayo el sindicato de Duendes y ahora debe pagar seguro medico";
+mes "para cada uno...en fin";
+mes "Te gustaria cooperar con algo?";
+next;
+menu "Si, Claro.",M_INFO,"No, no tengo.",M_CANCEL,"NO ME MOLESTES",M_NAB;
+
+M_INFO:
+	mes @npc$;
+	mes "Muchas gracias.";
+	mes "Eres caritativo.";
+	next;
+	mes @npc$;
+	mes "Cuanto puedes donar a la causa.";
+	input @zeny_dona_nav;
+	set donacion_nav_zeny,0;
+	if (@zeny_dona_nav==0) goto M_CANCEL;
+	if(Zeny < @zeny_dona_nav) goto M_NOZENY;
+	set Zeny,zeny-@zeny_dona_nav;
+	if (@zeny_dona_nav>100000 && @zeny_dona_nav<150000) mes "Wow, si es bastante";
+	if (@zeny_dona_nav>150000) mes "OMG! Creo que tu no eres marro como los demas :D";
+	set donacion_nav_zeny,@zeny_dona_nav;
+	next;
+	mes "Muchas gracias, se que santa te lo agradeceria.";
+	mes "...a proposito, por que no vas con su representante";
+	mes "lo encontraras en la cuidad de la navidad";
+	mes "en el centro, bajo el arbol de navidad.";
+	emotion 15;
+	close;
+
+M_NOZENY:
+	next;
+	mes @npc$;
+	mes "Tienes buenas intenciones.";
+	mes "Pero no tienes esa cantidad de zeny.";
+	mes "Sera para la proxima =)";
+	mes "Feliz Navidad.";
+	emotion 8;
+	close;
+
+M_NAB:
+	next;
+	mes @npc$;
+	mes "En navidad no es muy aceptable esa aptitud.";
+	mes "Una caminata no te hara mal.";
+	emotion 23;
+	next;
+	warp "xmas",189,268;
+	savepoint "xmas",189,268;
+	close;
+
+M_CANCEL:
+	next;
+	mes @npc$;
+	mes "Ok.....sera para la proxima =)";
+	mes "Feliz Navidad.";
+	emotion 12;
+	close;
+
+}
+
+//============================================================ 
+xmas,148,133,5	script	Representante de Santa	718,{
+
+set @npc$,"[Representante de Santa]";
+
+	mes @npc$;
+	mes "Jo, jo, jo";
+	mes "Hola "+strcharinfo(0)+".";
+	mes "Feliz Navidad.";
+	specialeffect2 686;
+	emotion 18;
+	next;
+	if (donacion_nav_zeny>0){
+		set @idtemp,getcharid(3);
+		if (uidnavidad2==getcharid(3)) goto M_REPETIDO;
+		query_sql("SELECT COUNT(*) FROM global_reg_value WHERE value = '" + @idtemp + "' AND str = 'uidnavidad2'", @repe);
+		if (@repe>0) goto M_REPETIDO;
+		mes "Jo, Jo, Jo, veo que te gusta ayudar, te dare un regalo en agradecimiento.";
+		getitem 13808,1;//Xmas Firecracker Box
+		getitem 664,3;//Gift Box
+		getitem 667,3;//Gift Box
+		getitem 12210,1;//bubble
+		if (donacion_nav_zeny>10000) getitem 17002,1;//rare candy
+		getitem 7539,1;//porin coin
+		getitem 5136,1;//Louise's Santa Hat
+		if (donacion_nav_zeny>50000) getitem 12105,1;//Taming Gift Set 
+		if (donacion_nav_zeny>100000) getitem 2784,1;//O Holy Night
+		if (donacion_nav_zeny>150000) getitem 616,1;//Old Card Album	
+		set uidnavidad2,getcharid(3);
+		next;
+		mes "...tambien los Administradores me dijeron que te diera este mensaje";
+		mes "leelo porfavor.";
+		next;
+		mes " ";
+		mes "^0080FFDe parte de el Staff de ROMX, te deseamos una Feliz Navidad^000000";
+		mes "^0080FFy prospero Anio Nuevo^000000";
+		mes " ";
+		mes "^0080FFGM Rex y GM Erilas^000000";
+		goto M_REPETIDO;
+	}
+	goto M_NADA;
+		
+M_REPETIDO:
+	next;
+	mes @npc$;
+	mes "Espero te haya gustado tu regalo.";
+	mes "Hasta luego";
+	emotion 12;
+	close;	
+	
+M_NADA:
+	close;	
+}

@@ -1,0 +1,374 @@
+//--------------------------------Npc Principal--------------------------------//
+
+turbo_room,102,74,4	script	Khriz	483,{
+OnTouch:
+mes "[Khriz]";
+mes "Hola quieres ver el tutorial de nuevo?";
+next;
+switch(select("Si:No")){
+    case 1:
+    doevent "GuiaNoVisible::OnTuto";
+    end;   
+
+    case 2:
+    mes "ok";
+    close;
+
+    }
+
+OnInit:
+
+    OnTimer60000:
+        if(rand(0,1)==1){
+        npctalk "Bienvenido a Pvp-Romx!";
+        emotion 21;
+    }else{
+        npctalk "Si un necesitas guia, hablame!";
+        emotion 33;
+    }
+    stopnpctimer;
+       initnpctimer;
+       end;
+end;
+}
+
+-	script	GuiaNoVisible	-1,{
+   
+    OnPCLoginEvent:
+        if(#pvp_tutorial==0){
+        callfunc "GuiaPvP";
+        end;
+    }
+    end;
+    OnTuto:
+    callfunc "GuiaPvP";
+    end;
+
+   
+}
+
+
+
+
+//--------------------------------Guia--------------------------------//
+
+function	script	GuiaPvP	{
+OnInicio:
+set @npc$,"^03B507[Khriz]^000000";
+    mes @npc$;
+    mes "Bienvenido a PvP-RoMX!!";
+    mes "Este server fue diseado para poder disfrutar grandes y feroces batallas.";
+    next;
+    if(#pvp_regalo==0){
+        mes @npc$;
+        mes "Puedo mostrarte este server si gustas, con un ^FF0000regalo al final^000000.";
+        mes "Quieres tomar este tutorial?";
+        next;
+        switch(select("Si:No")){
+            case 2:
+            mes @npc$;
+            mes "Si quieres tomarlo posteriormente, habla conmigo, y te mostrare el lugar.";
+            set #pvp_tutorial,1;
+            close;
+        }
+    }           
+    IntroTutorial:
+    mes @npc$;
+    mes "Primero debo explicarte lo basico. Los npcs de este lugar odian el zeny, por lo que solo aceptan ^FF0000Cash Points^000000.";
+    mes "Te preguntaras Como puedo conseguir Cash points en este server?";
+    mes "Pues simplemente batallando!";
+    next;
+    mes @npc$;
+    mes "Cada vez que ganes un encuentro, obtendras ^FF00005 Cash Points^000000.";
+    mes "Si por el contrario pierdes el encuentro no te desanimes, pues obtendras ^FF00001 Cash Points^000000.";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        goto IntroTutorial;
+    }
+   
+    mes @npc$;
+    mes "Como todo esta claro, ahora te hare un tour guiado. Espero lo disfrutes :)";
+   
+    set .@x,getcharid(3);
+    unitwalk .@x,99,85;
+    sleep2 2500;
+    unitwalk .@x,99,100;
+    sleep2 2500;
+    enablenpc "Guia";
+    hideoffnpc "Guia";
+    next;
+    mes @npc$;
+    mes "Ese NPC que se ve a los alrededores con aspecto de mob es el ^FF0000Healer^000000 de aqui. El te curara completamente y te dara dopas cada vez que le hables.";
+    next;
+    disablenpc "Guia";
+    hideonnpc "Guia";
+    mes @npc$;
+    mes "Bien, sigamos.";
+    unitwalk .@x,99,115;
+    sleep2 2500;
+    enablenpc "Guia#1";
+    hideoffnpc "Guia#1";
+    next;   
+
+    mes @npc$;
+    mes "Lo primero que te enseare ser como cambiar de job.";
+    next;
+    CambioJob:
+    mes @npc$;
+    mes "El NPC frente a ti, con aspecto de Valkyrie es la ^FF0000Job Master^000000 de este servidor.";
+    next;
+    mes @npc$;
+    mes "Conoce a todos los jobs tan profundamente que te puede transformar en el que escojas.";
+    next;
+    mes @npc$;
+    mes "Pero si no te gusto el job que elegiste, no te preocupes... Puedes cambiarlo :D!";
+    next;
+    mes @npc$;
+    mes "La primera vez es gratis, pero despues tendra un costo de ^FF0000100 Cash Points^000000 cada vez que cambies o hagas otro persojane en esta cuenta.";
+    next;
+    mes @npc$;
+    mes "El NPC ubicado a tu izquierda es el encargado de realizar los resets aqui.";
+    mes "Ademas puede guardar tus stats, para usarlos posteriormente.";
+    next;
+    mes @npc$;
+    mes "Los precios puedes consultarlos con el directamente, es muy sociable.";
+    next;
+    mes @npc$;
+    mes "El NPC a tu derecha es el Rentador. Si escoges de job ^FF0000Swordman,Merchant o sus clases avanzadas^000000 el te rentara tu montura,mado o carro... conociendo la skill adecuada.";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        goto CambioJob;
+        end;
+    }
+    mes @npc$;
+    mes "Creo que aqui ya estamos listos, asi que sigamos :D";
+    next;
+    disablenpc "Guia#1";
+    hideonnpc "Guia#1";
+    mes @npc$;
+    mes "Ahora te mostrare donde podras adquirir tu equipo.";
+    unitwalk .@x,116,123;
+    sleep2 2700;
+    enablenpc "Guia#2";   
+    hideoffnpc "Guia#2";
+    next;
+    Equipo:
+    mes @npc$;
+    mes "En esta zona se encuentran 5 NPCs encargados de ofrecer el equipo, cards y consumibles que necesites para ser el mejor.";
+    next;
+    mes @npc$;
+    mes "Primero el NPC de arriba a la izquierda, con aspecto de....maquina de bebidas.... es el encargado de vender ^FF0000Consumibles^000000.";
+    next;
+    mes @npc$;
+    mes "Este NPC vende todo lo necesario, y ademas los vende por packs a buenos precios. Asegurate de leer bien el resumen de tu compra.";
+    next;
+    mes @npc$;
+    mes "El NPC a su derecha es el vendedor de ^FF0000MVP Cards^000000. El te vendera estas extras y valiosas cards sin problemas.";
+    mes "Dedico su vida a conseguirlas, por lo que las vende a un alto precio.";
+    next;
+    mes @npc$;
+    mes "El NPC de abajo a la izquierda te ofrecera una gran variedad de ^FF0000Cards Normales^000000, a diversos precios.";
+    next;
+    mes @npc$;
+    mes "El siguiente NPC del centro-abajo es el ^FF0000Vendedor de Armas^000000. Posee una gran variedad de armas, todas clasificadas por lo que sera facil encontrar la que sea  de tu agrado.";
+    next;
+    mes @npc$;
+    mes "Y el ultimo NPC es el ^FF0000Vendedor de Armors^000000. Igual posee un gran stock de armaduras y equipo, entre las que encontraras la adecuada para ti!";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        goto Equipo;
+        end;
+    }
+    disablenpc "Guia#2";
+    hideonnpc "Guia#2";
+    mes @npc$;
+    mes "Ahora iremos a ver los NPCs que nos prestaran servicios.";
+    unitwalk .@x,120,109;
+    sleep2 2100;
+    enablenpc "Guia#3";
+    hideoffnpc "Guia#3";
+    next;
+    OtrosNPCS:
+    mes @npc$;
+    mes "Desde arriba hacia abajo:";
+    next;
+    mes @npc$;
+    mes "La primera NPC se llama ^FF0000Kafra^000000. Ella guardara tus items gratuitamente.";
+    next;
+    mes @npc$;
+    mes "La segunda NPC es ^FF0000Apprentice Craftsman^000000. Ella tiene el poder de encantar tus armaduras por un precio.";
+    mes "Ten cuidado, porque puede fallar y perderas dicha armadura.";
+    next;
+    if(sex==female){
+        mes @npc$;
+        mes "El tercer NPC es el ^FF0000Stylist^000000. EL puede dejarte bien guapa!";
+    }else{
+        mes @npc$;
+        mes "El tercer NPC es el ^FF0000Stylist^000000. EL puede dejarte bien guapo!";
+    }
+    next;
+    mes @npc$;
+    mes "Mas abajo sigue ^FF0000Suhnbi^000000. Es el mejor herrero de por aqui, y es el encargado de refinar tu equipo";
+    next;
+    mes @npc$;
+    mes "La dulce anciana que sigue es ^FF0000Wise Old Woman^000000. Ella tiene una habilidad para quitar cards de tu equipo que te puede ayudar mucho.";
+    next;
+    mes @npc$;
+    mes "Y finalmente el ultimo NPC es ^FF0000Repairman^000000. El reparara tu equipo dado en batalla";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        goto OtrosNPCS;
+        end;
+    }
+    disablenpc "Guia#3";
+    hideonnpc "Guia#3";
+    mes @npc$;
+    mes "Seguimos el recorrido.";
+    unitwalk .@x,88,114;
+    sleep2 5000;
+    enablenpc "Guia#4";
+    hideoffnpc "Guia#4";
+    next;
+    Woe:
+    mes @npc$;
+    mes "Ella es ^FF0000Maroll Battle Recruiter^000000. Es la encargada de ^FF0000Battleground^000000, en el que pueden librar batallas y conseguir poderoso equipo.";
+    next;
+    disablenpc "Guia#4";
+    hideonnpc "Guia#4";
+    mes @npc$;
+    mes "Sigamos...";
+    unitwalk .@x,80,112;
+    sleep2 1500;
+    enablenpc "Guia#5";
+    hideoffnpc "Guia#5";
+    next;
+    mes @npc$;
+    mes "Frente a ti esta la bandera de ^FF0000War of Emperium^000000. En el horario correspondiente aparecera un warp que te llevara al castillo, y si eres el poseedor de este, puedes acceder por la misma bandera.";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        disablenpc "Guia#5";
+        hideonnpc "Guia#5";
+        unitwalk .@x,88,114;
+        sleep2 1000;
+        enablenpc "Guia#4";
+        hideoffnpc "Guia#4";
+        goto Woe;
+        end;
+    }
+    disablenpc "Guia#5";
+    hideonnpc "Guia#5";
+    mes @npc$;
+    mes "Queda poco, espero te estes divirtiendo.";
+    unitwalk .@x,89,97;
+    sleep2 2000;
+    unitwalk .@x,80,91;
+    sleep2 2300;
+    enablenpc "Guia#6";
+    hideoffnpc "Guia#6";
+    next;
+    Sala1:
+    mes @npc$;
+    mes "En esta zona estan las salas de batalla, divididas por jobs, una para todos los jobs, y una Guild vs Guild.";
+    mes "Al entrar a estas salas ^FF0000no se te quitaran las dopas^000000.";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        goto Sala1;
+        end;
+    }
+    disablenpc "Guia#6";
+    hideonnpc "Guia#6";
+    mes @npc$;
+    mes "Iremos a la ultima parte del recorrido:";
+    unitwalk .@x,99,95;
+    sleep2 3000;
+    unitwalk .@x,119,91;
+    sleep2 3100;
+    enablenpc "Guia#7";
+    hideoffnpc "Guia#7";
+    next;
+    Sala2:
+    mes @npc$;
+    mes "En esta zona podemos encontrar las mismas salas que en la anterior, pero la diferencia es que aqui ^FF0000te quitan todas las dopas^000000 antes de entrar.";
+    next;
+    mes @npc$;
+    mes "Quieres que lo repita?";
+    next;
+    switch(select("Si:No")){
+        case 1:
+        goto Sala2;
+        end;
+    }
+    disablenpc "Guia#7";
+    hideonnpc "Guia#7";
+    mes @npc$;
+    mes "Bien, ya terminamos :D!";
+    unitwalk .@x,106,89;
+    sleep2 2000;
+    unitwalk .@x,100,74;
+    sleep2 2800;
+    next;
+    mes @npc$;
+    mes "Si quieres tomar el tutorial nuevamente, no dudes en hablarme!";
+    if(#pvp_regalo==0){
+        next;
+        mes @npc$;
+        mes "Aqui esta el regalo prometido, espero te sea util!";
+        getitem 2393,1;
+        set #pvp_tutorial,1;
+	set #pvp_regalo,1;
+    }
+    close;       
+}
+
+turbo_room,100,100,8	script	Khriz::Guia	483,{
+
+OnInit:
+    disablenpc "Guia";
+    disablenpc "Guia#1";
+    disablenpc "Guia#2";
+    disablenpc "Guia#3";
+    disablenpc "Guia#4";
+    disablenpc "Guia#5";
+    disablenpc "Guia#6";
+    disablenpc "Guia#7";
+    hideonnpc "Guia";
+    hideonnpc "Guia#1";
+    hideonnpc "Guia#2";
+    hideonnpc "Guia#3";
+    hideonnpc "Guia#4";
+    hideonnpc "Guia#5";
+    hideonnpc "Guia#6";
+    hideonnpc "Guia#7";
+}
+
+turbo_room,100,115,2	duplicate(Guia)	Guia#1	483
+turbo_room,117,123,2	duplicate(Guia)	Guia#2	483
+turbo_room,119,109,6	duplicate(Guia)	Guia#3	483
+turbo_room,89,114,2	duplicate(Guia)	Guia#4	483
+turbo_room,80,111,2	duplicate(Guia)	Guia#5	483
+turbo_room,79,91,3	duplicate(Guia)	Guia#6	483
+turbo_room,118,91,6	duplicate(Guia)	Guia#7	483

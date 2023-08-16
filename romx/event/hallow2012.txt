@@ -1,0 +1,129 @@
+//evento halloween 2012
+//Erilas 5475
+//
+prontera,155,186,5	script	Pesadiellu	1509,{
+	set .@nombre$, "[^FF0000Pesadiellu^000000]";
+	mes .@nombre$;
+	switch(rand(0,10)){
+		case 0:
+			mes "...";
+			close;
+			break;
+		case 1:
+			mes "...";
+			close;
+			break;
+		case 2:
+			mes "Deja de seguirme!";
+			warp "Random",0,0;
+			close;
+			break;
+		case 3:
+			mes "Por que me sigues?";
+			close;
+			break;	
+		case 4:
+			mes "...";
+			close;
+			break;
+		case 5:
+			mes "Deja de seguirme!";
+			warp "Random",0,0;
+			close;
+			break;
+		case 6:
+			mes "...";
+			close;
+			break;
+		case 7:
+			mes "...";
+			close;
+			break;
+		case 8:
+			if (event_h2012==0){
+				mes "Dejame en paz...";
+				next;
+				mes .@nombre$;
+				mes "...";
+				next;
+				mes .@nombre$;
+				mes "Toma...";
+				getitem 5475,1;
+				set event_h2012,1;
+				next;
+				mes .@nombre$;
+				mes "Ahora ... deja de seguirme!";
+				warp "Random",0,0;
+				close;
+			}else{
+				mes "Deja de seguirme!";
+				close;
+				warp "Random",0,0;
+			}
+			break;
+		case 9:
+			mes "...";
+			close;
+			break;
+		case 10:
+			mes "...";
+			close;
+			break;
+	}
+end;
+
+Oninit:
+OnTimer30000://2 minutos= 60000
+	npcspeed 160;
+	getmapxy( .@map$, .@x, .@y, 1, "Pesadiellu");
+	set .@x,rand(.@x+7,.@x-7);
+	set .@y,rand(.@y+7,.@y-7);
+	npcwalkto .@x,.@y;
+	stopnpctimer;
+	initnpctimer;
+	end;
+
+}
+
+-	script	hallowen2012	-1,{
+OnNPCKillEvent:
+	if(countitem(5475)>0){
+		if(carga_mob<10){
+			set carga_mob,carga_mob+1;
+			specialeffect2 487;
+		}	
+		if(carga_mob==10){
+			set carga_mob,carga_mob+1;
+			specialeffect2 603;
+			soundeffect "wug_bite.wav",0;
+		}
+	} 
+	end;
+
+OnPCKillEvent:
+	if(countitem(5475)>0){
+		if(carga_pj<10){
+			set carga_pj,carga_pj+1;
+			specialeffect2 487;
+		}	
+		if(carga_pj==10){
+			set carga_pj,carga_pj+1;
+			specialeffect2 603;
+			soundeffect "wug_bite.wav",0;
+		}
+	} 
+	end;
+
+OnPCLogoutEvent:
+	if(h2012==1 && carga_pj>=10){set carga_pj,0;}
+	if(h2012==1 && carga_mob>=10){set carga_mob,0;}
+	end;
+
+
+On_carga_mob:
+	unequip 9;
+	unequip 10;
+	soundeffect "banshee_die.wav",0;
+	deltimer "hallowen2012::On_carga_mob";	
+	end;
+}

@@ -1,0 +1,94 @@
+turbo_room,123,102,3	script	Repairman	86,{
+	callfunc "repairmain","Repairman";
+	end;
+}
+
+//============================================================
+//= Equipment Repair Function
+//============================================================
+function	script	repairmain	{
+	set .@repairprice,1;
+	mes "["+getarg(0)+"]";
+	mes "Hey there!";
+	mes "Do you want me";
+	mes "to repair any items?";
+	mes "You can count on me";
+	mes "for item repairs!";
+	next;
+	switch(select("Actually, I do have some items...:None at the moment.")) {
+	case 1:
+		set .@checkitem,1;
+		while (1) {
+			if (getbrokenid(.@checkitem) == 0) {
+				break;
+			}
+			set .@checkitem,.@checkitem+1;
+		}
+		set .@checkitem,.@checkitem-1;
+		if (!.@checkitem) {
+			mes "["+getarg(0)+"]";
+			mes "Oh wow, this is incredible!";
+			mes "You must take very good care of your things. None of your items are damaged!";
+			next;
+			mes "["+getarg(0)+"]";
+			mes "If everyone is like you, I'm going to be unemployed!! Haha~!";
+			close;
+		}
+		mes "["+getarg(0)+"]";
+		mes "Hmm...";
+		mes "Let's see...";
+		mes "Out of all your items,";
+		mes "" + .@checkitem + " are damaged.";
+		mes "Would you like to repair?";
+		next;
+		set .@totalcost,.@repairprice*.@checkitem;
+		mes "["+getarg(0)+"]";
+		mes "Each repair costs " + .@repairprice + " Cash. So to repair all your damaged items would cost " + .@totalcost + " Cash! Would you like to repair the items?";
+		next;
+		switch(select("Yes:No")) {
+		case 1:
+			if (Zeny < .@totalcost) {
+				mes "["+getarg(0)+"]";
+				mes "Whoa whoa...";
+				mes "Check your wallet before you receive the repair bill! I can't repair anything because you don't have enough Zeny.";
+				close;
+			}
+			set .@checkitem2,1;
+			while (1) {
+				if (getbrokenid(.@checkitem2) == 0) {
+					break;
+				}
+				set .@checkitem2,.@checkitem2+1;
+			}
+			set .@checkitem2,.@checkitem2-1;
+			if (.@checkitem == .@checkitem2) {
+				atcommand  "@cash -"+.@totalcost;
+				while (.@checkitem) {
+					repair(.@checkitem);
+					set .@checkitem,.@checkitem-1;
+				}
+				mes "["+getarg(0)+"]";
+				mes "Okay! All done. Now, try to be a little more careful. Items have lives too you know.";
+				close;
+			}
+			else {
+				mes "["+getarg(0)+"]";
+				mes "Mmm? Something's wrong. Wait... Equip the items you need to repair and then come back to me.";
+				close;
+			}
+		case 2:
+			mes "["+getarg(0)+"]";
+			mes "Well, it's no skin off my nose, but it's not good to leave items damaged. You should get them repaired as soon as possible!";
+			close;
+		}
+	case 2:
+		mes "["+getarg(0)+"]";
+		mes "Hohoho...";
+		mes "You don't have";
+		mes "any business with me";
+		mes "if you don't have any";
+		mes "items to repair.";
+		close;
+	}
+}
+

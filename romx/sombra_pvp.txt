@@ -1,0 +1,48 @@
+//PVP con sombras
+guild_vs3,49,53,4	script	Shadow Fighter	411,{
+set .@nombre$, "[^FF0000Shadow Fighter^000000]";
+mes .@nombre$;
+if (getvariableofnpc(.eventoniciado,"GMEventos")!=1){//getvariableofnpc(.eventoactivo,"GMEventos")!=3 && 
+	mes "Puedo crear una sombra de ti para que te pruebes a ti mismo.";
+	mes " ";
+	mes "El costo por sombra es de 500 z";
+	mes "Te gustaria retarte?";
+	next;
+	switch (select("Borrar Sombras","Si, quiero una sombra mia","No, asi esta bien.","Salir de PVP")){
+		case 1:
+			killmonsterall "guild_vs3";
+			npctalk strcharinfo(0)+" limpio el mapa.";
+			break;
+		case 2:
+			if(checkoption(0x000400) || checkoption(0x2) || checkoption(0x4) || checkoption(0x40)){mes "No puedo crear tu sombra si estas oculto...";close;}
+			if(getmapmobs("guild_vs3")>5){mes "No puedo crear mas sombras...";close;}
+			if(zeny<500){ goto nozeny;}
+			set Zeny,zeny-500;
+			atcommand "@evilclone "+strcharinfo(0);
+			break;
+		case 3:
+			mes .@nombre$;
+			mes "Claro, es mejor practicar con alguien real...";	
+			break;
+		case 4:
+			if (checkoption(0x000400) || checkoption(0x2) || checkoption(0x4) || checkoption(0x40)){mes "No puedo atenderte si estas oculto...";close;}
+			npctalk strcharinfo(0)+" saldra de PVP en 10 segundos.";
+			close2;
+			progressbar "ffff00",10;
+			mapannounce strcharinfo(3),"Shadow Fighter : El jugador [" + strcharinfo(0) + "] ha salido de PVP!",bc_blue;	
+			warp "prontera",155,99;
+			break;
+	}//end switch
+	close;
+}else{
+	mes "...";
+	mes " ";
+	mes "En este momento hay un evento activo, no puedo ayudarte.";
+	close;
+}
+nozeny:
+	mes .@nombre$;
+	mes "No trabajo gratis";
+	close;
+}
+

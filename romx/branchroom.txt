@@ -1,0 +1,107 @@
+// Branch Rooms warper with password for private rooms.
+// Scripted by: [Leon]
+prontera,146,164,5	script	Branch Room	833,{
+
+	//NPC SETTINGS ~
+	//what's the cost to enter private rooms?
+	set @privatezeny, 25000;
+	//what's the cost to enter public room?
+	set @publiczeny, 2500;
+	//what's the npc name to show in messages?
+	set @npcname$, "Branch Room";
+	
+L_start:
+	set @header$,"[^0000ff" + @npcname$ + "^000000]";
+	mes @header$;
+	mes "Hello. What would you like to do?";
+	next;
+	switch (select("Reserve a private room",
+					"Use public room [^ff0000" + getmapusers("pvp_y_1-5") + "^000000]",
+					"Leave")){
+	case 1:
+		mes @header$;
+		mes "The fee to reserve a private room is of ^ff0000" + @privatezeny + " zeny^000000.";
+		mes "Please choose a private room.";
+		next;
+		set @room, select("Private room 1 [^ff0000" + getmapusers("pvp_n_1-1") + "^000000]",
+							"Private room 2 [^ff0000" + getmapusers("pvp_n_2-1") + "^000000]",
+							"Private room 3 [^ff0000" + getmapusers("pvp_n_3-1") + "^000000]",
+							"Private room 4 [^ff0000" + getmapusers("pvp_n_4-1") + "^000000]",
+							"Private room 5 [^ff0000" + getmapusers("pvp_n_5-1") + "^000000]",
+							"Private room 6 [^ff0000" + getmapusers("pvp_n_6-1") + "^000000]",
+							"Private room 7 [^ff0000" + getmapusers("pvp_n_7-1") + "^000000]",
+							"Private room 8 [^ff0000" + getmapusers("pvp_n_8-1") + "^000000]");
+		set @mapname$, "pvp_n_" + @room + "-1";
+		if (zeny < @privatezeny){
+			mes @header$;
+			mes "Sorry, but you do not have enough zeny. Would you like to use the public room? [^ff0000" + getmapusers("pvp_y_1-5") + "^000000]";
+			next;
+			if (select("Yes","No") == 1) goto L_publicroom;
+			goto L_start;
+		}
+		if (getmapusers(@mapname$) < 1){
+			mes @header$;
+			mes "Please input a password. Only people who know this password will then be allowed in.";
+			next;
+			input @pass$;
+			if (getmapusers(@mapname$) > 0){
+				mes @header$;
+				mes "Sorry, but the room was taken while we were chatting.";
+				goto L_start;
+			}
+			set .pass$[@room],@pass$;
+			warp @mapname$,0,0;
+			set zeny, zeny - @privatezeny;
+			end;
+		} else {
+			mes @header$;
+			mes "There is already someone in this room. Please input its password to proceed.";
+			next;
+			input @pass$;
+			if (@pass$ != .pass$[@room]) {
+				mes @header$;
+				mes "Sorry, but that is not correct.";
+				next;
+				goto L_start;
+			}
+			warp @mapname$,0,0;
+			end;
+		}
+	case 2:
+	L_publicroom:
+		mes @header$;
+		mes "Entering the public room will cost ^ff0000" + @publiczeny + " zeny^000000.";
+		next;
+		if (zeny < @publiczeny){
+			mes @header$;
+			mes "Sorry, but you do not have enough zeny.";
+			next;
+			goto L_start;
+		}
+		menu "Enter public room",-;
+		mes @header$;
+		mes "Please keep in mind, we are not responsible if you get a kill stolen while using the public room";
+		close2;
+		set zeny, zeny - @publiczeny;
+		warp "pvp_y_1-5",0,0;
+		end;
+		
+		
+	case 3:
+		mes @header$;
+		mes "Come again.";
+		close;
+	}
+
+}
+
+//Nowarpto mapflags, so you won't be able to @warp to those maps.
+pvp_n_1-1	mapflag	nowarpto
+pvp_n_2-1	mapflag	nowarpto
+pvp_n_3-1	mapflag	nowarpto
+pvp_n_4-1	mapflag	nowarpto
+pvp_n_5-1	mapflag	nowarpto
+pvp_n_6-1	mapflag	nowarpto
+pvp_n_7-1	mapflag	nowarpto
+pvp_n_8-1	mapflag	nowarpto
+pvp_y_1-5	mapflag	nowarpto

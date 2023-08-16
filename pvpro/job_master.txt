@@ -1,0 +1,384 @@
+//
+turbo_room,99,120,5	script	Job Master	811,{
+	set .npc$,"[^FF0000Job Master^000000]"; //nombre del gm
+	mes .npc$;
+	mes "Hola "+strcharinfo(0);
+	if (#cambio_job==0){
+		mes "Veo que es la primera vez que cambias de job.";
+		mes "Este cambio corre por mi cuenta, solo recuerda una cosa";
+		mes "La proxima vez que quieras que te cambie de job";
+		mes "^0000FFCobrare por ello!^000000";
+	}else{
+		mes "Yo puedo cambiarte de Job, por:";
+		mes "^0000FF100 cash points^000000";
+	}
+	mes "Entonces dime, quieres cambiar de Job?";
+	set .@renacido,2;
+	if(select("No","Si")==1){close;}
+	next;
+	mes .npc$;
+	if(checkfalcon() || checkcart() || checkriding()) goto L_remove;
+	mes "A que Clase quieres cambiar?";
+	switch(select("Swordsman","Mage","Archer","Acolyte","Merchant","Thief","Super Novice","Taekwon","Gunslinger","Ninja")){
+		case 1://clase sworman
+			switch(select("Knight","Lord Knight","Rune Knight","Crusader","Paladin","Royal Guard")){
+				case 1:
+					set @target_job, 7;
+					break;
+				case 2:
+					set @target_job, 4008;
+					break;
+				case 3:
+					set @target_job, 4060;
+					break;
+				case 4:
+					set @target_job, 14;
+					break;
+				case 5:
+					set @target_job, 4015;
+					break;
+				case 6:
+					set @target_job, 4073;
+					break;									
+			}
+			set .@clase,1;
+			break;
+		case 2://clase mage
+			switch(select("Wizard","High Wizard","Warlock","Sage","Professor","Sorcerer")){
+				case 1:
+					set @target_job, 9;
+					break;
+				case 2:
+					set @target_job, 4010;
+					break;
+				case 3:
+					set @target_job, 4061;
+					break;
+				case 4:
+					set @target_job, 16;
+					break;
+				case 5:
+					set @target_job, 4017;
+					break;
+				case 6:
+					set @target_job, 4074;
+					break;									
+			}
+			set .@clase,2;
+			break;
+		case 3://clase Archer
+			switch(select("Hunter","Sniper","Ranger","Bard/Dancer","Clown/Gypsy","Ministrel/Wanderer")){
+				case 1:
+					set @target_job, 11;
+					break;
+				case 2:
+					set @target_job, 4012;
+					break;
+				case 3:
+					set @target_job, 4062;
+					break;
+				case 4:
+					if (Sex==0){set @target_job, 20;}//si es mujer
+					else{set @target_job, 19;}
+					break;
+				case 5:
+					if (Sex==0){set @target_job, 4021;}//si es mujer
+					else{set @target_job, 4020;}
+					break;
+				case 6:
+					if (Sex==0){set @target_job, 4076;}//si es mujer
+					else{set @target_job, 4075;}
+					break;									
+			}
+			set .@clase,3;
+			break;
+		case 4://clase Acolyte
+			switch(select("Monk","Champion","Sura","Priest","High Priest","Arch Bishop")){
+				case 1:
+					set @target_job, 15;
+					break;
+				case 2:
+					set @target_job, 4016;
+					break;
+				case 3:
+					set @target_job, 4077;
+					break;
+				case 4:
+					set @target_job, 8;
+					break;
+				case 5:
+					set @target_job, 4009;
+					break;
+				case 6:
+					set @target_job, 4063;
+					break;									
+			}
+			set .@clase,4;
+			break;
+		case 5://clase Merchant
+			switch(select("Blacksmith","Whitesmith","Mecanic","Alchemist","Creator","Genetic")){
+				case 1:
+					set @target_job, 10;
+					break;
+				case 2:
+					set @target_job, 4011;
+					break;
+				case 3:
+					set @target_job, 4064;
+					break;
+				case 4:
+					set @target_job, 18;
+					break;
+				case 5:
+					set @target_job, 4019;
+					break;
+				case 6:
+					set @target_job, 4078;
+					break;									
+			}
+			set .@clase,5;
+			break;
+		case 6://clase Thief
+			switch(select("Assassin","Assassin Cross","Guillotine Cross","Rogue","Stalker","Shadow Chaser")){
+				case 1:
+					set @target_job, 12;
+					break;
+				case 2:
+					set @target_job, 4013;
+					break;
+				case 3:
+					set @target_job, 4065;
+					break;
+				case 4:
+					set @target_job, 17;
+					break;
+				case 5:
+					set @target_job, 4018;
+					break;
+				case 6:
+					set @target_job, 4079;
+					break;									
+			}
+			set .@clase,6;
+			break;
+		case 7://"Super Novice"
+			switch(select("Super Novice","Expanded Super Novice")){
+				case 1:
+					set @target_job, 23;
+					break;
+				case 2:
+					set @target_job, 4190;
+					set .@clase,10;
+					break;									
+			}
+			break;
+
+		case 8://"Taekwon"
+			switch(select("Taekwindo","Star Gladiator","Soul Linker")){
+				case 1:
+					set @target_job, 4046;
+					break;
+				case 2:
+					set @target_job, 4047;
+					set .@clase,8;
+					break;
+				case 3:
+					set @target_job, 4049;
+					set .@clase,8;
+					break;							
+			}
+			break;
+		case 9://"Gunslinger"
+			set @target_job, 24;
+			break;
+		case 10://"Ninja"
+			switch(select("Ninja","Kagerou/Oboro")){
+				case 1:
+					set @target_job, 25;
+					break;
+				case 2:
+					if (Sex==0){set @target_job, 4212;}//si es mujer
+					else{set @target_job, 4211;}
+					set .@clase,9;
+					break;									
+			}
+			break;
+			
+	}
+	next;
+	mes .npc$;
+	mes "Estas seguro de que deseas cambiar a ^0000FF" + JobName(@target_job) + "^000000 ?";
+	if(select("No","Si")==1){close;}
+	if(#cambio_job==1){
+		atcommand  "@cash -100";
+	}else{atcommand  "@cash 50";}
+	//La convinacion de hinovice y resetlvl(1) quita los estats
+	jobchange Job_Novice_High;
+	resetlvl(1);
+	//lo ago novice para que cualquier job pueda ser cambiado
+	jobchange 0;
+	resetlvl(1);
+	//inicia obtencion de puntos skill
+	atcommand  "@joblvlup 9";//9 jobs de novice
+	switch(.@clase){
+		case 1:	//"Swordsman"
+			callfunc "Job_Change", 1;//cambio a swordman
+			atcommand  "@joblvlup 50";//doy job
+			callfunc "skills_platinum";
+			if(@target_job==4060){callfunc "Job_Change", 4008;}
+			callfunc "skills_platinum";
+			if(@target_job==4073){callfunc "Job_Change", 4015;}
+			break;
+		case 2://"Mage"
+			callfunc "Job_Change", 2;//cambio a 1 job
+			atcommand  "@joblvlup 50";//doy job
+			if(@target_job==4061){callfunc "Job_Change", 4010;}
+			callfunc "skills_platinum";
+			if(@target_job==4074){callfunc "Job_Change", 4017;}
+			callfunc "skills_platinum";
+			break;			
+		case 3://"Archer"
+			callfunc "Job_Change", 3;//cambio a 1 job
+			atcommand  "@joblvlup 50";//doy job
+			if(@target_job==4062){callfunc "Job_Change", 4012;}
+			callfunc "skills_platinum";
+			if(@target_job==4075){callfunc "Job_Change", 4020;}
+			callfunc "skills_platinum";
+			if(@target_job==4076){callfunc "Job_Change", 4021;}
+			callfunc "skills_platinum";
+			break;
+		case 4://"Acolyte"
+			callfunc "Job_Change", 4;//cambio a 1 job
+			atcommand  "@joblvlup 50";//doy job
+			if(@target_job==4077){callfunc "Job_Change", 4016;}
+			callfunc "skills_platinum";
+			if(@target_job==4063){callfunc "Job_Change", 4009;}
+			callfunc "skills_platinum";
+			break;
+		case 5://"Merchant"
+			callfunc "Job_Change", 5;//cambio a 1 job
+			atcommand  "@joblvlup 50";//doy job
+			callfunc "skills_platinum";
+			if(@target_job==4064){callfunc "Job_Change", 4011;}
+			callfunc "skills_platinum";
+			if(@target_job==4078){callfunc "Job_Change", 4019;}
+			callfunc "skills_platinum";
+			break;
+		case 6://"Thief"
+			callfunc "Job_Change", 6;//cambio a 1 job
+			atcommand  "@joblvlup 50";//doy job
+			if(@target_job==4065){callfunc "Job_Change", 4013;}
+			callfunc "skills_platinum";
+			if(@target_job==4079){callfunc "Job_Change", 4018;}
+			callfunc "skills_platinum";
+			break;
+		case 8://TKD
+			callfunc "Job_Change", 4046;//cambio a TKD
+			atcommand  "@joblvlup 50";//doy job
+			break;
+		case 9://Kagerou Oboro
+			callfunc "Job_Change", 25;//cambio a ninja
+			atcommand  "@joblvlup 70";//doy job
+			break;
+		case 10://Expanded Super Novice
+			callfunc "Job_Change", 23;//cambio a Super Novice
+			atcommand  "@joblvlup 99";//doy job
+			break;
+	}
+	atcommand  "@joblvlup 70";//doy job
+	callfunc "Job_Change", @target_job;
+	atcommand  "@lvup 150";
+	atcommand  "@joblvlup 99";					
+	set #cambio_job,1;//bandera que indica que ya a cambiado de job
+	callfunc "F_ClearJobVar";
+	
+	ResetSkill;
+	ResetStatus;
+	mes "Vuelva pronto!";
+	close;
+end;
+
+L_remove:
+	mes "Por favor, retire su carro, halcon o pecopeco";
+	mes "Vuelva pronto!";
+	close;
+
+nozeny:
+	next;
+	mes .npc$;		
+	mes "Perdona...tu no tienes suficientes Cash Point";
+	emotion e_pif;
+	close;
+
+Oninit:
+	//muros de mapa principal
+	setwall "turbo_room",93,75,4,2,0,"wal1";
+	setwall "turbo_room",109,75,4,2,0,"wal2";
+	setwall "turbo_room",124,112,2,0,0,"wal3";
+	setwall "turbo_room",75,112,2,0,0,"wal4";
+
+
+}
+
+//obtener skill por job
+function	script	skills_platinum	{
+skill 142,1,0; // First Aid
+	if (BaseClass == Job_Novice) {
+		skill 143,1,0; // Play Dead
+	} else if (BaseClass == Job_Swordman) {
+		skill 144,1,0; // Moving HP-Recovery
+		skill 145,1,0; // Fatal Blow
+		skill 146,1,0; // Auto Berserk
+	} else if (BaseClass == Job_Mage) {
+		skill 157,1,0; // Energy Coat
+	} else if (BaseClass == Job_Archer) {
+		skill 147,1,0; // Arrow Crafting
+		skill 148,1,0; // Arrow Repel
+	} else if (BaseClass == Job_Merchant) {
+		skill 153,1,0; // Cart Revolution
+		skill 154,1,0; // Change Cart
+		skill 155,1,0; // Crazy Uproar
+	} else if (BaseClass == Job_Thief) {
+		skill 149,1,0; // Sand Attack
+		skill 150,1,0; // Back Slide
+		skill 151,1,0; // Find Stone
+		skill 152,1,0; // Stone Fling
+	} else if (BaseClass == Job_Acolyte) {
+		skill 156,1,0; // Holy Light
+	}
+	if (Class == Job_Knight || Class == Job_Lord_Knight) {
+		skill 1001,1,0; // Charge Attack
+	} else if (Class == Job_Crusader || Class == Job_Paladin) {
+		skill 1002,1,0; // Shrink
+	} else if (Class == Job_Wizard || Class == Job_High_Wizard) {
+		skill 1006,1,0; // Sight Blaster
+	} else if (Class == Job_Sage || Class == Job_Professor) {
+		skill 1007,1,0; // Create Elemental Converter
+		skill 1008,1,0; // Elemental Change Water
+		skill 1017,1,0; // Elemental Change Earth
+		skill 1018,1,0; // Elemental Change Fire
+		skill 1019,1,0; // Elemental Change Wind
+	} else if (Class == Job_Hunter || Class == Job_Sniper) {
+		skill 1009,1,0; // Phantasmic Arrow
+	} else if (Class == Job_Bard || Class == Job_Clown) {
+		skill 1010,1,0; // Pang Voice
+	} else if (Class == Job_Dancer || Class == Job_Gypsy) {
+		skill 1011,1,0; // Wink of Charm
+	} else if (Class == Job_Blacksmith || Class == Job_Whitesmith) {
+		skill 1012,1,0; // Unfair Trick
+		skill 1013,1,0; // Greed
+	} else if (Class == Job_Alchemist || Class == Job_Creator) {
+		skill 238,1,0; // Bioethics
+	} else if (Class == Job_Assassin || Class == Job_Assassin_Cross) {
+		skill 1003,1,0; // Sonic Acceleration
+		skill 1004,1,0; // Throw Venom Knife
+	} else if (Class == Job_Rogue || Class == Job_Stalker) {
+		skill 1005,1,0; // Close Confine
+	} else if (Class == Job_Priest || Class == Job_High_Priest) {
+		skill 1014,1,0; // Redemptio
+	} else if (Class == Job_Monk || Class == Job_Champion) {
+		skill 1015,1,0; // Ki Translation
+		skill 1016,1,0; // Ki Explosion
+	}
+	return;
+}

@@ -1,0 +1,88 @@
+// NPC items preview
+prontera,163,190,5	script	Test Poring Shop	719,{
+set .@nombre$, "[^FF0000Test Poring Shop^000000]";
+mes .@nombre$;
+mes "Hola, yo tengo todos los hats que vende la Cash Shop.";
+mes "Si quieres te puedo prestar uno para que lo pruebes.";
+next;
+query_sql "SELECT `id` FROM `dynamic_shop` ORDER BY price ASC", .@itemsporingc;
+set .@cicloarrar,0;
+for (set .@c, 0; .@c < getarraysize(.@itemsporingc); set .@c, .@c + 1) {
+	if (getiteminfo(.@itemsporingc[.@c],2)==5){
+		setarray .@itemspc[.@cicloarrar],.@itemsporingc[.@c];
+		set .@cicloarrar,.@cicloarrar+1;
+	}
+}
+if (select("Sip:Nop") == 2){ close;}
+for (set .@c, 0; .@c < getarraysize(.@itemspc); set .@c, .@c + 1){
+	set .@menu$, .@menu$ + getitemname(.@itemspc[.@c]) + ":";
+}
+mes .@nombre$;
+mes "Dime cual de ellos quieres probarte?";
+set .@pos, select(.@menu$);
+next;
+mes .@nombre$;
+mes "OK...te lo presto unos segundos, cuidalo mucho.";
+addtimer 20000,strnpcinfo(3)+"::OnCerrar";
+set .@hattest,.@pos-1;
+switch (getiteminfo(.@itemspc[.@hattest],5)) {
+	case 256: 
+		unequip EQI_HEAD_TOP;
+		changelook 5, getiteminfo(.@itemspc[.@hattest],11);
+		set @i, 1;
+		break;
+	case 512: // Mid Headgear
+		unequip EQI_HEAD_MID;
+		changelook 4, getiteminfo(.@itemspc[.@hattest],11);
+		set @i, 2;
+		break;
+	case 1: // Low Headgear
+		unequip EQI_HEAD_LOW;
+		changelook 3, getiteminfo(.@itemspc[.@hattest],11);
+		set @i, 3;
+		break;
+	case 513: //medio + inferior
+		unequip EQI_HEAD_MID;
+		unequip EQI_HEAD_LOW;
+		changelook 4, getiteminfo(.@itemspc[.@hattest],11);
+		set @i, 2;
+		break;
+	case 768: //superior + medio
+		unequip EQI_HEAD_TOP;
+		unequip EQI_HEAD_MID;
+		changelook 5, getiteminfo(.@itemspc[.@hattest],11);
+		set @i, 1;
+		break;
+	case 769: //todos los slots de cabeza
+		unequip EQI_HEAD_TOP;
+		unequip EQI_HEAD_MID;
+		unequip EQI_HEAD_LOW;
+		changelook 5, getiteminfo(.@itemspc[.@hattest],11);
+		set @i, 1;
+		break;
+	default:
+		mes "^FF0000This item cannot be tested...^000000";
+		close;
+} // End switch
+dispbottom "La prueba del item " + getitemname(.@itemspc[.@hattest]) + " durara 20 segundos.";
+close;
+OnCerrar:
+switch (@i) {
+	case 1:
+		changelook 5, 0;
+		break;
+	case 2:
+		changelook 4, 0;
+		break;
+	case 3:
+		changelook 3, 0;
+		break;
+	default:
+		break;
+} // End switch
+deltimer strnpcinfo(3)+"::OnCerrar";
+set @i, 0;
+set @eqid, 0;
+end;
+close;
+} // End Script

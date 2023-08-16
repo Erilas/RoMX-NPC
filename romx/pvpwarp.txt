@@ -1,0 +1,22 @@
+prontera,140,95,5	script	PvP Warper	414,{//sala libre
+	if (getmapusers("guild_vs3") >= 50) goto Sorry;
+	warp "guild_vs3",0,0;
+	close;
+Sorry:
+	mes "[PVP Warper]";
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+
+OnInit:
+	donpcevent "PvP Warper::OnChatInfo";
+	end;
+
+OnChatInfo:
+	while (1) {
+		delwaitingroom;
+		waitingroom "Sala PVP [" + getmapusers("guild_vs3") + " / 50]",0;
+		sleep 1000;
+	}
+	end;
+}// fin script
+

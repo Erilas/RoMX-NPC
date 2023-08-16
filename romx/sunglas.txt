@@ -1,0 +1,190 @@
+//===== eAthena Script ======================================= 
+alberta,42,197,5	script	Keira	882,{
+	set @npc$,"[Aprendiz Keira]";
+	mes @npc$;
+	mes "Hola..."; 
+	if (countitem(2202)<1) {
+	emotion 20;
+	close;
+	}
+	else
+	{
+	mes "Estoy aprendiendo a cambiar el color de los objetos.";
+	mes "Tus lentes estan pasados de moda...te gustaria que intentara cambiar de color tus lentes?"; 
+	next; 
+	menu "Que necesito?",M_INFO,"Cambialos por favor.",M_MAKE,"No gracias.",M_CANCEL;
+
+M_MAKE:
+	mes @npc$;
+	mes "Bien ^-^";
+	mes "Que color te gustaria?";
+	query_sql("SELECT `value` FROM `global_reg_value` WHERE `account_id` = '" + getcharid(3) + "' AND `str` LIKE '#CASHPOINTS'", .@cashp);
+	menu "^006600Lentes Verdes^000000",M_GREEN,"^FF0000Lentes Rojos^000000",M_RED,"^FFDD00Lentes Dorados^000000",M_GOLD,"^0000FFLentes Azules^000000",M_BLUE,"^8717D2Lentes Morados^000000",M_PURPLE,"^777777Lentes Blancos^000000",M_WHITE,"^00BBFFLentes Cyan^000000",M_LBLUE,"Cancelar",M_CANCEL;
+
+M_GREEN:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(979)<1 || .@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 979,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15771,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_RED:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(975)<1 || .@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 975,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15773,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_GOLD:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(976)<1 || .@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 976,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15770,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_BLUE:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(978)<1 || .@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 978,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15768,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_LBLUE:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(982)<1 || countitem(978)<1 ||.@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 978,1;
+	delitem 982,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15769,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_PURPLE:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(981)<1 ||.@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 981,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15772,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_WHITE:
+	mes "Ok, dame los items necesarios.";
+	next;   
+	if(countitem(2202)<1 || countitem(982)<1 ||.@cashp<20 || (Zeny < 200000)) goto M_NOITEMS;
+	delitem 2202,1;
+	delitem 982,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-200000;
+	mes @npc$;
+	mes "Dame un segundo...";
+	mes "Clang! Clang! Clang!";
+	emotion 21;
+	next;
+	getitem 15774,1;
+	mes @npc$;
+	mes "Wiiiiii =D";
+	mes "Aqui tienes.";
+	close;
+
+M_INFO:
+	mes @npc$;
+	mes "Para hacerlo necesito tus Sunglasses [1] (si tiene alguna carta se borrara),";
+	mes "20 Cash Point, 200 000 Zenys^000000 y";
+	mes "los tintes necesarios de esta lista:";
+	mes " ";
+	mes "^006600 Verde: Darkgreen Dyestuff^000000";
+	mes "^FF0000 Rojo: Scarlet Dyestuff^000000";
+	mes "^FFDD00 Dorado: Lemon Dyestuff^000000";
+	mes "^0000FF Azul: Cobaltblue Dyestuff^000000";
+	mes "^00BBFF Cyan: Cobaltblue & White Dyestuffs^000000";
+	mes "^8717D2 Purpura: Violet Dyestuff^000000";
+	mes "^777777 Blanco: White Dyestuff^000000";
+	next;
+	menu "Hazme uno!",M_MAKE,"Cancelar",M_CANCEL;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "No tienes todos los items necesarios.";
+	mes "No puedo trabajar asi u_u";
+	close;
+
+M_LEAVE:
+	mes @npc$;
+	mes "Probamos en otra ocasion?";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	emotion 20;
+	mes "Tan pronto te vas?";
+	close;
+}}

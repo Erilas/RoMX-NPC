@@ -1,0 +1,531 @@
+//[========================================================]
+//[===========        Torneo Automatico         ===========]
+//[========================================================]
+//[ Version 1.1                                            ]
+//[========================================================]
+//[ Original script by: haunter94                          ]
+//[========================================================]
+//[ Descripcion:                                           ]
+//[--------------------------------------------------------]
+//[ Torneo Automatico					   ] 2, 4, 8, 16, 32
+//[-Control de tiempo con modo de horas aleatorias	   ]
+//[-Modo de wispeo GM, solo wispea a NPC:Torneo		   ]
+//[-Modo espectador					   ]
+//[========================================================]
+
+-	script	Torneo	-1,{
+
+OnInit:
+// 	[====================Configuracion=======================]
+	set .npc$,"GM Torneo";							//nombre del anunciador
+	set .t1tiempogm,4;							//Tiempo Minimo para activar evento. (horas)
+	set .t2tiempogm,10;							//Tiempo maximo para activar evento. (horas)
+	set .gm,99;								//Nivel GM minimo para tomar en cuenta cuando wispea
+	set .limite,16;								//Usuarios minimos para iniciar un evento
+	set .maximo_pjs,2;							//numero de integrantes por party
+	query_sql("CREATE TABLE IF NOT EXISTS `torneo` (`id` int(11) NOT NULL AUTO_INCREMENT,`nombre` char(255) DEFAULT NULL,`pid` int(11) DEFAULT NULL,`fase` int(11) DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+	query_sql("CREATE TABLE IF NOT EXISTS `record_torneo` (`id` int(11) NOT NULL AUTO_INCREMENT,`Nombre` char(255) DEFAULT NULL,`Ganados` int(11) DEFAULT NULL,`uid` int(11) DEFAULT NULL,`cid` int(11) DEFAULT NULL,PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+// 	[========================================================]
+	set .eventoniciado,0;		//bandera...NO TOCAR
+	set .esperausaurios,0;		//bandera...NO TOCAR
+	set .registro,0;		//bandera de registro de participantes
+	disablenpc "warper_torneo";	//Warper Torneo
+	hideonnpc "warper_torneo";
+	//muros
+	setwall "guild_vs4",27,46,8,0,0,"wall1";
+	setwall "guild_vs4",72,46,8,0,0,"wall2";
+	setwall "guild_vs4",65,48,4,0,0,"wall3";
+	setwall "guild_vs4",64,48,4,0,0,"wall4";
+	setwall "guild_vs4",35,48,4,0,0,"wall5";
+	setwall "guild_vs4",34,48,4,0,0,"wall6";
+	setwall "guild_vs4",48,64,4,6,0,"wall7";
+	setwall "guild_vs4",48,65,4,6,0,"wall8";
+	setwall "guild_vs4",48,35,4,6,0,"wall9";
+	setwall "guild_vs4",48,34,4,6,0,"wall10";
+	
+while(1) {
+		set .@tiempogm,gettimetick(2) / 60;
+		set .gmdice,0;
+		set .fase_torneo,1;
+		if(.TItiempogm <= .@tiempogm) set .TItiempogm,.@tiempogm + rand(.t1tiempogm * 60,.t2tiempogm * 60);
+		do {
+			if((.TItiempogm - .@tiempogm) / (24 * 60)) sleep 24 * 60 * 60 * 1000;
+			else sleep (.TItiempogm - .@tiempogm) * 60 * 1000;
+			set .@tiempogm,gettimetick(2) / 60;
+		} while(.@tiempogm < .TItiempogm);
+		iniciaevento:		
+		set .@gmsonline,0;
+		set .@ciclogms,0;
+		if (.gmdice==1){goto eventogmdice;}//si el gm activo el evento, se ignoran las restricciones
+		if (getusers(1)>=.limite && agitcheck()==0) {//si hay mas de X usuarios online y no hay woe espera
+			eventogmdice:
+			set .TItiempogm,0;
+			set .@tiempogm,0;
+			set .esperausaurios,0;
+			set .eventoniciado,1;
+			query_sql("TRUNCATE `torneo`");
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Active Torneo, GM activo evento="+.gmdice+". Con fecha "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+". A las "+gettime(3)+":"+gettime(2)+":"+gettime(1)+". El servidor marcaba "+getusers(1)+" usuarios en linea.')");
+			set .gmdice,0;
+				announce .npc$+": El Torneo esta a punto de comenzar.",0;
+				sleep 5000;
+				//sleep 10000;
+				enablenpc "warper_torneo";
+				hideoffnpc "warper_torneo";
+				donpcevent "Torneo.::OnActive";
+				set .registro,1;
+				announce .npc$+": El evento comenzara en 5 minutos.",0;
+				sleep 60000;
+				//announce .npc$+": Aquellas partys que quieran participar, por favor registrence.",0;
+				//sleep 60000;
+				//announce .npc$+": El evento comenzara en 2 minutos",0;
+				//sleep 15000;
+				//announce .npc$+": Aquellas partys que quieran participar, por favor registrence.",0;
+				//sleep 45000;
+				//announce .npc$+": El evento iniciara en 1 minuto",0;
+				//sleep 15000;
+				//announce .npc$+": Ultimos 30 segundos.",0;
+				//sleep 10000;
+				//announce .npc$+": Si quieres participar, por favor registra tu party.",0;
+				//sleep 10000;
+				//announce .npc$+": Ultimos 10 segundos.",0;
+				//sleep 5000;
+				announce .npc$+": 5.",0;
+				sleep 1000;
+				announce .npc$+": 4.",0;
+				sleep 1000;
+				announce .npc$+": 3.",0;
+				sleep 1000;
+				announce .npc$+": 2.",0;
+				sleep 1000;
+				announce .npc$+": 1.",0;
+				sleep 1000;
+				announce .npc$+": Se termino el tiempo de registro.",0;
+				set .registro,1;
+				sleep 1000;
+				query_sql("SELECT `id` FROM `torneo`", .id_x);
+				if(getarraysize(.id_x)==0){goto UHP_None;}
+				mapannounce "guild_vs4",.npc$+": El Torneo se iniciara en breve.",0;
+				sleep 9000;
+				mapannounce "guild_vs4",.npc$+": Las reglas son simples, se iniciaran duelos Party vs Party en modo torneo",0;
+				sleep 9000;
+				mapannounce "guild_vs4",.npc$+": Para que una party pase a la siguiente ronda, almenos un miembro deve quedar en Pie.",0;
+				sleep 9000;
+				set .fase_torneo,0;
+				set .fin_torneo,0;
+				set .azul,.maximo_pjs;//contadores de partys
+				set .rojo,.maximo_pjs;
+				set .jugador_azul,0;//indicadores de equipos
+				set .jugador_rojo,0;
+				do{
+					set .fin_ronda,0;
+					for (set .@c, 0; .@c < getarraysize(.id_t); set .@c, .@c + 1){//limpieza de arrays
+						deletearray .id_t[0],.@c;deletearray .nom_t$[0],.@c;deletearray .pid_t[0],.@c;
+					}
+					query_sql("SELECT `id`, `nombre`, `pid` FROM `torneo` WHERE `fase`="+.fase_torneo, .id_t, .nom_t$, .pid_t, .uid_t);	
+					if(getarraysize(.id_t)==1){set .fin_torneo,1;goto torneo_fin;}//si solo queda un participante, sera el ganador
+					if(getarraysize(.id_t)==0){set .fin_ronda,1;goto ronda_fin;}//si ya no hay equipos para ronda, siguiente ronda
+					set .jugador_azul,getarraysize(.id_t)/2;//matematicamente la mitad de la lista es el siguiente contrincante
+					do{
+						donpcevent "Torneo.::OnChange";
+						set .pid_azul,.pid_t[.jugador_azul];
+						set .pid_rojo,.pid_t[.jugador_rojo];
+						callfunc "aviso_lider",.pid_t[.jugador_rojo],0;//party rojo
+						callfunc "aviso_lider",.pid_t[.jugador_azul],0;//party azul
+						sleep 2000;
+						mapannounce "guild_vs4",.npc$+": Ronda no. "+.fase_torneo+1+"!",0;
+						sleep 2000;
+						mapannounce "guild_vs4",.npc$+": En un Minuto iniciara la Pelea!",0;
+						sleep 6000;
+						mapannounce "guild_vs4",.npc$+": La pelea inicia en ...",0;
+						sleep 2000;
+						mapannounce "guild_vs4",.npc$+": 3",0;
+						sleep 2000;
+						mapannounce "guild_vs4",.npc$+": 2",0;
+						sleep 2000;
+						mapannounce "guild_vs4",.npc$+": 1",0;
+						sleep 2000;
+						// si algunos de los chats no se llena
+						if(getwaitingroomstate(0,"Heal #azul")!=.maximo_pjs && getwaitingroomstate(0,"Heal#rojo")!=.maximo_pjs){
+							if(getwaitingroomstate(0,"Heal #azul")!=.maximo_pjs && getwaitingroomstate(0,"Heal#rojo")==.maximo_pjs){
+								mapannounce "guild_vs4",.npc$+": La party "+getpartyname(.pid_rojo)+" a ganado por default!",0;
+								sleep 2000;
+								query_sql ("UPDATE `torneo` SET `fase`="+.fase_torneo+1+" WHERE `pid`="+.pid_rojo);
+								query_sql ("DELETE from `torneo` where `pid`="+.pid_azul);
+								
+							}else if(getwaitingroomstate(0,"Heal #rojo")!=.maximo_pjs && getwaitingroomstate(0,"Heal#azul")==.maximo_pjs){
+								mapannounce "guild_vs4",.npc$+": La party "+getpartyname(.pid_azul)+" a ganado por default!",0;
+								sleep 2000;
+								query_sql ("UPDATE `torneo` SET `fase`="+.fase_torneo+1+" WHERE `pid`="+.pid_azul);
+								query_sql ("DELETE from `torneo` where `pid`="+.pid_rojo);
+							}else if(getwaitingroomstate(0,"Heal #rojo")!=.maximo_pjs && getwaitingroomstate(0,"Heal#azul")!=.maximo_pjs){
+								mapannounce "guild_vs4",.npc$+": Ninguna party se a comletado, las 2 partys descalificadas!",0;
+								sleep 2000;
+								query_sql ("DELETE from `torneo` where `pid`="+.pid_rojo);
+								query_sql ("DELETE from `torneo` where `pid`="+.pid_azul);
+							}
+							warpparty "SavePointAll",0,0,.pid_azul;
+							warpparty "SavePointAll",0,0,.pid_rojo;
+							set .fin_ronda,1;
+							goto ronda_fin;
+						}
+						donpcevent "Heal #azul::OnWarp";//warpen a los que esten en los chats
+						donpcevent "Heal#rojo::OnWarp";
+						mapannounce "guild_vs4",.npc$+": AHORA!",0;
+						//inicia pelea
+						do{
+							sleep 6000;
+						} while(.azul==0 || .rojo==0);
+						//decicion de quien gana
+						if(.azul==0 && .rojo<0){
+							mapannounce "guild_vs4",.npc$+": La party "+getpartyname(.pid_rojo)+" a ganado!",0;
+							sleep 2000;
+							query_sql ("UPDATE `torneo` SET `fase`="+.fase_torneo+1+" WHERE `pid`="+.pid_rojo);
+							query_sql ("DELETE from `torneo` where `pid`="+.pid_azul);							
+						}else if(.rojo==0 && Azul<0){
+							mapannounce "guild_vs4",.npc$+": La party "+getpartyname(.pid_azul)+" a ganado!",0;
+							sleep 2000;
+							query_sql ("UPDATE `torneo` SET `fase`="+.fase_torneo+1+" WHERE `pid`="+.pid_azul);
+							query_sql ("DELETE from `torneo` where `pid`="+.pid_rojo);
+						}else if(.rojo==0 && .azul==0){
+							mapannounce "guild_vs4",.npc$+": Ninguna party a ganado, las 2 partys seran descalificadas!",0;
+							sleep 2000;
+							query_sql ("DELETE from `torneo` where `pid`="+.pid_rojo);
+							query_sql ("DELETE from `torneo` where `pid`="+.pid_azul);
+						}
+						warpparty "SavePointAll",0,0,.pid_azul;
+						warpparty "SavePointAll",0,0,.pid_rojo;
+						ronda_fin:
+						//se ahumenta indicador para siguiente equipo
+						set .jugador_azul,.jugador_azul+1;
+						set .jugador_rojo,.jugador_rojo+1;
+						if(.jugador_rojo==getarraysize(.id_t)/2){set .fin_ronda,1;}
+					}while(.fin_ronda==0);
+					mapannounce "guild_vs4",.npc$+": Fin de Ronda no. "+.fase_torneo+"!",0;
+					set .fase_torneo,.fase_torneo+1;
+					torneo_fin:
+				} while(.fin_torneo==0);
+				query_sql("SELECT `pid` FROM `torneo` ORDER BY `fase` ASC", .pid_final);//ganador el que tenga fase mas alta	
+				announce .npc$+": Tenemos un nuevo campeon del torneo, Felicidadez "+getpartyname(.pid_final[0])+"!",0;
+				sleep 6000;
+				//definir npc premiador
+				warpparty "himinn",48,73,.pid_final[0];
+				sleep 6000;
+				goto UHP_finevento;
+				UHP_None:
+					announce .npc$+": Evento Cancelado, no se registraron combatientes.",0;
+					query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+.npc$+"','Termino evento. NO CONVATIENTES "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				UHP_finevento:
+				set .eventoactivo,0;
+				disablenpc "warper_torneo";
+				hideonnpc "warper_torneo";
+				donpcevent "Torneo.::OnNull";
+				mapwarp "guild_vs4","turbo_room",99,62;
+		}else {//si hay menos de X usuarios online
+			set .timerx,0;
+			set .esperausaurios,1;
+			do{
+				sleep 60000;//1 min
+				set .timerx,.timerx+1;
+			} while(.timerx<20);//esperamos 20 minutos
+			goto iniciaevento;
+		}//end else
+	set .eventoniciado,0;
+	donpcevent "Torneo.::OnInit";
+}
+end;
+
+//Anuncio cuando un usuario logea
+OnPCLoginEvent:
+	if(.eventoniciado == 1) {
+		if(.registro == 1) {set .mensag$,", las inscripciones todavia estan abiertas";}
+		sleep2 3000;
+		announce "Bienvenido, el Torneo esta activo"+.mensag$,bc_self,0x0FCFFA;
+	}
+end;
+
+
+//GM Panel al Wispear
+OnWhisperGlobal:
+	set .npc$,getvariableofnpc(.npc$,"Torneo"); //nombre del gm
+	if(getgmlevel() >= .gm) {
+		mes .npc$;
+		mes "Hola ^^";
+		if(!.eventoniciado) {
+			mes "En este momento ^880000NO hay Torneo en progreso^000000.";
+			if (.esperausaurios==0){
+				set .@tiempogm,.TItiempogm - (gettimetick(2) / 60);
+				if(!.@tiempogm) set .@tiempogm$,"unos segundos";
+				else if(.@tiempogm < 60) set .@tiempogm$,.@tiempogm+" minutos";
+				else {
+					set .@tiempogm,.@tiempogm / 60;
+					if(.@tiempogm < 24) set .@tiempogm$,.@tiempogm+" horas";
+						else set .@tiempogm$,(.@tiempogm / 24)+" dias";
+				}
+				mes "El siguiente Torneo automatico iniciara en "+.@tiempogm$+".";
+			}
+			else{
+				mes "^880000Estoy esperando para iniciar torneo.^000000";
+				mes "El timer marca: ^880000"+.timerx+"^000000 Min.";
+			}
+			set .@b,select("^880000Salir^000000","Iniciar un torneo Automatico.") - 1;
+			if(.@b) {
+				next;
+				query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+strcharinfo(0)+"','Inicio Torneo. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");
+				set .timerx,9999;
+				set .TItiempogm,0;
+				set .gmdice,1;
+				awake "Torneo";
+				next;
+				mes .npc$;
+				mes "El evento a sido iniciado.";
+				close;
+			}
+		}
+		else {
+			mes "El ^880000Torneo^000000, esta en progreso.";
+			close;
+		}
+	}
+next;
+mes .npc$;
+mes "Bye ^^";
+close;
+}//fin script
+
+
+// 	[====================Funciones=======================]
+
+//avisa a los miembros de la party y warpea party
+function	script	aviso_lider	{
+	getpartymember(getarg(0));
+	copyarray @ids_miembros[0],$@partymembercid[0],$@partymembercount;
+	copyarray @nombres_miembros$[0],$@partymembername$[0],$@partymembercount;
+	for( set .@i,0; .@i <= getarraysize(@nombres_miembros$); set .@i,.@i+1 ){
+		if(isloggedin(@ids_miembros[.@i]==1)){
+			message @nombres_miembros$[.@i],"SERAS WARPEADO AL TONREO EN 1 MINUTO";
+		}
+	}
+	sleep 60000;
+	if(getarg(1)==0){set @x,11;}else{set @x,88;}
+	warpparty "guild_vs4",@x,49,getarg(0);
+	return;
+}
+
+// 	[====================Warper=======================]
+
+turbo_room,99,109,0	script	warper_torneo	45,1,1,{
+	end;
+OnTouch:
+	warp "guild_vs4",49,29;
+	sc_start SC_WEDDING,600000,0;//modo casado
+	sc_start SC_NOCHAT,600000,0;//mute de gm
+	end;
+}
+
+// 	[====================Letrero de Torneo=======================]
+turbo_room,76,105,5	script	Torneo.	857,{
+	set .npc$,getvariableofnpc(.npc$,"Torneo"); //nombre del gm
+	if (getvariableofnpc(.registro,"Torneo") == 1){
+		mes "[Inscripcion al Torneo]";
+		mes "Solo estan permitidas partys de "+getvariableofnpc(.maximo_pjs,"Torneo")+" integrantes.";
+		//revisa que tenga party
+		if (getcharid(1)==0){close;}
+		//revisa si es el dueo de la party
+		if (getpartyleader(getcharid(1),2)!=getcharid(0)){mes "Solo el lider de la party puede hacer el tramite de registro.";close;}
+		getpartymember(getcharid(1));
+		set @numero_miembros_party,$@partymembercount;
+		//revisa el numero de integrantes
+		if (@numero_miembros_party!=getvariableofnpc(.maximo_pjs,"Torneo")){mes "El numero de miembros de tu party no es valido.";close;}
+		mes "Te gustaria inscrivirte al Torneo?";
+		if (select("No me interesa","Si, estoy listo")==1) {close;}
+		next;
+		mes "[Inscripcion al Torneo]";
+		//esta parte evita que entre de nuevo con otro pj el mismo participante, revisa el pid
+		query_sql("SELECT `pid` FROM `torneo`", .ids_usuario);
+		set .@inscrito,0;
+		for (set .@c, 0; .@c < getarraysize(.ids_usuario); set .@c, .@c + 1){
+			if(.ids_usuario[.@c]==getcharid(1)){set .@inscrito,1;}
+		}
+		if(.@inscrito==0){//si la party no esta inscrita
+			query_sql("INSERT INTO `torneo` (`id`, `nombre`, `pid`, `fase`) VALUES ( NULL,'"+strcharinfo(1)+"',"+getcharid(1)+",1)");
+			mes "...";
+			mes "Muy bien, la party "+strcharinfo(1)+" esta inscrita al Torneo, porfavor esten al pendiente.";
+			if (select("Gracias!","Me podrias descrivir las reglas internas del torneo?")==1) {
+				close;
+			}else{
+				next;
+				mes "[Inscripcion al Torneo]";
+				mes "Claro!";
+				mes "El torneo es una competicion Party vs Party sin restricciones de clase, equipo o items.";
+				mes "Al inscrivir una party es necesario que cada integerante se encuentre el linea en el momento que es llamado a pelear, si algun integrante falta se toma como desercion y el equipo contrario gana por default.";
+			}
+			
+			
+		}else{
+			mes "Tu Party ya esta inscrita al torneo ... deja de perder mi tiempo!";
+			close;
+		}
+		close;
+	}else{
+		mes "Campeones del Torneo";
+		mes " ";
+		mes "Nombre         Torneo(s) Ganado(s)";
+		mes " ";
+		query_sql("SELECT `Nombre`, `Ganados` FROM `record_torneo` ORDER BY `Ganados` DESC", .nombres_camp$, .ganados_camp);
+		if (getarraysize(.nombres_camp$)==0){close;}
+		for (set .@c, 0; .@c < getarraysize(.nombres_camp$); set .@c, .@c + 1){
+			mes .nombres_camp$[.@c]+"                          "+.ganados_camp[.@c];
+		}
+		close;
+	}
+close;
+end;
+
+OnInit:
+	while (getvariableofnpc(.eventoniciado,"Torneo")==0) {
+		set .@tiempogm,getvariableofnpc(.TItiempogm,"Torneo") - (gettimetick(2) / 60);
+		if(!.@tiempogm) set .@tiempogm$,"Unos segundos";
+		else if(.@tiempogm < 60) set .@tiempogm$,.@tiempogm+" Minutos";
+		else {
+		set .@tiempogm,.@tiempogm / 60;
+		if(.@tiempogm < 24) set .@tiempogm$,.@tiempogm+" Horas";
+		else set .@tiempogm$,(.@tiempogm / 24)+" Dias";
+		}
+		delwaitingroom;
+		waitingroom "- Torneo en: "+.@tiempogm$+" -",0,0,0;
+		sleep 1000;
+	}
+	end;
+
+OnActive:
+	delwaitingroom;
+	waitingroom "- Inscripciones abiertas -",0,0,0;
+	end;
+
+OnChange:
+	delwaitingroom;
+	waitingroom "- Torneo Activo, "+getvariableofnpc(.fase_torneo,"Torneo")+" Ronda -",0,0,0;
+	end;
+
+OnNull:
+	delwaitingroom;
+	end;
+}
+
+guild_vs4,4,50,5	script	Heal #azul	802,{
+	specialeffect2 83;
+	percentheal 100,100;
+	atcommand "@repairall";
+	end;
+
+OnInit:
+	waitingroom "- Party Lista -",getvariableofnpc(.maximo_pjs,"Torneo");
+	end;
+
+OnWarp:
+	warpwaitingpc "guild_vs4",38,61;
+	copyarray @ids_miembros[0],$@warpwaitingpc[0],$@warpwaitingpcnum;
+	for( set .@i,0; .@i <= getarraysize(@ids_miembros); set .@i,.@i+1 ){
+		sc_end sc_all,@ids_miembros[.@i];
+	}
+	end;
+}
+
+guild_vs4,95,50,5	script	Heal#rojo	802,{
+	sc_end sc_all;
+	specialeffect2 83;
+	percentheal 100,100;
+	atcommand "@repairall";
+	end;
+
+OnInit:
+	waitingroom "- Party Lista -",getvariableofnpc(.maximo_pjs,"Torneo");
+	end;
+
+OnWarp:
+	warpwaitingpc "guild_vs4",61,38;
+	copyarray @ids_miembros[0],$@warpwaitingpc[0],$@warpwaitingpcnum;
+	for( set .@i,0; .@i <= getarraysize(@ids_miembros); set .@i,.@i+1 ){
+		sc_end sc_all,@ids_miembros[.@i];
+	}
+	end;
+}
+
+guild_vs4,46,90,5	script	Salida1	857,{
+
+OnInit:
+	hideonnpc "Salida1";
+	hideonnpc "Salida1#2";
+	hideonnpc "Salida1#3";
+	hideonnpc "Salida1#4";
+	waitingroom "- Salida -",0,0,0;
+	end;
+}
+
+guild_vs4,53,90,5	duplicate(Salida1)	Salida1#2	857
+guild_vs4,46,9,5	duplicate(Salida1)	Salida1#3	857
+guild_vs4,53,9,5	duplicate(Salida1)	Salida1#4	857
+
+
+// 	[====================Premiador=======================]
+himinn,48,86,5	script	Valkyrie	811,{
+	query_sql("SELECT `Nombre`, `Ganados` FROM `record_torneo` ORDER BY `Ganados` DESC", .nombres_camp$, .ganados_camp);
+
+}
+
+// 	[====================Muertes=======================]
+//Cuendo pj muere
+-	script	Kill_torneo	-1,{
+OnPCDieEvent://si el pj muere en torneo
+	if (getvariableofnpc(.eventoniciado,"Torneo") == 1){
+		getmapxy(.@mapuhp$,.jugador_rojo,.@y,0);
+		if(.@mapuhp$=="guild_vs4")//mapa torneo
+		{
+			set #kill_point, 0;
+			atcommand "@sound toasty";
+			atcommand "@alive";
+			warp "SavePoint",0,0;
+			if(getcharid(1)==getvariableofnpc(.pid_azul,"Torneo")){
+				set getvariableofnpc(.azul,"Torneo"),getvariableofnpc(.azul,"Torneo")-1;
+			}
+			if(getcharid(1)==getvariableofnpc(.pid_rojo,"Torneo")){
+				set getvariableofnpc(.rojo,"Torneo"),getvariableofnpc(.rojo,"Torneo")-1;
+			}
+			end;
+		}
+	}
+end;
+
+OnPCKillEvent://si pj mata en torneo
+	getmapxy(.@mapuhp$,.jugador_rojo,.@y,0);
+	if(.@mapuhp$=="guild_vs4"){//torneo
+
+		end;
+	}
+end;
+}
+
+// -- Mapflags
+guild_vs4	mapflag	nowarp
+guild_vs4	mapflag	nowarpto
+guild_vs4	mapflag	noteleport
+guild_vs4	mapflag	nosave
+guild_vs4	mapflag	nomemo
+guild_vs4	mapflag	nobranch
+guild_vs4	mapflag	partylock
+guild_vs4	mapflag	restricted	4
+guild_vs4	mapflag	nochat
+guild_vs4	mapflag	noicewall
+guild_vs4	mapflag	noreturn
+guild_vs4	mapflag	notrade
+guild_vs4	mapflag	novending
+
+// -- Warps internos
+
+//warps de salida
+guild_vs4,49,91,0	warp	salida01	1,1,turbo_room,99,62
+guild_vs4,50,7,0	warp	salida02	1,1,turbo_room,99,62
+guild_vs4,33,32,0	warp	mapa01	1,1,guild_vs4,30,37
+guild_vs4,32,34,0	warp	mapa02	1,1,guild_vs4,36,31
+guild_vs4,66,68,0	warp	mapa03	1,1,guild_vs4,69,64
+guild_vs4,68,66,0	warp	mapa04	1,1,guild_vs4,63,69

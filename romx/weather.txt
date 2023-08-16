@@ -1,0 +1,154 @@
+// [========================================================]
+// [===========              Climat              ===========]
+// [========================================================]
+// [ Version 16                                             ]
+// [========================================================]
+// [ Original Script: Ivion                                 ]
+// [========================================================]
+// [ Description:                                           ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ - Switchs automaticaly the weather effects of all the  ]
+// [   maps in your server.                                 ]
+// [========================================================]
+// [ 5 last updates:                                        ]
+// [--------------------------------------------------------]
+// [                                                        ]
+// [ v12: [Ivion]                                           ]
+// [ - Añadidos multiples mapas que faltaban.               ]
+// [ - Añadidos los mapas de los battlegrouds.              ]
+// [                                                        ]
+// [ v13: [Ivion]                                           ]
+// [ - Añadidos nuevos comentarios.                         ]
+// [ - Añadida conf de tiempo de actualización.             ]
+// [ - Nuevas variables.                                    ]
+// [ - Corregidos algunos errores insignificantes.          ]
+// [                                                        ]
+// [ v14: [Ivion]                                           ]
+// [ - Uso de bitwise.                                      ]
+// [                                                        ]
+// [ v15: [Ivion]                                           ]
+// [ - Añadidos los mapas del episodio 13.1 .               ]
+// [ - Añadidos algunos mapas que faltaban.                 ]
+// [                                                        ]
+// [ v16: [Ivion]                                           ]
+// [ - Added new maps of the 13.1 and 13.2 episodes.        ]
+// [ - Added some missing maps.                             ]
+// [ - Added the Illion maps.                               ]
+// [ - Rewrite of the On0 function.                         ]
+// [ - Increased the chance to add a climatological effect. ]
+// [ - Reviewed all the effects in each map.                ]
+// [========================================================]
+// [ http://www.eathena.ws/board/index.php?showtopic=145029 ]
+// [========================================================]
+-	script	SCfunc	-1,{
+
+OnInit:
+
+// [========================================================]
+// [ Configuration:                                         ]
+// [--------------------------------------------------------]
+
+	// Chance to add a climatological effect in a map. (%)
+	set .conf1,20;//20
+
+	// Chance to remove all the climatological effects of a map. (%)
+	set .conf2,20;//20
+
+	// Update time. (min)
+	set .conf3,30;//15
+
+// [--------------------------------------------------------]
+// [ End of configuration.                                  ]
+// [========================================================]
+
+	while(1) {
+		// Argumentos: "<mapa>",<clouds>,<clouds2>,<fog>,<leaves>,<sakura>,<snow>,<rain>.
+		callsub On0,"alberta",0,0,0,1,1,0,0;
+		callsub On0,"aldebaran",0,0,0,1,1,0,0;
+		callsub On0,"amatsu",0,0,0,1,1,0,0;
+		callsub On0,"ayothaya",0,0,0,1,1,0,0;
+		callsub On0,"comodo",0,0,0,1,1,0,0;
+		callsub On0,"einbech",0,0,0,1,1,0,0;
+		callsub On0,"geffen",0,0,0,1,1,0,0;
+		callsub On0,"hugel",0,0,0,1,1,0,0;
+		callsub On0,"izlude",0,0,0,1,1,0,0;
+		callsub On0,"jawaii",0,0,0,1,1,0,0;
+		callsub On0,"lighthalzen",1,0,0,1,1,0,0;
+		callsub On0,"louyang",0,0,0,1,1,0,0;
+		callsub On0,"manuk",0,0,0,1,1,0,0;
+		callsub On0,"mid_camp",0,0,0,1,1,0,0;
+		callsub On0,"morocc",0,0,0,1,0,0,0;
+		callsub On0,"moscovia",0,0,0,1,1,0,0;
+		callsub On0,"new_1-1",0,0,0,1,1,0,0;
+		callsub On0,"new_1-3",0,0,0,1,1,0,0;
+		callsub On0,"new_2-1",0,0,0,1,1,0,0;
+		callsub On0,"new_2-3",0,0,0,1,1,0,0;
+		callsub On0,"new_3-1",0,0,0,1,1,0,0;
+		callsub On0,"new_3-3",0,0,0,1,1,0,0;
+		callsub On0,"new_4-1",0,0,0,1,1,0,0;
+		callsub On0,"new_4-3",0,0,0,1,1,0,0;
+		callsub On0,"new_5-1",0,0,0,1,1,0,0;
+		callsub On0,"new_5-3",0,0,0,1,1,0,0;
+		callsub On0,"new_zone01",0,0,0,1,1,0,0;
+		callsub On0,"new_zone03",0,0,0,1,1,0,0;
+		callsub On0,"payon",0,0,0,1,1,0,0;
+		callsub On0,"prontera",1,0,0,1,1,0,0;
+		callsub On0,"rachel",0,0,1,1,0,0,0;
+		callsub On0,"splendide",0,0,0,1,1,0,0;
+		callsub On0,"umbala",0,0,0,1,1,0,0;
+		callsub On0,"veins",0,0,1,0,0,0,0;
+		set .a,0;
+		sleep .conf3 * 60 * 1000;
+	}
+	end;
+
+On0:
+	set .@m$,getarg(0);
+	if(getmapmobs(.@m$) != -1) {
+		setmapflag .@m$,mf_nightenabled;
+		set .@a,getmapflag(.@m$,mf_clouds) +
+			getmapflag(.@m$,mf_clouds2) +
+			getmapflag(.@m$,mf_fog)	+
+			getmapflag(.@m$,mf_leaves) +
+			getmapflag(.@m$,mf_sakura) +
+			getmapflag(.@m$,mf_snow)+
+			getmapflag(.@m$,mf_rain);
+		if(!.@a || (rand(100) < .conf2)) {
+			removemapflag .@m$,mf_clouds;
+			removemapflag .@m$,mf_clouds2;
+			removemapflag .@m$,mf_fog;
+			removemapflag .@m$,mf_leaves;
+			removemapflag .@m$,mf_sakura;
+			removemapflag .@m$,mf_snow;
+			removemapflag .@m$,mf_rain;
+		}
+		if(!.@a && (rand(100) < .conf1)) {
+			set .@c,0;
+			set .@d,1;
+			while(getarg(.@d,-1) != -1) {
+				set .@c,.@c + (getarg(.@d) > 0);
+				set .@d,.@d + 1;
+			}
+			set .@c,rand(1,.@c);
+			set .@d,0;
+			while(.@c) {
+				set .@d,.@d + 1;
+				set .@c,.@c - (getarg(.@d) > 0);
+			}
+			switch(.@d) {
+				case 1: setmapflag .@m$,mf_clouds;	break;
+				case 2: setmapflag .@m$,mf_clouds2;	break;
+				case 3: setmapflag .@m$,mf_fog;		break;
+				case 4: setmapflag .@m$,mf_leaves;	break;
+				case 5: setmapflag .@m$,mf_sakura;	break;
+				case 6: setmapflag .@m$,mf_snow;	break;
+				case 7: setmapflag .@m$,mf_rain;	break;
+			}
+		}
+	}
+	set .a,.a + 1;
+	if(.a % 100) sleep 1;
+	return;
+}
+

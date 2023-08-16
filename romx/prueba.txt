@@ -1,0 +1,69 @@
+//
+prontera,162,186,5	script	Prueba	423,{
+set $ruta,rand(1,2);
+npctalk " "+$ruta;
+//areamobuseskill "alde_tt02",388,157,2,1083,"MG_COLDBOLT",10,3000,1,e_gg,3;
+}
+// http://www.eathena.ws/board/index.php?showtopic=267690
+// i wanna make a heal npc that is not straight heal on player,but is cast 
+// santuary on ground that player stand,is that possible?
+
+prontera,157,88,4	script	Healer#sanctuarya	742,2,2,{
+	npctalk "Can you feel my healing powers?";
+	if (.npc_map$=="") donpcevent strnpcinfo(3)+"::OnInit";
+	end;
+	
+OnInit:
+	getmapxy .npc_map$,.npc_x,.npc_y, 1; // NPC coordinates
+	// 5x5 area, except outer courners. 20 cells total.
+	setarray .@dx[0], -1, 0, 1,-2,-1, 0, 1, 2,-2,-1, 0, 1, 2,-2,-1, 0, 1, 2,-1, 0, 1;
+	setarray .@dy[0], -2,-2,-2,-1,-1,-1,-1,-1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2;
+	// setup Sanctuary cells
+	for (set .@i,0; .@i<getarraysize(.@dx); set .@i,.@i+1) {
+		if (checkcell(.npc_map$, .npc_x+.@dx[.@i], .npc_y+.@dy[.@i] ,cell_chkpass)) // is this check necessary?
+			movenpc "sanctuarya#a"+.@i, .npc_x+.@dx[.@i], .npc_y+.@dy[.@i];
+	}
+OnTimer31000: // Sanctuary lasts 31 seconds (1 + 3*Skill_Lv)
+	specialeffect 83; // Sanctuary (angel above your  head)
+	donpcevent "::OnShowSanctuarya"; // Sanctuary Map Unit(s)
+	initnpctimer;
+	end;
+	
+OnTouch:
+	while (getmapxy(.@map$,.@x,.@y,0) == 0) {
+		// check distance
+		if (.npc_map$!=.@map$ || distance(.@x,.@y, .npc_x,.npc_y) > 2) break;
+		if (Hp < MaxHp) {
+			heal 777, 0;
+			specialeffect2 312; // Heal effect
+			 //skilleffect "AL_HEAL",777; // but this makes them do the Heal animation too =[
+		}
+		sleep2 1000;
+	}
+	end;
+}
+
+-	script	sanctuarya	139,{ 
+OnShowSanctuary: specialeffect 319; // Sanctuary Map Unit
+}
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a0	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a1	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a2	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a3	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a4	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a5	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a6	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a7	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a8	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a9	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a10	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a11	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a12	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a13	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a14	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a15	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a16	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a17	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a18	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a19	139
+prontera,0,0,0	duplicate(sanctuarya)	sanctuarya#a20	139

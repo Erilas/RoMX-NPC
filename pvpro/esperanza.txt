@@ -1,0 +1,51 @@
+-	script	cashPVP	-1,{
+OnPCKillEvent:
+
+	set .@killer_id,killedrid;
+	set .@temp, getcharid(3);
+	set .@ip_temp$,#ip$;
+
+	attachrid killedrid;
+	set .@ip_check$,#ip$;
+	attachrid .@temp;
+	
+	if(.@killer_id!=#Ultimo_Muerto && .@ip_check$!= #ip$){
+		atcommand "@cash 5";
+		set #Ultimo_Muerto,.@killer_id;
+	}
+
+	attachrid killedrid;
+
+	if(.@temp!=#Ultimo_asesino && .@ip_temp$!= #ip$){
+		atcommand "@cash 1";
+		set #Ultimo_asesino,.@temp;
+	}
+end;
+
+OnPCLoginEvent:
+	//obtengo el ip del char
+	query_logsql("SELECT `last_ip` FROM `login` WHERE `account_id` = '" + getcharid(3) +"'",ip_char$);
+	set #ip$,ip_char$;
+	atcommand "@main on";
+	end;
+}
+
+//[========================================================]
+//letreros
+//[========================================================]
+
+turbo_room,84,87,5	script	PvP Rank#uno	857,{
+end;
+
+OnInit:
+waitingroom " - PVP Comun - ",0;
+end;
+}
+
+turbo_room,115,87,4	script	PvP Rank#dos	857,{
+end;
+
+OnInit:
+waitingroom " - PVP s/Dopas - ",0;
+end;
+}

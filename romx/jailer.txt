@@ -1,0 +1,1 @@
+prontera,144,100,5	script	Rossi	852,{}

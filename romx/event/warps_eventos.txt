@@ -1,0 +1,3235 @@
+//Castigos evento Lost
+new_zone04,188,171,0	script	Warp_lost_X#1	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+
+new_zone04,188,171,0	script	Warp_lost_X#2	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#3	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#4	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#5	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#6	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#7	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#8	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#9	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#10	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#11	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#12	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#13	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#14	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#15	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#16	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#17	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#18	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#19	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#20	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#21	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#22	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#23	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#24	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#25	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#26	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#27	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#28	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#29	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#30	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#31	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#32	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#33	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#34	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#35	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#36	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#37	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#38	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#39	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#40	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#41	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#42	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#43	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#44	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#45	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#46	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#47	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#48	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#49	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#50	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#51	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#52	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#53	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#54	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#55	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#56	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#57	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#58	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#59	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#60	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}
+new_zone04,188,171,0	script	Warp_lost_X#61	45,1,1,{
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	switch(rand(0,8)){
+		case 0:
+			dispbottom .npc$+" : Caiste en una Trampa Venenosa!";
+			specialeffect2 125;
+			sc_start SC_Poison,10000,10;
+			break;
+		case 1:
+			dispbottom .npc$+" : Caiste en una Trampa Conjeladora!";
+			specialeffect2 51;
+			sc_start SC_FREEZE,10000,10;
+			break;
+		case 2:
+			dispbottom .npc$+" : Caiste en una Trampa Sopnifera!";
+			specialeffect2 579;
+			sc_start SC_SLEEP,10000,10;
+			break;
+		case 3:
+			dispbottom .npc$+" : Caiste en una Trampa Confusa!";
+			specialeffect2 668;
+			sc_start SC_CONFUSION,10000,10;
+			break;
+		case 4:
+			dispbottom .npc$+" : Caiste en una Trampa Petrificante!";
+			specialeffect2 23;
+			sc_start SC_STONE,10000,10;
+			break;
+		case 5:
+			dispbottom .npc$+" : Caiste en una Trampa Alentadora!";
+			specialeffect2 38;
+			sc_start SC_DECREASEAGI,300000,10;
+			break;
+		case 6:
+			dispbottom .npc$+" : Caiste en una Trampa Muerte!";
+			specialeffect2 531;
+			sc_start SC_COMA,0,0;
+			break;
+		case 7:
+			dispbottom .npc$+" : Caiste en una Trampa Maldita!";
+			specialeffect2 578;
+			sc_start SC_CURSE,300000,10;
+			break;
+		case 8:
+			dispbottom .npc$+" : Caiste en una Trampa Moustro!";
+			specialeffect2 411;
+			nude;
+			sc_start SC_COMA,0,0;
+			disguise 1002;
+			atcommand "@killable";
+			break;
+	}
+}

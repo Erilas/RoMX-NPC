@@ -1,0 +1,176 @@
+// [========================================================]
+// [===========      Sistema Puntos Pvp          ===========]
+// [========================================================]
+// [ Version 2.1                                            ]
+// [========================================================]
+// [ Script Original de: Beck                               ]
+// [========================================================]
+// [ Descripción:                                           ]
+// [--------------------------------------------------------]
+// [ - Sistema de puntos registrados cada vez que    se     ]
+// [ mata a otro char                                       ]
+// [ - Inlcuye configuracion de mapas y Puntos negativos    ]
+// [========================================================]
+-	script	canjeadorpvp	-1,{
+OnInit:
+set .MapaActivado, 1; // Si quieres un mapa especifico pon 1 , si quieres todos los mapas pon 0
+set .RestarPuntos, 1; // Si esta en 1 , cada vez que te muera alguien se le restara un punto , si esta en 0 no pasara nada al morir.
+set .PuntosNegativos, 1; // Debe estar activada la variable anterior , de lo contrario no se ejecuta.
+setarray .mapas_pvp$[0],"guild_vs3","guild_vs2","prontera"; // Añadir o quitar mapas
+setarray $item_pvp[0], 5147,5383,5132,5137; //Baseball Cap, Hunters Cap, Angeling Hat, Alice Doll
+setarray $valor_item[0], 10,70,150,500; // Aquí pones el costo de puntos que quieres por el item (Debe ir según el orden del array anterior)
+setarray $Campeon[0],200,500,600;// Cantidad de puntos necesarios para el bonus
+end;
+
+OnPcKillEvent: // Sumamos los puntos al matar a alguien
+if(killerrid==Ultimo_Muerto) end;// Esto cancela todo lo que viene a continuacion por matar a 2 veces la misma persona
+if (.MapaActivado) {
+   for (set .@c, 0; .@c < getarraysize(.mapas_pvp$); set .@c, .@c + 1)
+      if (.mapas_pvp$[.@c] == strcharinfo(3))
+         set #PuntosPvp,#PuntosPvp + 1;
+         set Ultimo_Muerto,killerrid;
+} else
+   set Ultimo_Muerto,killerrid;
+   set #PuntosPvp,#PuntosPvp + 1;
+dispbottom "Has ganado un punto, ahora tienes " + #PuntosPvp + ". Sigue así.";
+end;
+
+OnPCDieEvent: // Restamos los puntos al matar a alguien
+if (.RestarPuntos) {
+	if (.MapaActivado) {
+			for (set .@c, 0; .@c < getarraysize(.mapas_pvp$); set .@c, .@c + 1) {
+				if (.mapas_pvp$[.@c] == strcharinfo(3)) {
+					if (.PuntosNegativos)
+						set #PuntosPvp,#PuntosPvp - 1;
+					else {
+						if (#PuntosPvp <= 0)
+							end;
+						else
+							set #PuntosPvp,#PuntosPvp - 1;
+					} // End if
+				} // End if
+			} // End loop
+		} // End if
+	} else {
+		if (.PuntosNegativos)
+			set #PuntosPvp,#PuntosPvp - 1;
+		else {
+			if (#PuntosPvp <= 0)
+				end;
+			else
+				set #PuntosPvp,#PuntosPvp - 1;
+		} // End if
+	} // End if
+	dispbottom "Has perdido un punto PvP, ahora tienes " + #PuntosPvp + ".";
+end;
+} // fin script
+
+// [========================================================]
+prontera,140,95,5	script	PvP Warper	414,{
+	set @npc$,"[PvP Warper]";
+	mes @npc$;
+	mes "Hola, yo puedo llevarte a una sala PVP";
+	mes "Por favor selecciona una opcion.";
+
+	next;
+	menu
+	"PvP Room 1 [" + getmapusers("guild_vs3") + " / 50]",PVP1,
+//	"PvP Room 2 [" + getmapusers("guild_vs2") + " / 50]",PVP2,
+	"Informacion de Puntos PVP.",M_info,
+	"Revisar Bonus PVP.",M_Bonus,
+	"Premios PVP.",M_premiador,
+	"Salir",M_Nada;
+
+PVP1:
+	if (getmapusers("guild_vs3") >= 50) goto Sorry;
+	warp "guild_vs3",0,0;
+	close;
+
+PVP2:
+	if (getmapusers("guild_vs2") >= 50) goto Sorry;
+	warp "guild_vs2",0,0;	
+	close;
+Sorry:
+	mes @npc$;
+	mes "Perdona, pero esta sala esta llena, intenta elegir otra!";
+	close;
+M_info:
+	mes @npc$;
+	mes "En PVP ahora existe la modalidad de Puntos PVP.";
+	mes "Cuando matas a un jugador en PVP se te sumara un punto PVP, pero tambien si tu mueres se te quitara un punto.";
+	next;
+	mes @npc$;
+	mes "Estos puntos se pueden cambiar por items o equipo, ademas de que superando cierta cantidad de puntos, tendras la oportunidad de un Bonus el cual incrementara tus puntos!";
+	next;
+	mes @npc$;
+	mes "Tu tienes "+#PuntosPvp+" puntos PVP.";
+	close;
+
+M_Bonus:
+	mes @npc$;
+	for( set .@d, 0; .@d < getarraysize($Campeon); set .@d, .@d + 1 ) {
+		if(#PuntosPvp==$Campeon[.@d]) goto M_puntos;
+	}
+	mes "Para obtener un bonus de puntaje pvp, debes tener tus PUNTOS PVP IGUAL a:";
+	for( set .@i, 0; .@i < getarraysize($Campeon); set .@i, .@i + 1 ) {
+		mes $Campeon[.@i]+" Puntos.";}
+	close;
+
+M_puntos:
+	mes "Has conseguido un bonus, Felicidades!.";
+	mes "Elejire un numero al azar, y te lo sumare.";
+	next;
+	mes @npc$;
+	set .@bonus,rand(1,100); // 100%
+if ( .@bonus <= 20 ) {// ( 20% chance)
+	set #PuntosPvp,#PuntosPvp + 10;
+	mes "Has recibido 10 Puntos de Pvp, la cantidad mas baja. Espero que no te desanimes, pronto tendras otro Bonus.";
+	} else 
+	if ( .@bonus <= 40&& .@bonus>=21 ) {// (40% Chance)
+		set #PuntosPvp,#PuntosPvp + 30;
+		mes "Has recibido 30 Puntos de Pvp, una cantidad baja. Espero que no te desanimes, pronto tendras otro Bonus.";
+		} else
+		if ( .@bonus <= 60 && .@bonus >=41 ) {// (60% Chance)
+			set #PuntosPvp,#PuntosPvp + 50;
+			mes "Has recibido 50 Puntos de Pvp. Espero que no te desanimes, pronto tendras otro Bonus.";
+			} else
+			if ( .@bonus <= 80 && .@bonus>=61) {// (80% Chance)
+				set #PuntosPvp,#PuntosPvp + 70;
+				mes "Has recibido 70 Puntos de Pvp. Espero que no te desanimes, pronto tendras otro Bonus.";
+				} else 
+				if ( .@bonus <= 100 && .@bonus>=81) {// (40% Chance)
+					set #PuntosPvp,#PuntosPvp + 100;
+					mes "Has recibido 100 Puntos de Pvp, la cantidad mas alta. Espero estes contento y recuerda pronto tendras otro Bonus."; //(100% de chance)
+					}
+mes "Ahora tienes un total de "+#PuntosPvp+", Suerte!";
+close;
+
+M_premiador:
+mes @npc$;
+mes "Tu tienes "+#PuntosPvp+" puntos, que te gustaria escoger?";
+for( set .@i, 0; .@i < getarraysize($item_pvp); set .@i, .@i + 1 ) {
+mes ""+$valor_item[.@i]+" = "+getitemname($item_pvp[.@i])+"";
+if( .@i < 1 )
+	set .@menu$, getitemname($item_pvp[.@i]);
+else
+	set .@menu$, .@menu$+":"+getitemname($item_pvp[.@i]);
+}// 
+next;
+select(.@menu$);
+set @choice, @menu - 1;
+if( $valor_item[@choice] > #PuntosPvp ) {
+	mes "Te faltan puntos, animate y ver por ellos!";
+	close;
+	}
+getitem $item_pvp[@choice],1;
+set #PuntosPvp,#PuntosPvp-$valor_item[@choice];
+mes @npc$;
+mes "Felicidades , Ahi tienes.";
+close;
+
+M_Nada:
+mes @npc$;
+mes "Adios.";
+close;
+
+}// fin script

@@ -1,0 +1,74 @@
+//
+-	script	Woe3jobKick	-1,{
+OnPCLoadMapEvent:
+getmapxy(.@mapawoe$,.@x,.@y,0);
+if(agitcheck ()){
+if(getmapflag(.@mapawoe$,mf_gvg_castle)) {//revisa 
+if (.@mapawoe$=="aldeg_cas02" || .@mapawoe$=="aldeg_cas04" || .@mapawoe$=="aldeg_cas01" || .@mapawoe$=="aldeg_cas03" || .@mapawoe$=="aldeg_cas05"){//castillos de novice  
+			if (Class > 20) { 
+				dispbottom "No se permiten personajes Renacidos, Extended (Ninja, Soul Linker, Gunslinger, etc), ni 3er Job en este mapa, warpeando a SavePoint...";
+				warp "SavePoint",0,0; // warp out
+			}//end if class 20
+		}//end if mapcheck alde
+		if (.@mapawoe$=="gefg_cas01" || .@mapawoe$=="gefg_cas02" || .@mapawoe$=="gefg_cas03" || .@mapawoe$=="gefg_cas04" || .@mapawoe$=="gefg_cas05"){//castillos de 2 job
+			if (Class > 4053) { 
+				dispbottom "No se permiten personajes 3er Job en este mapa, warpeando a SavePoint...";
+				warp "SavePoint",0,0; // warp out
+			}//end if class 4053
+		}//end if mapchek gef	
+	if (.@mapawoe$=="aldeg_cas02" || .@mapawoe$=="aldeg_cas04" || .@mapawoe$=="aldeg_cas01" || .@mapawoe$=="aldeg_cas03" || .@mapawoe$=="aldeg_cas05") {
+		sc_end SC_MAXOVERTHRUST;
+		sc_end SC_WEAPONPERFECTION;
+		sc_end SC_SPIRIT;
+		sc_end SC_GOSPEL;
+		sc_end SC_WINDWALK;
+		sc_end SC_ASSUMPTIO;
+		sc_end SC_KAUPE;
+		sc_end SC_KAAHI;
+		sc_end SC_KAIZEL;
+		sc_end SC_MATKFOOD;
+		sc_end SC_WATKFOOD;
+		sc_end SC_BATKFOOD;
+		sc_end SC_FLEEFOOD;
+		sc_end SC_HITFOOD;
+		sc_end SC_LUKFOOD;
+		sc_end SC_DEXFOOD;
+		sc_end SC_INTFOOD;
+		sc_end SC_VITFOOD;
+		sc_end SC_AGIFOOD;
+		sc_end SC_STRFOOD;
+		sc_end SC_BENEDICTIO;
+		sc_end SC_INTRAVISION;
+		sc_end SC_INCSTR;
+		sc_end SC_INCAGI;
+		sc_end SC_INCALLSTATUS;
+		sc_end SC_INCVIT;
+		sc_end SC_INCINT;
+		sc_end SC_INCDEX;
+		sc_end SC_INCLUK;
+		sc_end SC_INCHIT;
+		sc_end SC_INCHITRATE;
+		sc_end SC_INCFLEE;
+		sc_end SC_INCFLEERATE;
+		sc_end SC_INCMHPRATE;
+		sc_end SC_INCMSPRATE;
+		sc_end SC_INCATKRATE;
+		sc_end SC_INCMATKRATE;
+		sc_end SC_INCDEFRATE;
+		sc_end SC_WALKSPEED;
+		sc_end SC_ADRENALINE2;
+		//genetic
+		sc_end SC_SAVAGE_STEAK;//12429
+		sc_end SC_COCKTAIL_WARG_BLOOD;//12430
+		sc_end SC_MINOR_BBQ;//12431
+		sc_end SC_SIROMA_ICE_TEA;//12432
+		sc_end SC_DROCERA_HERB_STEAMED;//12433
+		sc_end SC_PUTTI_TAILS_NOODLES;//12434
+		sc_end SC_INCMHPRATE;//12422
+		sc_end SC_INCMSPRATE;//12425
+		sc_end SC_EXTRACT_SALAMINE_JUICE;//12437
+		sc_end SC_EXTRACT_WHITE_POTION_Z;//12428 
+	}
+}
+}
+}//end script

@@ -1,0 +1,331 @@
+// 
+pvp_y_1-5,159,113,4	script	Invocador	791,{
+set @npc$,"[Invocador Master]";
+mes @npc$;
+mes "Hola...";
+mes "Sabes, puedo invocar un MVP en este mapa,";
+mes "....claro con un costo";
+menu "Dime mas",Contin,"Que MVPS puedes invocar?",lista,"No me interesa",salir;
+
+lista:
+next;
+mes @npc$;
+mes "Puedo invocar:";
+    	mes "Amon Ra";
+    	mes "Atroce";
+    	mes "White Lady";
+    	mes "Baphomet";
+    	mes "Dark Lord";
+    	mes "Detale";
+    	mes "Doppelganger";
+    	mes "Dracula";
+    	mes "Drake";
+    	mes "Eddga";
+    	mes "Egnigem Cenia";
+    	mes "Evil Snake Lord";
+    	mes "Garm";
+    	mes "Gloom Under Night";
+    	mes "Golden Thief Bug";
+    	mes "Ifrit";
+    	mes "Incantation Samurai";
+    	mes "Stormy Knight";
+    	mes "Lady Tanee";
+    	mes "Lord of Death";
+    	mes "Maya";
+    	mes "Mistress";
+    	mes "Moonlight Flower";
+    	mes "Orc Hero";
+    	mes "Orc Lord";
+    	mes "Osiris";
+    	mes "Pharaoh";
+    	mes "Phreeoni";
+    	mes "RSX 0806";
+    	mes "Tao Gunka";
+    	mes "Turtle General";
+    	mes "Vesper";
+    	mes "Pouring";
+menu "Cual es el Costo",Contin,"No me interesa",salir;
+
+Contin:
+next;
+mes @npc$;
+mes "Cobrare 25 Porin Coins";
+mes "Pero mis poderes solo hacen que el MVP este un tiempo.";
+mes "Que dices?, aceptas invocar el MVP 40 Minutos por 25 Porin Coins? ";
+menu "Acepto",invo,"No, Gracias",salir;
+
+invo:
+if (countitem(7539)<25) goto M_NOITEMS;
+delitem 7539,25;
+set var, rand(1,33);
+switch (var) {
+    case 1:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Amon Ra",1511,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Amon Ra por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+    case 2:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Pouring",1894,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Santa Poring por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+    case 3:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Atroce",1785,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Atroce por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+    case 4:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"White Lady",1630,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a White Lady por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+    case 5:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Baphomet",1039,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Baphomet por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 6:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Dark Lord",1272,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Dark Lord por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 7:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Detale",1719,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Detale por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 8:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Doppelganger",1046,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Doppelganger por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 9:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Dracula",1389,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Dracula por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 10:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Drake",1112,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Drake por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 11:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Eddga",1115,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Eddga por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 12:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Evil Snake Lord",1418,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Evil Snake Lord por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 13:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Garm",1252,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Garm por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 14:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Golden Thief Bug",1086,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Golden Thief Bug por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 15:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Incantation Samurai",1492,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Incantation Samurai por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+
+	case 16:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Stormy Knight",1251,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Stormy Knight por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+
+	case 17:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Lady Tanee",1688,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Lady Tanee por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 18:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Lord of Death",1373,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Lord of Death por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;		
+
+	case 19:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Maya",1147,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Maya por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 20:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Mistress",1059,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Mistress por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 21:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Moonlight Flower",1150,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Moonlight Flower por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 22:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Orc Hero",1087,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Orc Hero por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 23:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Orc Lord",1190,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Orc Lord por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+
+	case 24:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Osiris",1038,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Osiris por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 25:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Pharaoh",1157,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Pharaoh por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 26:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Phreeoni",1159,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Phreeoni por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;
+	
+	case 27:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"RSX 0806",1623,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a RSX 0806 por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 28:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Tao Gunka",1583,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Tao Gunka por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+		
+	case 29:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Turtle General",1312,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Turtle General por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 30:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Vesper",1685,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Vesper por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+	
+	case 31:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Egnigem Cenia",1658,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Egnigem Cenia por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;			
+	
+	case 32:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Gloom Under Night",1768,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Gloom Under Night por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;	
+
+	case 33:
+    	initnpctimer;
+        monster "pvp_y_1-5",159,107,"Ifrit",1832,1,"Invocador::OnMobDeath";
+	areaannounce "pvp_y_1-5",0,0,297,297,"Se a Invocado a Gloom Under Night por 40 Minutos",0;
+	hideonnpc "Invocador";
+	close;		
+	default:
+
+        break;
+
+}
+
+OnMobDeath:
+	stopnpctimer; 
+	areaannounce "pvp_y_1-5",0,0,297,297,"El MVP a sido Eliminado",0;
+	hideoffnpc "Invocador";
+	close;
+	end;
+
+OnTimer1800000: //30 1800000 minutos 
+        areaannounce "pvp_y_1-5",0,0,297,297,"Solo puedo Mantener el MVP por 10 Minutos Mas!",0;
+	close;
+
+
+OnTimer2400000: //40 2400000 minutos
+        stopnpctimer; 
+        areaannounce "pvp_y_1-5",0,0,297,297,"No puedo Mantener el MVP mas tiempo!",0;
+	hideoffnpc "Invocador";
+        killmonsterall "pvp_y_1-5";
+        close;	
+	end;	
+		
+		
+M_NOITEMS:
+	next;
+	mes @npc$;
+	mes "No tienes suficientes Porin Coins.";
+	mes "No trabajo gratis.";
+	close;
+
+salir:
+	next;
+	mes @npc$;
+	mes "...";
+	close;
+}

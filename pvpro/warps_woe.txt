@@ -1,0 +1,194 @@
+// [========================================================]
+// [Warper] Se activa en woe y desactiva los warp que te envian fuera de castillos
+// [========================================================]
+turbo_room,76,112,5	script	Woe_warper	45,1,1,{
+	//al tocar
+	set .@castle_actual$,getvariableofnpc(.castillo_actual$,"WoE Information");
+	callfunc "warp_woe_custom",0,.@castle_actual$;
+	end;
+
+OnAgitStart:
+	enablenpc "Woe_warper";
+	end;
+
+OnAgitEnd:
+	disablenpc "Woe_warper";
+	end;
+
+Oninit:
+	disablenpc "Woe_warper";
+	disablenpc "aldg01-1";
+	disablenpc "aldg02-1";
+	disablenpc "aldg03-1";
+	disablenpc "aldg04-1";
+	disablenpc "aldg05-1";
+	disablenpc "gefg02";
+	disablenpc "gefg01";
+	disablenpc "gefg03-1";
+	disablenpc "gefg06-1";
+	disablenpc "gefg05-1";
+	disablenpc "gefg07-1";
+	disablenpc "gefg08-1";
+	disablenpc "gefg10-1";
+	disablenpc "gefg10";
+	disablenpc "payg01-1";
+	disablenpc "payg02-1";
+	disablenpc "payg03-1";
+	disablenpc "payg04-1";
+	disablenpc "payg05-1";
+	disablenpc "prtg01-1";
+	disablenpc "prtg02";
+	disablenpc "prtg03";
+	disablenpc "prtg04";
+	disablenpc "prtg05";
+	end;
+
+}// fin script
+
+// [========================================================]
+// [Bandera de woe]
+// [========================================================]
+
+turbo_room,72,113,5	script	PVP-RO	722,{
+
+	set .@castle_actual$,getvariableofnpc(.castillo_actual$,"WoE Information");
+	set .@GID, GetCastleData(.@castle_actual$,1);
+	if (.@GID == 0) {
+		mes "[ Arunafeltz Royal Edict ]";
+		mes "The Holy Kingdom of";
+		mes "PVP-RO declares that";
+		mes "one has yet to claim lordship";
+		mes "over this stronghold. The one";
+		mes "that breaks the Emperium will";
+		mes "be recognized as its new owner.";
+		close;
+	}
+	else {
+		if (getcharid(2) == .@GID) {
+			mes "[ Ringing Voice ]";
+			mes "Courageous one,";
+			mes "do you wish to return";
+			mes "to your Emperium?";
+			next;
+			switch(select("Return to the Emperium:Cancel")) {
+			case 1:
+				set .@GID, GetCastleData(.@castle_actual$,1);
+				if (getcharid(2) == .@GID) {
+					callfunc "warp_woe_custom",1,.@castle_actual$;
+					end;
+				}
+				close;
+			case 2:
+				close;
+			}
+		}
+		mes "[ Arunafeltz Royal Edict ]";
+		mes "The Holy Kingdom of";
+		mes "PVP-RO decrees that";
+		mes "this castle is owned";
+		mes "by the ^FF0000" + GetGuildName(.@GID) + "^000000 Guild.";
+		next;
+		mes "[ Arunafeltz Royal Edict ]";
+		mes "^FF0000" + GetGuildMaster(.@GID) + "^000000 is";
+		mes "Guild Master of ^FF0000" + GetGuildName(.@GID) + "^000000.";
+		mes "Any that object must claim this";
+		mes "castle through strength of";
+		mes "steel and magic during the";
+		mes "appointed Guild Siege times.";
+		close;
+	}
+	end;
+
+OnAgitStart:
+	enablenpc "PVP-RO";
+	set .@castle_actual$,getvariableofnpc(.castillo_actual$,"WoE Information");
+	FlagEmblem GetCastleData(.@castle_actual$,1);
+	end;
+
+OnAgitEnd:
+	disablenpc "PVP-RO";
+	end;
+
+Oninit:
+	disablenpc "PVP-RO";
+	end;
+
+OnAgitBreak:
+	set .@cas_actual$,getvariableofnpc(.castillo_actual$,"WoE Information");
+	FlagEmblem GetCastleData(.@cas_actual$,1);
+	end;
+}
+
+// [========================================================]
+// [Funcion anuncio de woe]
+// [========================================================]
+-	script	GMEventos	-1,{
+
+OnInit:
+	set .anuncio_woe$,"RoMX Rulez!";
+	end;
+
+OnPCLoginEvent:
+	if (agitcheck()==1){
+		sleep2 1000;
+		announce .anuncio_woe$,bc_self,0xECFA0F;
+	}
+end;
+}
+
+// [========================================================]
+// [Funcion de warpeo]
+// [========================================================]
+
+function	script	warp_woe_custom	{
+	switch(getarg(0)){
+		case 0://sea de warp normal
+			if(getarg(1)=="aldeg_cas01") {set .@x,34;set .@y,248;}
+			if(getarg(1)=="aldeg_cas02") {set .@x,88;set .@y,163;}
+			if(getarg(1)=="aldeg_cas03") {set .@x,114;set .@y,286;}
+			if(getarg(1)=="aldeg_cas04") {set .@x,149;set .@y,17;}
+			if(getarg(1)=="aldeg_cas05") {set .@x,216;set .@y,103;}
+			if(getarg(1)=="gefg_cas01") {set .@x,34;set .@y,140;}
+			if(getarg(1)=="gefg_cas02") {set .@x,70;set .@y,143;}
+			if(getarg(1)=="gefg_cas03") {set .@x,125;set .@y,250;}
+			if(getarg(1)=="gefg_cas04") {set .@x,24;set .@y,149;}
+			if(getarg(1)=="gefg_cas05") {set .@x,11;set .@y,134;}
+			if(getarg(1)=="payg_cas01") {set .@x,214;set .@y,48;}
+			if(getarg(1)=="payg_cas02") {set .@x,272;set .@y,57;}
+			if(getarg(1)=="payg_cas03") {set .@x,226;set .@y,26;}
+			if(getarg(1)=="payg_cas04") {set .@x,252;set .@y,271;}
+			if(getarg(1)=="payg_cas05") {set .@x,62;set .@y,225;}
+			if(getarg(1)=="prtg_cas01") {set .@x,99;set .@y,32;}
+			if(getarg(1)=="prtg_cas02") {set .@x,43;set .@y,229;}
+			if(getarg(1)=="prtg_cas03") {set .@x,168;set .@y,12;}
+			if(getarg(1)=="prtg_cas04") {set .@x,86;set .@y,13;}
+			if(getarg(1)=="prtg_cas05") {set .@x,17;set .@y,235;}
+			break;
+		case 1://sea warp de bandera
+			if(getarg(1)=="aldeg_cas01") {set .@x,218;set .@y,170;}
+			if(getarg(1)=="aldeg_cas02") {set .@x,84;set .@y,74;}
+			if(getarg(1)=="aldeg_cas03") {set .@x,118;set .@y,76;}
+			if(getarg(1)=="aldeg_cas04") {set .@x,45;set .@y,88;}
+			if(getarg(1)=="aldeg_cas05") {set .@x,31;set .@y,190;}
+			if(getarg(1)=="gefg_cas01") {set .@x,83;set .@y,47;}
+			if(getarg(1)=="gefg_cas02") {set .@x,23;set .@y,66;}
+			if(getarg(1)=="gefg_cas03") {set .@x,116;set .@y,89;}
+			if(getarg(1)=="gefg_cas04") {set .@x,59;set .@y,70;}
+			if(getarg(1)=="gefg_cas05") {set .@x,61;set .@y,52;}
+			if(getarg(1)=="payg_cas01") {set .@x,212;set .@y,108;}
+			if(getarg(1)=="payg_cas02") {set .@x,22;set .@y,275;}
+			if(getarg(1)=="payg_cas03") {set .@x,9;set .@y,263;}
+			if(getarg(1)=="payg_cas04") {set .@x,40;set .@y,235;}
+			if(getarg(1)=="payg_cas05") {set .@x,276;set .@y,227;}
+			if(getarg(1)=="prtg_cas01") {set .@x,96;set .@y,173;}
+			if(getarg(1)=="prtg_cas02") {set .@x,71;set .@y,36;}
+			if(getarg(1)=="prtg_cas03") {set .@x,181;set .@y,215;}
+			if(getarg(1)=="prtg_cas04") {set .@x,258;set .@y,247;}
+			if(getarg(1)=="prtg_cas05") {set .@x,52;set .@y,41;}
+			break;
+	}
+	warp getarg(1),.@x,.@y;
+	return 0;
+}
+
+//"nguild_alde", "nguild_gef", "nguild_pay", "nguild_prt", "schg_cas01", "arug_cas01";

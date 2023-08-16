@@ -1,0 +1,56 @@
+prontera,165,187,3	script	Coin Exchanger	831,{
+
+	setarray @vote_item[0],			7539,7539,7539,7539; // Item ID
+	setarray @vote_item_count[0],	1,5,10,30; // Item Count wich will be given
+	setarray @vote_cost[0],			2,10,20,60; // Cost in Vote Points
+	set @min_vote, 0; // minimum count on Vote Points to see the Item List
+	set @npcname$,"[^ff0000Coin Exchanger^000000]";
+
+	query_sql ("SELECT `point` FROM `vote_point` WHERE `loginname` = MD5('"+getcharid(3)+"')", @vote);
+
+	mes @npcname$;
+	mes "Hola que tal, gracias por apoyar a RoMX!";
+	mes "Yo puedo cambiar tus puntos por Poring Coins";
+	mes "Actualmente tienes ^ff0000"+@vote+"^000000 Puntos!";
+	if( @vote < @min_vote ) {
+		mes "^ff0000Necesitas "+@min_vote+" Puntos para intercambiarlos conmigo!^000000";
+		close;
+	}
+	if (select("Cambiar mis Puntos!","Cancelar~") == 2) 
+		close;
+
+	next;
+	mes @npcname$;
+	mes "";
+	for( set .@i, 0; .@i < getarraysize(@vote_item); set .@i, .@i + 1 ) {
+		mes "^0000ff"+@vote_item_count[.@i]+"x "+getitemname(@vote_item[.@i])+"^000000 = ^00aa00"+@vote_cost[.@i]+" Puntos^000000";
+		if( .@i < 1 )
+			set .@menu$, getitemname(@vote_item[.@i]);
+		else
+			set .@menu$, .@menu$+":"+@vote_item_count[.@i]+"x "+getitemname(@vote_item[.@i]);
+	}
+
+	next;
+	select(.@menu$);
+	set @choice, @menu - 1;
+
+	mes @npcname$;
+	if( @vote_cost[@choice] > @vote ) {
+		mes "Lo siento...";
+		mes "No tienes suficientes puntos para "+@vote_item_count[@choice]+"x "+getitemname(@vote_item[@choice])+"";
+		close;
+	}
+	mes "De verdad quieres cambiar "+@vote_item_count[@choice]+"x '^ff0000"+getitemname(@vote_item[@choice])+"^000000' for ^00aa00"+@vote_cost[@choice]+"^000000 Puntos?";
+	if(select("No! Cancelar!:Si, Cambialos por favor!") == 1 ) {
+		mes "^ff0000Trato Cancelado~^000000";
+		close;
+	}
+
+	set .@new, @vote - @vote_cost[@choice];
+	if( .@new < 0 ) // safety first..
+		set .@new, 0;
+	query_sql("UPDATE `vote_point` SET `point` = '"+.@new+"' WHERE `loginname` = MD5('"+getcharid(3)+"')");
+	getitem @vote_item[@choice], @vote_item_count[@choice];
+	mes "^00aa00Cambio exitoso ^_^ Gracias por votar por RoMX!^000000";
+	close;
+}

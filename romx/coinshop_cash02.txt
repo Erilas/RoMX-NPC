@@ -1,0 +1,203 @@
+//[========================================================]                                                    
+prontera,158,193,6	script	Consumibles	562,{
+	set @n$,"~ ^00B200Consumibles^000000 ~";
+	function DEBUG_MES;
+	function RESET;
+	mes @n$;
+	mes "Hola, hola solo quiero avisarte que esta tienda funciona con ^999999Cash Points en lugar de Zeny.^000000";
+	mes "^FF0000(asi que la cantidad de Zeny mostrada representa la cantidad de Cash Points necesarios.)";
+	close2;
+	dispbottom "Actualmente tienes " + #CASHPOINTS + " Cash Points.";
+	callshop "Dynamic_Shop2",1;
+	npcshopattach "Dynamic_Shop2";
+	end;
+
+OnWhisperGlobal:
+	if(getgmlevel() > 3) {
+		set @n$,"~ ^00B200Consumibles^000000 ~";
+		mes @n$;
+		mes "Hola, en que te puedo ayudar patron?";
+		next;
+		switch(select("Agregar Item y precio:Eliminar Item de tienda:Iniciar tienda")){
+			case 1:
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000ID del item^000000.";
+				next;
+				input @item_id;
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000Precio^000000 del item.";
+				next;
+				input @price;
+				mes @n$;
+				mes "Confirma:";
+				mes "^FF0000Item: " + getitemname(@item_id);
+				mes "ID: " + @item_id;
+				mes "Precio: " + @price + "^000000";
+				mes "Es correcto?";
+				next;
+				if(!(select("- No!:- Si") -1)){ 
+					mes @n$; 
+					mes "Accion cancelada."; 
+				} else {
+					query_sql "INSERT INTO `dynamic_shop2` ( `id` , `price` ) VALUES ( '"+@item_id+"' , '"+@price+"' )";
+					npcshopadditem "Dynamic_Shop2", @item_id, @price;
+					mes @n$;
+					mes "El item a sido agregado a la tienda!";
+				}
+				next;
+				break;
+			case 2:
+				RESET(1);
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000ID del item^000000.";
+				next;
+				input @item_id;
+				next;
+				query_sql("SELECT `id` FROM `dynamic_shop2` WHERE `id`="+@item_id, @id_all);
+				if(!@id_all[0]){
+					set @admin_menu,0;
+					mes @n$;
+					mes "^FF0000Ese ID no existe en la teinda^000000";
+					next;
+				} else {
+					mes @n$;
+					mes "Confirmas borrar el item ^FF0000"+@item_id+" - "+getitemname(@item_id)+"^000000?";
+					next;
+					if(select("No:Si") -1){ 
+						query_sql("DELETE FROM `dynamic_shop2` WHERE `id`="+@item_id);
+						npcshopdelitem "Dynamic_Shop2", @item_id;
+						mes @n$;
+						mes "El item fue eliminado.";
+						close;
+					}
+				}
+				break;	
+			case 3:
+				doevent "Consumibles::OnInit";
+				mes "Listo.";
+				close;
+				break;		
+		}//switch
+	}//end if
+	close;
+	end;
+	
+OnBuyItem:
+
+	set @price, 0;
+	set @quantity, 0;
+
+	RESET(1);
+
+	query_sql "SELECT * FROM `dynamic_shop2` ORDER BY price ASC", @id_all, @price_all;
+	
+	if(!@id_all[0]) DEBUG_MES(0);
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1)
+		for( set @z, 0; @z < getarraysize(@id_all); set @z, @z + 1)
+			if(@id_all[@z] == @bought_nameid[@i])
+				set @quantity, @quantity + (@price_all[@z] * @bought_quantity[@i]);
+		mes "~ ^999999Cuenta^000000 ~";
+	
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) 
+		mes "^FF0000" + getitemname(@bought_nameid[@i]) + ": " + @bought_quantity[@i] + "^000000";
+		mes "Este item te costara ^999999" + @quantity + " Cash Points^000000!";
+	mes "Quieres completar la compra?";
+	next;
+	switch(select("No, gracias:Si, lo compro")){
+		case 1:
+			RESET(0);
+			mes @n$; mes "Compra cancelada.";
+			close;
+			break;
+		case 2:
+			if(#CASHPOINTS < @quantity){
+				RESET(0);
+				mes @n$;
+				mes "Lo siento, no tienes suficientes ^999999Cash Pointss^000000...";
+				close;
+			} else {
+				atcommand "@cash -"+ @quantity;
+				for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) 
+				getitem @bought_nameid[@i], @bought_quantity[@i];
+				RESET(0);
+			}
+			break;
+	}
+	mes @n$;
+	mes "Gracias por apoyar nuestro servidor!";
+	close;
+	
+
+// ( -------------------------- Functions: --------------------------- ) \\
+
+	function DEBUG_MES {
+
+	// ( ----- If the SQL-DBs are empty ----- ) \\
+	// ( ------- getarg(0) - Player --------- ) \\
+	// ( ------- getarg(1) - Admin ---------- ) \\
+
+		if(!getarg(0)){
+
+			mes @n$;
+			mes "^FF0000Error de Base de Datos.^000000";
+			mes "Por favor intenta de nuevo en un rato.";
+			mes "Si esta no es la primera ves que ve este mensaje, por favor reportelo al GM!";
+			close;
+			
+		} else {
+		
+			mes @n$;
+			mes "^FF0000Error de Base de Datos.^000000";
+			mes "Asegurece de que la tabla existe o no este vacia!";
+			close;
+			
+		}
+		
+	}
+
+	function RESET {
+
+	// ( ---------------------- Reset of the Variables -------------------- ) \\
+	// ( -------- getarg(0) - 1 for SQL-RESET; 0 for OnBuyItem-RESET. ----- ) \\
+
+		if(getarg(0)){
+		
+			deletearray @id_all, getarraysize(@id_all);
+			deletearray @price_all, getarraysize(@price_all);
+			
+		} else {
+		
+			deletearray @bought_quantity, getarraysize(@bought_quantity);
+			deletearray @bought_nameid, getarraysize(@bought_nameid);
+
+		}
+		
+		return;
+
+	}
+	
+// ( ------------------------------------------------------------------ ) \\
+
+
+OnInit:
+
+  	npcshopdelitem "Dynamic_Shop2", 512;
+
+	query_sql "SELECT * FROM `dynamic_shop2` ORDER BY price ASC", .id_all, .price_all;
+	
+	if(!.id_all[0])
+		end;
+	
+	npcshopitem "Dynamic_Shop2", .id_all[0], .price_all[0];
+	
+	for( set .i, 1; .i < getarraysize(.id_all); set .i, .i + 1 ) 
+		npcshopadditem "Dynamic_Shop2", .id_all[.i], .price_all[.i];
+
+	end;
+	
+}
+
+-	shop	Dynamic_Shop2	-1,512:20 // Dummy-Shop.
+
+
+

@@ -1,0 +1,38 @@
+//
+prontera,166,200,5	script	Coleccionista	898,{
+	set @npc$,"[Coleccionista]";
+	mes @npc$;
+	mes "Hola..."; 
+	if (countitem(7621)<1) {
+		emotion 20;
+		close;
+	}else{
+	mes "Puedo cambiarte esos ^00A521"+getitemname(7621)+"^000000";
+	mes "Te dare .... ^FF000030 Cash Point^000000 por cada uno, te parece?"; 
+	next; 
+	menu "Perfecto",M_MAKE,"No gracias.",M_CANCEL;
+	}
+	close;
+
+M_MAKE:
+	mes @npc$;
+	mes "Bien ^-^";
+	mes "Veamos...tu tienes ^00A521"+countitem(7621)+" "+getitemname(7621)+"^000000";
+	mes "...";
+	set .@tokens_cash,countitem(7621)*30;
+	mes "Serian ^FF0000"+.@tokens_cash+" Cash Point^000000...Aqui tienes =)";
+	delitem 7621,countitem(7621);
+	atcommand "@cash " + .@tokens_cash;
+	next;
+	mes @npc$;
+	mes "Nos vemos luego ^-^";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	emotion 20;
+	mes "No creo que alguien mas te de algo por ese item...";
+	close;
+
+}
+

@@ -1,0 +1,109 @@
+prontera,146,152,5	script	GuildMaster	743,{
+
+	if (agitcheck() == 1 || agitcheck2() == 1) {
+		mes "[GuildMaster]";
+		mes " ";
+		mes "Esta función no esta disponible durante WoE";
+		close;
+	}
+	if ( !getcharid(2) ) {
+		mes "[GuildMaster]";
+		mes " ";
+		mes "Necesitas pertenecer a un Guild para usar esta función";
+		close;
+	}
+	if ( getguildmaster(getcharid(2)) != strcharinfo(0) ) {
+		mes "[GuildMaster]";
+		mes " ";
+		mes "Necesitas ser el GuildMaster de tu Guild para usar esta función";
+		close;
+	}
+	mes "[GuildMaster]";
+	mes " ";
+	mes "Hola en que puedo ayudarte?";
+	switch(select("Cancelar","Cambiar de GuildMaster","Cambiar de Nombre a mi Guild")) {
+		case 1:
+			close;
+		case 2:
+			next;
+			mes "[GuildMaster]";
+			mes " ";
+			mes "Este servicio tiene un costo de 50,000z";
+			mes " ";
+			mes "Por favor escribe el nombre EXACTO del personaje que sera el GuildMaster";
+			next;
+			input .@name$;
+			if(Zeny < 50000) {
+				next;
+				mes "[GuildMaster]";
+				mes " ";
+				mes "No tienes el zeny suficiente";
+				close;
+			}
+			if ( !isloggedin( getcharid(3, .@name$) ) ) {
+				mes "[GuildMaster]";
+				mes " ";
+				mes "El usuario es incorrecto o se encuentra desconectado";
+				close;
+			}
+			set .@origin, getcharid(3);
+			attachrid getcharid(3, .@name$);
+			set .@guildid, getcharid(2);
+			attachrid .@origin;
+			if ( getcharid(2) != .@guildid ) {
+				mes "[GuildMaster]";
+				mes "Ese usuario no está en tu Guild";
+				close;
+			}
+			if ( !guildchangegm( getcharid(2), .@name$ ) ) {
+				mes "[GuildMaster]";
+				mes "Error, intenta nuevamente";
+				close;
+			} else {
+				set Zeny,Zeny-50000;
+				mes "Realizado";
+				close;
+			}
+		case 3:
+			nuevo_nombre:
+			next;
+			set .@GID,getcharid(2);
+			mes "[GuildMaster]";
+			mes " ";
+			mes "Este servicio tiene un costo de 10 Cash Points";
+			mes "^FF0000El nombre debe tener minimo 4 letras y maximo de 24. No uses signos de ningun tipo.^000000";
+			mes "Por favor escribe el nuevo nombre de la guild. ";
+			input .@guild_name$;
+			debugmes "ifs!";
+			if(#CASHPOINTS < 10) {
+				next;
+				mes "[GuildMaster]";
+				mes " ";
+				mes "No tienes el cash suficiente";
+				close;
+			}
+			if (getstrlen(.@guild_name$)<4) {
+				dispbottom "El nombre debe tener por lo menos 4 letras.";
+				goto nuevo_nombre;
+			}
+			if (getstrlen(.@guild_name$)>24) {
+				dispbottom "El nombre no puede tener mas de 24 letras.";
+				goto nuevo_nombre;
+			}
+			debugmes "queri de existencia";
+			query_sql ("SELECT COUNT(name) FROM `guild` WHERE name='"+escape_sql(.@guild_name$)+"'", .@name_exists);
+			if (.@name_exists) {
+				dispbottom "El nombre "+.@guild_name$+" ya esta en uso.";
+				goto nuevo_nombre;
+			}
+			debugmes "cash";
+			atcommand "@cash -10";
+			debugmes "sleep y update";
+			atcommand "@kick "+strcharinfo(0);
+			sleep 500;
+			query_sql ("UPDATE `guild` SET `name` = '"+.@guild_name$+"' WHERE `guild_id` = "+.@GID);
+			debugmes "UPDATE `guild` SET `name` = '"+.@guild_name$+"' WHERE `guild_id` = "+.@GID;
+			break;
+		}
+end;
+}

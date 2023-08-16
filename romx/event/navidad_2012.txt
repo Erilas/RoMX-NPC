@@ -1,0 +1,157 @@
+// navidad romx 2012
+-	script	navidad2012	-1,{
+OnNPCKillEvent:
+	if(#navidad2012==0 && killedrid==1062){
+		getitem 5381,1;//hat
+		set #navidad2012,1;
+	}
+}
+
+//npc
+prontera,146,95,6	script	Mr Santa	718,{
+	set .npc$,"[^FF0000Mr Santa^000000]"; 
+	mes .npc$;
+	mes "Jo Jo Jo!";
+	emotion e_heh;
+	mes "Feliz Navidad "+strcharinfo(0)+"!";
+	if(countitem(5381)>=1){
+		if(#deseo2012==0){
+			next;
+			mes .npc$;
+			mes "Jo Jo Jo!";
+			next;
+			mes .npc$;
+			mes "Jo Jo Jo!";
+			mes "emm... Prospero emm...";
+			next;
+			mes .npc$;
+			mes "Jo Jo Jo!";
+			mes "Parece que a Erilas se le acabaron las ideas para mi dialogo... raro en el.";
+			next;
+			mes .npc$;
+			mes "Te propongo algo, si tu me dices algun deseo de navidad yo te consedere uno a ti, que te parece?";
+			next;
+			mes .npc$;
+			mes "...";
+			next;
+			mes .npc$;
+			mes "... ...";
+			next;
+			mes .npc$;
+			mes "Interpretare tu silencio como un SI";
+			mes "Te recomiendo que sea un deseo corto. Y no te preocupes, pondre tu nombre junto a tu deseo en mis notas.";
+			next;
+			input .@deseo$;
+			query_logsql("INSERT INTO `navidad2012` (`nombre`,`deseo`) VALUES ('"+strcharinfo(0)+"','"+.@deseo$+"')");
+			mes .npc$;
+			mes "Bien, como lo prometi puedes elegir un deseo... para que no se me olvide are que tu Santa Poring Hat lo recuerde.";
+		}
+		M_menu:
+		mes "Elige el que quieras.";
+		menu "+1 Todos los Estats",M_estats,"10% mas exp",M_exp,"5% Resistencia a elementos",M_resistencia,"Dropear Candy",M_candy,"Spiritual Power y Recuperative Power",M_skills,"Drop de Zeny",M_zeny;
+		end;
+	}else{close;}
+	end;
+
+M_estats:
+	next;
+	mes .npc$;
+	mes "^FF0000+1 En todos los estats^000000";
+	mes "Mientras tengas puesto el Hat, tendras +1 en todos tus estats indefinidamente.";
+	mes " ";
+	set .@deseo,1;
+	goto M_deseo;
+
+M_exp:
+	next;
+	mes .npc$;
+	mes "^FF000010% + Experiencia al matar cualquier moustro^000000";
+	mes "Mientras tengas puesto el Hat, obtendras 10% mas experiencia al matar cualquier tipo de moustro.";
+	mes " ";
+	set .@deseo,2;
+	goto M_deseo;
+
+M_resistencia:
+	next;
+	mes .npc$;
+	mes "^FF00005% + resistencia a elementos^000000";
+	mes "Mientras tengas puesto el Hat, obtendras 5% de resistencia a todos los elementos.";
+	mes " ";
+	set .@deseo,3;
+	goto M_deseo;
+
+M_candy:
+	next;
+	mes .npc$;
+	mes "^FF0000X% de dropear un Guyak Candy^000000";
+	mes "Mientras tengas puesto el Hat, tendras un X% de posibilidad de dropear un Guyak Candy al matar cualquier tipo de moustro.";
+	mes " ";
+	set .@deseo,4;
+	goto M_deseo;
+
+M_skills:
+	next;
+	mes .npc$;
+	mes "^FF0000Increase Spiritual Power y Increase Recuperative Power^000000";
+	mes "Mientras tengas puesto el Hat, tendras activas las skills Increase Spiritual Power y Increase Recuperative Power a nivel 1.";
+	mes " ";
+	set .@deseo,5;
+	goto M_deseo;
+
+M_zeny:
+	next;
+	mes .npc$;
+	mes "^FF0000X% de dropear Zeny^000000";
+	mes "Mientras tengas puesto el Hat, tendras X% de posiblidad de obtener 20z al matar cualquier tipo de moustro.";
+	mes " ";
+	set .@deseo,6;
+	goto M_deseo;
+
+M_deseo:
+	mes "Quieres este deseo?";
+	next;
+	switch (select("Si","No, Regresar al menu anterior.","No, asi dejare mi Hat Gracias.")){
+		case 1:
+			if(getequipid(1)==5381){unequip 1;}
+			specialeffect2 83;
+			set #deseo2012,.@deseo;
+			mes .npc$;
+			mes "Listo, si cambias de idea regresa y te cambiare tu deseo.";
+			close;
+			break;
+		case 2:
+			mes .npc$;
+			goto M_menu;			
+			break;
+		case 3:
+			mes .npc$;
+			mes "Esta bien, si cambias de idea regresa y te cambiare tu deseo.";
+			break;
+	}
+	close;
+	end;
+
+OnInit:
+ 	initnpctimer;
+ 	end;
+
+OnTimer300000://300000 5 minutos
+	query_logsql("SELECT `nombre`, `deseo` FROM `navidad2012`", .nombre$, .deseo$);
+	set .rand,rand(getarraysize(.nombre$));
+	npctalk "Jo Jo Jo!! "+.nombre$[.rand]+" les desea "+.deseo$[.rand];
+	stopnpctimer;
+	initnpctimer;
+	end;
+
+OnWhisperGlobal:
+	if(getgmlevel()>90){
+		doevent "Mr Santa::OnTimer300000";
+	}
+end;
+
+
+}
+
+prontera,0,0,0,0	monster	Santa Poring	1062,3,0,0,0
+
+

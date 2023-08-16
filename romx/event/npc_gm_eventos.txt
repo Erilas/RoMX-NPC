@@ -1,0 +1,1397 @@
+//Simulador de GM 2562
+prontera,155,92,4	script	GM Eureka	2562,8,8,{
+set .npc$,"[^FF0000"+getvariableofnpc(.npc$,"GMEventos")+"^000000]"; //nombre del gm
+M_inicio:
+	mes .npc$;
+	mes "Hola "+strcharinfo(0)+"  ^^";
+	mes " ";
+	mes "Bienvenido a RoMX, en que te puedo ayudar?";
+	if (getgmlevel()==0){//si no es VIP
+		//sleep2 10000;
+		if (countitem(17020)>=1 && getgmlevel()==0){
+			delitem 17020,1;
+			specialeffect2 270;
+			npctalk "Perdona "+strcharinfo(0)+", esto me lo quedo yo, gracias ^_^";
+			dispbottom .npc$+" te a decomisado tu membresia VIP.";
+		}		
+	}
+	if (getvariableofnpc(.eventoactivo,"GMEventos")==13 && getvariableofnpc(.eventoniciado,"GMEventos")==1){menu "^ff0000Votar por un Evento^000000",M_Voto_evento,"Informacion del Servidor",M_info,"Informacion sobre "+.npc$,M_infogm,"Informacion sobre [^FF0000"+strcharinfo(0)+"^000000]",M_CASH,"Enviar mensaje a GM",M_mensajes,"^00A521Sistema Invita a un Amigo^000000",M_amigo,"Usuarios VIP",M_vip,"Cambio de Nombre",M_Nombre,"Donaciones SMS",M_SMS,"Transformarme en un mob",M_disg,"Cambiame de tamanio",M_Tamanio,"Cambiame de Genero",M_Genero,"Nada, solo saludaba",M_CANCEL;}
+	else{menu "Informacion del Servidor",M_info,"Informacion sobre "+.npc$,M_infogm,"Informacion sobre [^FF0000"+strcharinfo(0)+"^000000]",M_CASH,"Enviar mensaje a GM",M_mensajes,"^00A521Sistema Invita a un Amigo^000000",M_amigo,"Usuarios VIP",M_vip,"Cambio de Nombre",M_Nombre,"Donaciones SMS",M_SMS,"Transformarme en un mob",M_disg,"Cambiame de tamanio",M_Tamanio,"Cambiame de Genero",M_Genero,"Nada, solo saludaba",M_CANCEL;}
+
+M_info:
+	set @baseexp$, getBattleFlag("base_exp_rate")/100;
+	set @jobexp$, getBattleFlag("job_exp_rate")/100;
+	set @ratedrops$, getBattleFlag("item_rate_card")/100;
+	next;
+	mes .npc$;
+	mes "Los rates actuales son ^0000FF"+@baseexp$+"x "+@jobexp$+"x "+@ratedrops$+"x^000000.";
+	mes " ";
+	mes "En este momento hay ^0000FF"+getusers(1)+" usuarios conectados^000000";
+	mes " ";
+	mes "RoMX cuenta con 3er Jobs, los cuales tienen limite de nivel 150/50, los 2os Jobs tienen limite de nivel 99/70.";
+	next;
+	mes .npc$;
+	mes "^FF0000NO contamos con Healer, ni Warper, ni JobMaster.^000000";
+	mes " ";
+	mes "Los comandos disponibles para usuarios son:";
+	mes "^0000FF@rates, @time, @date, @duel, @main, @hominfo, @autotrade, @refresh, @jailtime^000000";
+	//next;
+	//mes .npc$;
+	//mes "Existen varias Modalidades de WoE:";
+	//mes "1.- Post-Ancient WoE: En esta no pueden acceder personajes 3er Job.";
+	//mes "2.- WoE Todo Vale: Con la unica restriccion de no poder usar Yggdrasil Berry ni Yggdrasil Seed";
+	next;
+	mes .npc$;
+	mes "Solo existen 3 GMs en total:";
+	mes " ";
+	mes "^FF0000GM Rex^000000";
+	mes "^FF0000GM Erilas^000000";
+	mes "^FF0000"+getvariableofnpc(.npc$,"GMEventos")+"^000000";
+	next;
+	mes .npc$;
+	mes "Si necesitas mas informacion, puedes usar el chat de la pagina principal o simplemente usar el Foro del Servidor.";
+	mes " ";
+	mes "(esto en lo que aprendo a ser una buena GM ^^)";
+	next;
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	close;
+
+M_infogm:
+	next;
+	mes .npc$;
+	mes "Soy un GM Virtual...yo activo los eventos aleatoriamente.";
+	mes "Si hay suerte activare mas de un evento diario ^^";
+	mes "Tambien curo a los heridos que se acercan a mi (a veces xD)."; 
+	next;
+	mes .npc$;
+	mes "He sido programada con 15 eventos diferentes:";
+	mes "^FF00001.- Poring Catcher";
+	mes "2.- MVP Conquer";
+	mes "3.- Treasure Hunter";
+	mes "4.- The Fight Club";
+	mes "5.- Bomb Punch";
+	mes "6.- Poring Party";
+	mes "7.- Mas EXP";
+	mes "8.- Dice";
+	mes "9.- Lotto";
+	mes "10.- Reaction";
+	mes "11.- RoMX Team";
+	mes "12.- Democracia";
+	mes "13.- Lost";
+	mes "14.- Novice Race";
+	mes "15.- Invasor";
+	next;
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	close;
+
+M_mensajes:
+	next;
+	mes .npc$;
+	mes "Puedo enviarle a los GM un mensaje";
+	mes " ";
+	mes "Reporte de Bugs, sugerencias, dudas...etc";
+	mes " ";
+	mes "Te recomiendo que sea un mensaje corto.";
+	next;
+	input .@tiempogmexto$;
+	next;
+	mes .npc$;
+	mes "A que GM quieres mandarle el mesaje?";
+	mes " ";
+	switch (select("A los 2 GMs","GM Rex","GM Erilas","Mejor no, Gracias")){
+		case 1:
+			query_sql("INSERT INTO `mail` (`id`,`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('NULL','"+strcharinfo(0)+"',"+getcharid(3)+",'Rexy','150038','Mensaje desde Eureka','"+.@tiempogmexto$+"','"+gettimetick(2)+"','1','0','0','0','0','0','1','0','0','0','0')");
+			query_sql("INSERT INTO `mail` (`id`,`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('NULL','"+strcharinfo(0)+"',"+getcharid(3)+",'Erilas','150000','Mensaje desde Eureka','"+.@tiempogmexto$+"','"+gettimetick(2)+"','1','0','0','0','0','0','1','0','0','0','0')");
+			break;
+		case 2:	
+			query_sql("INSERT INTO `mail` (`id`,`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('NULL','"+strcharinfo(0)+"',"+getcharid(3)+",'Rexy','150038','Mensaje desde Eureka','"+.@tiempogmexto$+"','"+gettimetick(2)+"','1','0','0','0','0','0','1','0','0','0','0')");
+			break;
+		case 3:	
+			query_sql("INSERT INTO `mail` (`id`,`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('NULL','"+strcharinfo(0)+"',"+getcharid(3)+",'Erilas','150000','Mensaje desde Eureka','"+.@tiempogmexto$+"','"+gettimetick(2)+"','1','0','0','0','0','0','1','0','0','0','0')");
+			break;
+		case 4:	
+			goto M_CANCEL;
+			break;
+	}
+	next;
+	mes .npc$;
+	mes "Tu mensaje fue enviado a(los) GM(s).";
+	next;
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	close;
+
+M_amigo:
+	next;
+	mes .npc$;
+	mes "Este sistema intenta hacer crecer la comunidad por medio de obsequios.";
+	mes "Si tu eres un usuario que entro a este servidor por medio de una recomendacion de un amigo.";
+	mes "Puedes ayudarlo registrandote en este sistema.";
+	next;
+	query_sql("SELECT COUNT(*) FROM `cp_banlog` WHERE `account_id` = '" + getcharid(3) + "' AND `ban_reason` = 'Account has been confirmed and activated.' AND `ban_date`<'2011-04-15'", .@cuenta_promociona);
+	if(.@cuenta_promociona!=0){
+		mes .npc$;
+		mes "Los siento, tu cuenta es anterior a este sistema.";
+		mes "Pero puedes ganar un obsequio recomendando usuarios a RoMX.";
+		next;
+		menu "Regresar al menu principal",M_inicio,"Adios",M_CANCEL;
+		close;
+	}
+	if(#sistema_invitaciones==1 && #estado_sia==0){
+		mes .npc$;
+		if (#horas_j_sia>80 && BaseLevel>59 && #estado_sia==0 && #mob_invita_amigo>2000){//100 horas de juego y nivel base mayor a 60
+			query_sql("INSERT INTO `mail` (`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`time`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('"+getvariableofnpc(.npc$,"GMEventos")+"','150000','"+#nombre_anfitrion_sia$+"',"+#cid_sia+",'Invita a un Amigo','RoMX te da las gracias por hacer crecer la comunidad, aqui tienes un obsequio por invitar a tu amigo "+strcharinfo(0)+".','"+gettimetick(2)+"','1','0','17002','5','0','0','1','0','0','0','0')");sleep2 3000;
+			query_logsql("INSERT INTO `gm_eventos` (`hora`,`nombre_usuario`,`mensaje`) VALUES (NOW(),'"+getvariableofnpc(.npc$,"GMEventos")+"','Envie 5 Rare Candy a "+#nombre_anfitrion_sia$+" por el sistema Invita un amigo, esto por que "+strcharinfo(0)+" cumplio los requisitos. "+gettime(5)+"/"+gettime(6)+"/"+gettime(7)+" - "+gettime(3)+":"+gettime(2)+":"+gettime(1)+"')");sleep2 3000;
+			set #sistema_invitaciones,0;//desactiva sistema invitaciones
+			set #estado_sia,1;//variable bandera, indica que ya pago sistema
+			mes "As cumplido con los requerimientos del sistema Invita a un Amigo, tu amigo "+#nombre_anfitrion_sia$+" ha recibido en su mail su regalo, gracias por elegir RoMX.";
+		}else{
+			mes "Tu estatus del sistema es:";
+			set .@mensaje$,"^FF0100Incumplido^000000";
+			if(BaseLevel>59){set .@mensaje$,"^04E10BCumplido^000000";}
+			mes "Nivel Base: "+.@mensaje$;
+			set .@mensaje$,"^FF0100Incumplido^000000";
+			if(#horas_j_sia>80){set .@mensaje$,"^04E10BCumplido^000000";}
+			mes "Horas de Juego: "+.@mensaje$;
+			set .@mensaje$,"^FF0100Incumplido^000000";
+			if(#mob_invita_amigo>2000){set .@mensaje$,"^04E10BCumplido^000000";}
+			mes "Mobs matados: "+.@mensaje$;
+			mes "";
+			mes "Te invito: "+#nombre_anfitrion_sia$+".";
+		}
+		next;
+		menu "Regresar al menu principal",M_inicio,"Adios",M_CANCEL;
+		close;
+	}
+	if(#estado_sia==1){
+		mes .npc$;
+		mes "Tu amigo "+#nombre_anfitrion_sia$+" ya cobro su recompenza de el sistema Invita un Amigo.";
+		next;
+		menu "Regresar al menu principal",M_inicio,"Adios",M_CANCEL;
+		close;
+	}
+	mes .npc$;
+	mes "Veo que eres nuevo, te gustaria indicarme quien te recomendo RoMX?";
+	next;
+	menu "No, gracias.",M_CANCEL,"Si, soy nuevo y me recomendo...",AM_nuevo;
+	goto M_CANCEL;
+
+AM_nuevo:
+	next;
+	mes .npc$;
+	mes "Por favor, ingresa nombre EXACTO del personaje que te invito a jugar RoMX";
+	next;
+	input #nombre_anfitrion_sia$;
+	next;
+	query_sql("SELECT COUNT(*) FROM `char` WHERE `account_id` = '" + getcharid(3) + "' AND `name` = '"+#nombre_anfitrion_sia$+"'", .@migomismo);
+	query_sql("SELECT `char_id`, `account_id` FROM `char` WHERE `name` = '" +#nombre_anfitrion_sia$+ "'", #cid_sia, .@char_id_a);
+	query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = " +.@char_id_a, .@ip_invitado$);
+	query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = " +getcharid(3), .@ip_anfitrion$);
+	if(.@migomismo>0 || .@ip_anfitrion$==.@ip_invitado$){
+		mes .npc$;
+		mes "Lo siento, pero No puedes invitarte a ti mismo en este sistema.";
+		next;
+		goto M_CANCEL;
+	}
+	if(#cid_sia==0){
+		mes .npc$;
+		mes "El personaje ^FF0000"+#nombre_anfitrion_sia$+"^000000 no existe, por favor verifica si escribiste correctamente su nombre.";
+		next;
+		menu "Regresar al menu principal",M_inicio,"Adios",M_CANCEL;
+		close;
+	}
+	set #sistema_invitaciones,1;
+	set #estado_sia,0;
+	query_sql("INSERT INTO `mail` (`send_name`,`send_id`,`dest_name`,`dest_id`,`title`,`message`,`status`,`zeny`,`nameid`,`amount`,`refine`,`attribute`,`identify`,`card0`,`card1`,`card2`,`card3`) VALUES ('"+strcharinfo(0)+"',"+getcharid(0)+",'"+#nombre_anfitrion_sia$+"','"+#cid_sia+"','Invita a un Amigo','Te he registrado como la persona que me invito, recibiras un regalo pronto...','1','0','0','0','0','0','1','0','0','0','0')");
+	next;
+	mes .npc$;
+	mes "Tu amigo ^FF0000"+#nombre_anfitrion_sia$+"^000000 recivira una notificacion por mail de que a sido registrado en el sistema.";
+	mes "^FF0000Para verificar tu estatus en el sistema, por favor regresa con migo.^000000";
+	mes "^0000FFRecuerda que tu tambien puedes ganar un obsequio invitando amigos a RoMX ^_^ ^000000";
+	next;
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	close;
+
+M_disg:
+	next;
+	mes .npc$;
+	mes "Puedo trasformarte en un Mob por ^0000FF2 Cash Point!^000000";
+	mes " ";
+	mes "^FF0000Recuerda que el efecto desaparecera si relogeas^000000";
+	mes " ";
+	mes "Solo dime el ID del Mob del 1001 al 2024";
+	switch (select("Transformarme en el mob...","Transformarme al azar","Regresar a la normalidad (gratis)","No, Gracias")){
+		case 1:
+			next;
+			if(#CASHPOINTS<5){ goto nozeny;}
+			atcommand "@cash -2";
+			emotion e_cash;
+			set .bicho,1001;
+			M_retacho:
+			input .@bicho;
+			if (.@bicho >= 1001 && .@bicho <= 2024){
+				disguise(.@bicho);
+				close;
+			} 
+			else{
+				mes .npc$;
+				mes "^FF0000El ID del Mob debe ser del 1001 al 2024^000000  >:(";
+				emotion e_pif;
+				goto M_retacho;
+			} 
+			break;
+		case 2:
+			if(#CASHPOINTS<5){ goto nozeny;}
+			atcommand "@cash -2";
+			emotion e_cash;
+			set varmob,rand(1001,2024);
+			disguise(varmob);
+			close;	
+			break;
+		case 3:
+			undisguise;
+			close;
+			break;	
+		case 4:
+			goto M_CANCEL;
+			break;
+			
+	}//end switch		
+	close;
+
+nozeny:
+	next;
+	mes .npc$;		
+	mes "...tu no tienes suficientes Cash Point";
+	emotion e_pif;
+	close;
+
+M_CANCEL:
+	next;
+	mes .npc$;
+	mes "Bye  ^_^";	
+	emotion e_kis;
+	close;
+
+M_CASH:
+	next;
+	mes .npc$;
+	mes "Tu tienes: ^0000FF"+ #CASHPOINTS +" Cash Points.^000000";
+	if(#kafrabank>0){ mes "En el banco tienes: ^0000FF"+#kafrabank+" zeny.^000000";}
+	if (strcharinfo(1)!=""){mes "Estas en la party: ^0000FF"+strcharinfo(1)+"^000000";}
+	if (strcharinfo(2)!=""){mes "Perteneces a la Guild: ^0000FF"+strcharinfo(2)+"^000000";}
+	mes "En total has muerto "+PC_DIE_COUNTER+" veces.";
+	if (getgmlevel()==1){ mes "^0000FFTienes cuenta VIP activa.^000000";}
+	if (getpetinfo(2)!="null"){
+		if (getpetinfo(3)>10){set .@texto_pet$,"no parece que le agradas mucho.";}
+		if (getpetinfo(3)>50){set .@texto_pet$,"parece que se esta entendiendo con tigo.";}
+		if (getpetinfo(3)>90){set .@texto_pet$,"le agradas mucho.";}
+		if (getpetinfo(3)<90){set .@texto_pet$,"esta unida a ti mas que nunca.";}
+		mes "Tu mascota: ^0000FF"+getpetinfo(2)+"^000000 "+.@texto_pet$;
+	}
+	if (gethominfo(2)!="null"){
+		if (gethominfo(3)>10){set .@texto_pet$,"no parece que le agradas mucho.";}
+		if (gethominfo(3)>50){set .@texto_pet$,"parece que se esta entendiendo con tigo.";}
+		if (gethominfo(3)>90){set .@texto_pet$,"le agradas mucho.";}
+		if (gethominfo(3)<90){set .@texto_pet$,"esta unida a ti mas que nunca.";}
+		mes "Tu homunculo: ^0000FF"+gethominfo(2)+"^000000 "+.@texto_pet$;
+	}
+	next;
+	if(#fecha_nacimiento==0){
+		mes .npc$;
+		mes "Perdona no tengo registrado el dia de tu cumpleanios, me lo podrias proporcionar?";
+		switch (select("Si, Claro","No, me quieres secuestrar!")){
+			case 1:
+				N_dia:
+				next;
+				mes .npc$;
+				mes "Primero dime el dia que naciste?";
+				input .@dia;
+				if(.@dia>32 || .@dia<=0){mes "^FF0000El dia no es correcto, intenta de nuevo^000000";goto N_dia;}
+				next;
+				mes .npc$;
+				mes "Ahora dime el mes que naciste?";
+				set .@mes,select("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+				N_anio:
+				next;
+				mes .npc$;
+				mes "Ahora dime el anio en que naciste?";
+				input .@anio;
+				if(.@anio<1970 || .@anio>10000){mes "^FF0000El anio no es correcto, intenta de nuevo^000000";goto N_anio;}
+				next;
+				mes .npc$;
+				mes "Muchas gracias por la informacion, toma esto de agradecimiento ^^";
+				getexp 5000,5000;
+				set #fecha_nacimiento,1;
+				set .@fecha$,.@anio+"-"+.@mes+"-"+.@dia;
+				query_sql ("UPDATE `login` SET `birthdate` = '"+.@fecha$+"' WHERE `account_id` = "+getcharid(3));
+				break;
+			case 2:
+				next;
+				mes .npc$;
+				mes "Perdona, solo queria saber mas de ti u_u";
+				break;
+		}
+	next;
+	}else{
+		query_sql("SELECT SUBSTR(`birthdate`,6,5), SUBSTR(CURDATE(),6,5) FROM `login` WHERE `account_id` = "+getcharid(3), .@cumpleanos$, .@hoy$);
+		if(.@hoy$==.@cumpleanos$){
+			mes .npc$;
+			mes "Ho! espera!! Hoy es tu cumpleanios, Felicidadez!! ^_^";
+			mes "Te gustaria que hisiera algo por ti este dia especial?";
+			switch (select("Wiiii, heal y dopes porfavor!","Mandar un mensaje a todo el server!")){
+				case 1:
+					next;
+					mes .npc$;
+					mes "Claro! ^^";
+					close2;
+					goto N_cumpleanos;
+					break;
+				case 2:
+					next;
+					mes .npc$;
+					mes "Mensaje anunciado ^^";
+					announce getvariableofnpc(.npc$,"GMEventos")+" : Felicitemos a "+strcharinfo(0)+", ya que hoy cumple "+rand(30,200)+" anios!! Felicidadez!",0;
+					break;
+			}
+		next;
+		}
+	}
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	close;
+
+M_vip:
+	next;
+	mes .npc$;
+	if ( getgmlevel() == 1 ){
+		query_sql ("SELECT `fecha_final` FROM `vip` WHERE `idcuenta`=" + getcharid(3)+" AND `estado`=1", .@Trestante);
+		set .@left, .@Trestante[0]-gettimetick(2);
+		set .@day,  .@left / (24*60*60);
+		set .@hour, .@left % (24*60*60) / (60*60);
+		set .@min,  .@left % (24*60*60) % (60*60) / (60);
+		set .@sec,  .@left % (24*60*60) % (60*60) % (60);
+		mes "Tienes ^0000FF"+ .@day +" dias, "+ .@hour +" horas "+ .@min +" minutos con "+ .@sec +" segundos^000000 antes de que tu cuenta VIP expire.";
+		menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	}
+	else{
+		mes "En RoMX contamos con cuentas VIP.";
+		mes " ";
+		mes "Estas tienen algunos beneficios como el uso de ^FF0000@alootid, @who, @request y @mobsearch^000000";
+		mes " ";
+		mes "Ademas se les otorga una ^0000FFTarjeta de membresia^000000 que te permite usar ^FF0000Discount lv. 10, Overcharge lv. 10, Identify, Monster Property y Teleport lv. 1^000000";
+		mes " ";
+		mes "Tambien al estar equipada, da 50% mas experiencia al matar un Mob, ademas de poder usar el ^0000FFBroadcaster^000000.";
+		next;
+		if(countitem(7851)>=1){goto  M_Vip_gratis;}
+		mes .npc$;
+		mes "Existen los siguientes periodos de tiempo:";
+		mes "^FF00001 Mes^000000     por ^0000FF500  Cash Point^000000";
+		mes "^FF00003 Meses^000000  por ^0000FF1250 Cash Point^000000";
+		mes "^FF00006 Meses^000000  por ^0000FF2550 Cash Point^000000";
+		mes "Te gustaria ser usuario VIP?";
+		next;
+		switch ( select ( "Si", "No, en otro momento" ) ) {
+			case 1:
+				mes .npc$;
+				mes " ";
+				mes "Por cuanto tiempo?";
+				query_sql("SELECT `value` FROM `global_reg_value` WHERE `account_id` = '" + getcharid(3) + "' AND `str` LIKE '#CASHPOINTS'", .@cashp);
+				switch (select ("1 Mes","3 Meses","6 Meses","Mejor no, gracias")){
+					case 1:
+						if(.@cashp<500){ goto nozeny;}
+						set .@Tfinal, gettimetick(2)+2592000;
+						atcommand "@cash -500";
+						break;
+					case 2:
+						if(.@cashp<1250){ goto nozeny;}
+						set .@Tfinal, gettimetick(2)+7776000;
+						atcommand "@cash -1250";
+						break;
+					case 3:
+						if(.@cashp<2550){ goto nozeny;}
+						set .@Tfinal, gettimetick(2)+15552000;
+						atcommand "@cash -2550";
+						break;
+					case 4:
+						goto M_CANCEL;
+						break;
+				}//end switch
+				M_Gratis_vip:
+				query_sql ("INSERT INTO `vip` (`autonum`,`idcuenta`,`fecha_inicio`,`fecha_final`,`estado`) VALUES ('NULL','"+getcharid(3)+"','"+gettimetick(2)+"','"+.@Tfinal+"','1')");
+				atcommand "@adjgmlvl 1 "+ strcharinfo(0);
+				dispbottom "Cuenta VIP activada";
+				next;
+				mes .npc$;
+				mes " ";
+				mes "^FF0000Listo, tu cuenta es ahora VIP ^^ ^000000";
+				mes " ";
+				specialeffect2 381;
+				mes "Te entrego tu ^0000FFtarjeta de membresia^000000. Te recomiendo quitartela cuando delogees.";
+				rentitem 17020,.@Tfinal;
+				goto M_CANCEL;
+				break;
+			case 2:
+				goto M_CANCEL;
+				break;
+		}//end switch
+	}//end if
+	close;
+
+M_Vip_gratis:
+	next;
+	mes .npc$;
+	mes "^FF0000OMG! tienes un Wii!!^000000";
+	mes " ";
+	mes "^FF0000Puedo cambiarte ese Wii por una cuenta VIP por 15 dias.^000000";
+	mes " ";
+	mes "Te gustaria hacer el cambio?";
+	next;
+	switch ( select ( "Si", "No, quiero mi Wii =(" ) ) {
+		case 1:
+			set .@Tfinal, gettimetick(2)+1296000;
+			delitem 7851,1;
+			goto M_Gratis_vip;
+			break;
+		case 2:
+			mes .npc$;
+			mes "TwT";
+			mes " ";
+			mes "Ok, regresa cuando quieras.";
+			break;
+	}
+close;
+
+M_SMS:
+	set @pxe,100; //Cantidad de Puntos que recibira por cada Euro.
+	setarray @paisN$[0],"DE","AR","AU","AT","BE","BO","CL","CO","EC","ES","FR","GB","NL","IE","MX","NO","PE","PT","SE","CH","VE";
+	setarray @paisE[0],170,82,177,69,165,101,87,146,100,120,125,148,127,200,107,157,142,168,174,123,78;
+	next;
+	mes .npc$;
+	mes "Yo puedo cangear tu ^FF0000codigo de SMS^000000 por ^0000FF"+@pxe+" Cash Point^000000";
+	mes " ";
+	mes "Introduce el codigo que has recibido por SMS:";
+	next;
+	input @codigo$;
+	set @codigomd5$,md5(@codigo$);
+	next;
+	query_sql ("SELECT COUNT(*) FROM `sms` WHERE `CodigoMD5` = '" + @codigomd5$ + "' AND `Estado` = '0'", @producto);
+	if (@producto == 0) {
+		query_sql ("SELECT COUNT(*) FROM `sms` WHERE `CodigoMD5` = '" + @codigomd5$+ "' AND `Estado` = '1'", @producto);
+		if (@producto == 0) {
+			mes .npc$;
+			mes "El codigo de donacion SMS: ^FF0000"+@codigo$+"^000000";
+			mes " ";
+			mes "^FF0000No es valido.^000000";
+			close;
+		}//end if
+		query_sql ("SELECT `Pais` FROM `sms` WHERE `CodigoMD5` = '" + @codigomd5$ + "' AND `Estado` = '0'", @paisR$);
+		for(set .@i, 0; .@i < getarraysize(@paisN$); set .@i, .@i + 1) {
+			if(@paisN$[.@i] == @paisR$) {
+				set @paisRE,@paisE[.@i];
+			}//end if
+		}//end for
+		set @bsms,@pxe*@paisRE/100;
+		mes .npc$;
+		mes "El codigo de donacion SMS: ^FF0000"+@codigo$+"^000000";
+		mes " ";
+		mes "^FF0000Ya ha sido utilizado y ya no es valido.^000000";
+		close;
+	}//end if
+	query_sql ("UPDATE `sms` SET `estado` = '1', `CuentaAdquisicion` = '" + getcharid(3) + "', `FechaAdquisicion` = '" + gettimestr("%d-%m-%Y %H:%M:%S",21) + "' WHERE `CodigoMD5` = '" + @codigomd5$ + "'");
+	atcommand "@cash "+ @pxe;
+	emotion e_cash;
+	mes .npc$;
+	mes "El codigo de donacion SMS: ^FF0000"+@codigo$+"^000000";
+	mes " ";
+	mes "^FF0000Es correcto.^000000";
+	mes " ";
+	mes "Tus Cash Points fueron agregados a tu cuenta.";
+	next;
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+	close;
+
+M_Nombre:
+	next;
+	mes .npc$;
+	mes "Este servicio tiene un costo de ^0000FF 100 Cash Point^000000";
+	mes " ";
+	mes "Te gustaria que cambie tu nombre?";
+	mes " ";
+	mes "^FF0000Recuerda que antes de hacer el cambio por favor sal de tu Party y de tu Guild^000000";
+	mes "^FF0000ademas de seleccionar un nombre de minimo 4 letras y maximo de 24.^000000";
+	next;
+	switch ( select ( "Si", "No, me gusta mi nombre" ) ) {
+		case 1:
+			mes .npc$;
+			mes " ";
+			mes "Por favor introduce tu nuevo nombre";
+			next;
+			input .@name$;
+			// check name length
+			if (getstrlen(.@name$)<4) {
+				dispbottom "El nombre debe tener por lo menos 4 letras.";
+				close;
+			} else if (getstrlen(.@name$)>24) {
+				dispbottom "El nombre no puede tener mas de 24 letras.";
+				close;
+			}
+			// confirm
+			mes .npc$;
+			mes " ";
+			mes "Cambiar tu nombre de:";
+			mes strcharinfo(0)+" -->^0000FF "+.@name$+"^000000  ?";
+			mes "Despues de confirmar seras deslogueado de RoMX.";
+			mes "^FF0000Por favor espera 30 segundos antes de volver a entrar!^000000";
+			if(select("Si, Cambia mi nombre:No, gracias")==2){ close;}
+			if (getcharid(1)) {
+				dispbottom "Por favor sal de tu Party antes de proceder.";
+				close;
+			} else if (getcharid(2)) {
+				dispbottom "Por favor sal de tu Guild antes de proceder.";
+				close;
+			}
+			// check if name exists
+			query_sql "SELECT COUNT(char_id) FROM `char` WHERE name='"+escape_sql(.@name$)+"'", .@name_exists;
+			if (.@name_exists) {
+				dispbottom "Lo siento, ese nombre ya esta en uso.";
+				close;
+			}
+			// Zeny/Item cost goes here
+			if(#CASHPOINTS < 100) {
+				goto nozeny;
+			}
+			atcommand "@cash -100";
+			emotion e_cash;
+			announce getvariableofnpc(.npc$,"GMEventos")+" : El usuario "+strcharinfo(0)+" ha decidido cambiar su nombre a "+.@name$+"",0,0x0099FF;
+			set .@char_id, getcharid(0);	// save their Char ID
+			atcommand "@kick "+strcharinfo(0);
+			sleep 500;	// (usually not necessary) give the server time to save their char to SQL
+			query_sql "UPDATE `char` SET `name`='"+escape_sql(.@name$)+"' WHERE char_id="+.@char_id;
+			break;
+		case 2:
+			goto M_CANCEL;
+			break;
+	}//end switch
+	close;
+
+M_Tamanio:
+	next;
+	mes .npc$;
+	mes "Puedo cambiarte de tamanio por ^0000FF2 Cash Point!^000000";
+	mes " ";
+	mes "^ff0000Recuerda que el efecto desaparecera si relogeas^000000";
+	next;
+	switch ( select ("Quiero ser Gigante", "Quiero ser enano", "Quiero ser de tamanio normal (gratis)", "No, asi esta bien" ) ) {
+		case 1:
+			if(#CASHPOINTS<5){ goto nozeny;}
+			atcommand "@cash -2";
+			emotion e_cash;
+			atcommand "@size 2 "+strcharinfo(0);
+			break;
+		case 2:
+			if(#CASHPOINTS<5){ goto nozeny;}
+			atcommand "@cash -2";
+			emotion e_cash;
+			atcommand "@size 1 "+strcharinfo(0);
+			break;
+		case 3:
+			atcommand "@size 0 "+strcharinfo(0);
+			break;
+		case 4:
+			goto M_CANCEL;
+			break;
+	}
+	next;
+	menu "Regresar al menu anterior",M_inicio,"Adios",M_CANCEL;
+
+M_Voto_evento:
+	next;
+	query_logsql("SELECT COUNT(*) FROM `evento_democracia` WHERE `uid` = '" + getcharid(3) + "'", .@ya_voto);
+	query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = '" + getcharid(3) + "'", .@ip_voto$);
+	query_logsql("SELECT COUNT(*) FROM `evento_democracia` WHERE `ip` = '"+.@ip_voto$+"'", .@ip_ya_voto);
+	if (.@ya_voto>0){goto M_Ya_Voto;}
+	mes .npc$;
+	mes " ";
+	mes "Cual evento te gustaria que realizara?";
+	mes " ";
+	mes "^ff0000Recuerda que solo puedes votar una ves!^000000";
+	next;
+	set .@evento_votado, select("Aleatorio","Poring Catcher","MVP Conquer","Treasure Hunter","The Fight Club","Bomb Punch","Poring Party","Mas Exp","Dice","Lotto RoMX","Reaction","RoMX Team","Lost","Novice Race","Invasor","????");
+	if (.@ip_ya_voto>0){goto M_Ya_Voto;}
+	query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = '" + getcharid(3) + "'", .@ip_uid$);
+	query_logsql("INSERT INTO `evento_democracia` (`uid`,`voto`,`ip`) VALUES ('"+getcharid(3)+"',"+.@evento_votado+",'"+.@ip_uid$+"')");
+	goto M_Ya_Voto;
+
+M_Ya_Voto:
+	next;
+	mes .npc$;
+	mes " ";
+	mes "Gracias por tu Voto ^_^";
+	close;
+
+M_Genero:
+	next;
+	mes .npc$;
+	mes "Puedo cambiar el genero de todos tu personajes de tu cuenta por ^0000FF100 Cash Point!^000000.";
+	mes "^ff0000Recuerda que si tienes un personaje tipo Bard/Clown/Ministrel o Dancer/Gypsy/Wanderer no puedo cambiarte el genero!^000000.";
+	mes "Queres Cambiar de Genero?";
+	next;
+	switch ( select ("Si", "Me gusto como soy ahora")) {
+		case 1:
+			query_sql("SELECT `name` FROM `char` WHERE (`class`=19 OR `class`=20 OR `class`=4020 OR `class`=4021 OR `class`=4075 OR `class`=4076 ) AND `account_id`="+getcharid(3), .@no_genero$);
+			if (getstrlen(.@no_genero$)==0){
+				if(#CASHPOINTS < 100) {
+					goto nozeny;
+				}
+				mes .npc$;
+				mes "Ok todo parece en orden ^^";
+				mes "Procedere con la operacion, esto no dolera... mucho";
+				next;
+				announce getvariableofnpc(.npc$,"GMEventos")+" : El usuario "+strcharinfo(0)+" ha decidido cambiar de genero.",0,0x0099FF;
+				specialeffect2 622;
+				atcommand "@cash -100";
+				atcommand "@changesex "+strcharinfo(0);
+			}else{
+				mes .npc$;
+				mes "Lo lamento, no pudo cambiar el genero a tus personajes ya que ^0000FF"+.@no_genero$+"^000000 no es compatible.";
+				goto M_CANCEL;
+			}
+			break;
+		case 2:
+			mes .npc$;
+			mes "Claro, regresa cuando quieras ^^";
+			goto M_CANCEL;
+			break;		
+	}
+	close;
+
+OnPCLoginEvent:
+	deltimer strnpcinfo(3)+"::On_sindopas";
+	set no_dopadora,0;
+	end;
+
+OnTouch:
+	set .npc$,getvariableofnpc(.npc$,"GMEventos"); //nombre del gm
+	set no_dopadora,no_dopadora+1;
+	deltimer strnpcinfo(3)+"::On_sindopas";
+	addtimer 30000,strnpcinfo(3)+"::On_sindopas";//agrega un contador por pj, espera 2 minutos y resetea la bandera
+	if (no_dopadora==6){dispbottom getvariableofnpc(.npc$,"GMEventos")+" : NO SOY BUFFER!!";warp "Random",0,0;set no_dopadora,0;}
+	if(getequipid(1)!=5136 && getvariableofnpc(.eventoactivo,"GMEventos")!=12){setoption Option_xmas,0;}
+	if (rand(1,3)==3 && getgmlevel()<2){
+		set .@talk,rand(4);
+		if(.@talk == 0) npctalk "Hola "+strcharinfo(0)+"!! como te va? ^_^";
+		if(.@talk == 1) npctalk "Como has estado "+strcharinfo(0)+"?";
+		if(.@talk == 2) npctalk "HooOOooooOOooooolaaaAAAAAaaaaaaaa "+strcharinfo(0)+" :3";
+		if(.@talk == 3) npctalk "Es bueno verte de nuevo "+strcharinfo(0)+" =)";
+		//if(getcharid(0) == 151299){sleep2 100; npctalk strcharinfo(0)+" Ash!!! es "+strcharinfo(0)+" de nuevo u_u";}
+	}
+	if (rand(1,((BaseLevel+JobLevel)*2))==1 && getgmlevel()<2 && agitcheck()==0){
+		N_cumpleanos:
+		npctalk "Vamos "+strcharinfo(0)+"!! tu puedes ^_^";
+		emotion e_heh;
+		specialeffect2 83;
+		sc_end sc_stone;
+		sc_end sc_freeze;
+		sc_end sc_sleep;
+		sc_end sc_curse;
+		sc_end sc_silence;
+		sc_end sc_confusion;
+		sc_end sc_blind;
+		sc_end sc_bleeding;
+		sc_end sc_decreaseagi;
+		sc_end sc_poison;
+		sc_end sc_hallucination;
+		sc_end sc_stripweapon;
+		sc_end sc_striparmor;
+		sc_end sc_striphelm;
+		sc_end sc_stripsheild;
+		sc_start SC_BLESSING,400000,20;
+		sc_start SC_INCREASEAGI,400000,20;
+		sc_start SC_MAGNIFICAT,400000,5;
+		sc_start SC_ANGELUS,400000,10;
+		sc_start SC_IMPOSITIO,400000,5;
+		sc_start SC_GLORIA,400000,5;
+		sc_start SC_WINDWALK,400000,10;
+		sc_start SC_KAIZEL,400000,7;
+		sc_start SC_KAUPE,400000,3;
+		sc_start SC_ENDURE,400000,10;
+		sc_start SC_CONCENTRATE,400000,10;
+		sc_start SC_ADRENALINE2,400000,1;
+		sc_start SC_WEAPONPERFECTION,400000,10;
+		sc_start SC_CONCENTRATION,400000,5;
+		sc_start SC_AURABLADE,400000,5;
+		sc_start SC_LOUD,400000,1;
+		sc_start SC_TRUESIGHT,400000,10;
+		sc_start SC_ASSUMPTIO,400000,5;
+		sc_start SC_INCFLEE,400000,30;
+		sc_start SC_NEN,400000,5;
+		sc_start SC_CP_WEAPON,400000,0;
+     		sc_start SC_CP_SHIELD,400000,0;
+     		sc_start SC_CP_ARMOR,400000,0;
+     		sc_start SC_CP_HELM,400000,0;
+		sc_start SC_SECRAMENT,400000,5;	
+		sc_start SC_RENOVATIO,400000,1;
+		switch ( BaseJob ) {
+			case Job_Knight:
+			case Job_Lord_Knight:
+				sc_start4 SC_SPIRIT,400000,10,452,0,0; break;
+			case Job_Crusader:
+			case Job_Paladin:
+				sc_start4 SC_SPIRIT,400000,10,450,0,0; break;
+			case Job_Assassin:
+			case Job_Assassin_Cross:
+				sc_start4 SC_SPIRIT,400000,10,457,0,0; break;
+			case Job_Rogue:
+			case Job_Stalker:	
+				sc_start4 SC_SPIRIT,400000,10,456,0,0; break;
+			case Job_Blacksmith:
+			case Job_Whitesmith:
+				sc_start4 SC_SPIRIT,400000,10,458,0,0; break;
+			case Job_Alchemist:
+			case Job_Creator:
+				sc_start4 SC_SPIRIT,400000,10,445,0,0; break;
+			case Job_Hunter:
+			case Job_Sniper:
+				sc_start4 SC_SPIRIT,400000,10,460,0,0; break;
+			case Job_Bard:
+			case Job_Clown:
+			case Job_Dancer:
+			case Job_Gypsy:
+				sc_start4 SC_SPIRIT,400000,10,455,0,0; break;
+			case Job_Priest:
+			case Job_High_Priest:
+				sc_start4 SC_SPIRIT,400000,10,454,0,0; break;
+			case Job_Monk:
+			caseJob_Champion:
+				sc_start4 SC_SPIRIT,400000,10,447,0,0; break;
+			case Job_Wizard:
+			case Job_High_Wizard:
+				sc_start4 SC_SPIRIT,400000,10,453,0,0; break;
+			case Job_Sage:
+			case Job_Professor:
+				sc_start4 SC_SPIRIT,400000,10,449,0,0; break;
+			case Job_Soul_Linker:
+				sc_start4 SC_SPIRIT,400000,10,461,0,0; break;
+			case Job_Star_Gladiator:
+				sc_start4 SC_SPIRIT,400000,10,448,0,0; break;
+			case Job_SuperNovice:
+				sc_start4 SC_SPIRIT,400000,10,451,0,0; break;
+			default:
+				if ( upper == 1 ){sc_start4 SC_SPIRIT,400000,10,494,0,0; break;}
+		}
+		percentheal 100,100;
+	}
+	end;
+
+
+On_sindopas:
+	set no_dopadora,0;
+	deltimer strnpcinfo(3)+"::On_sindopas";
+	end;
+	
+OnTimer420000://780000 13 minutos
+	npcspeed 160;
+	if(rand(0,1)==1){
+		do{
+			set .@x,149+rand(8);
+			set .@y,90+rand(8);
+		} while (!checkcell("prontera",.@x,.@y,cell_chkpass));
+		npcwalkto .@x,.@y;
+	}else{
+		if (rand(0,5)==3){
+			set $ariatalk,rand(0,30);
+			if($ariatalk == 1) npctalk "Whaaa!!!...es tan aburrido ser GM u_u";
+			if($ariatalk == 2) npctalk "Recuerda siempre usar: ~ Barduzzi Skill ~  corre y grita como ninia!!!";
+			if($ariatalk == 3) emotion e_kis;
+			if($ariatalk == 4) npctalk "Soy la GM mas linda del mundo :3";
+			if($ariatalk == 5) npctalk "Vota por -> RoMX :3";
+			if($ariatalk == 6) emotion e_heh;
+			if($ariatalk == 7) emotion e_ho;
+			if($ariatalk == 8) npctalk "Suenio con un mundo mejor, donde las gallinas puedan cruzar la calle sin que se cuestionen sus motivos.";
+			if($ariatalk == 9) npctalk "No estoy Bugeada!! solo soy incomprendida u_u";
+			if($ariatalk == 10) npctalk "Es muy facil tener gato con purina de gatina ~ para chuparse los bigotes al comer ~ meow meow ^_^";
+			if($ariatalk == 11) npctalk "Si amas a alguien, dejalo libre...si regresa, ahora vete tu para que vea lo que se siente.";
+			if($ariatalk == 12) npctalk "No soy rara!!!...soy edicion limitada.";
+			if($ariatalk == 13) npctalk "Lo importante no es ganar; sino hacer perder al otro :D";
+			if($ariatalk == 14) npctalk "Si no puedes convencerlos, confundelos...";
+			if($ariatalk == 15) npctalk "Abeces miro a cielo y me pregunto... como me cai de alli?";
+			if($ariatalk == 16) npctalk "Si la primera vez no triunfas...destruye todas las pruebas de que lo intentaste.";
+			if($ariatalk == 17) npctalk "OK iniciare un evento... no, que flojera :3 ";
+			if($ariatalk == 18) npctalk "Si los noobs volaran...el cielo estaria nooblado?";
+			if($ariatalk == 19) npctalk "El trabajo en equipo es esencial...te permite echarle la culpa a otro.";
+			if($ariatalk == 20) npctalk "Si no puedes ayudar, molesta, lo importante es participar :D";
+			if($ariatalk == 21) npctalk "Las personas inteligentes estan siempre llenas de dudas... Sera verdad?";
+			if($ariatalk == 22) npctalk "Un dia estaba viendo las estrellas desde mi cama y me pregunte...y el techo?";
+			if($ariatalk == 23) npctalk "@ban Rexy ... no funciona xD";
+			if($ariatalk == 24) npctalk "El mundo se esta quedando sin genios: Einstein se murio, Beethoven se quedo sordo, y a mi me duele la cabeza.";	
+			if($ariatalk == 25) npctalk "Recuerda leer el foro RoMX!";
+			if($ariatalk == 26) npctalk "Un dia sin sol es como... ya sabes... noche.";
+			if($ariatalk == 27) npctalk "Tolololo ~ lolololo ~";
+			if($ariatalk == 27) npctalk "Si la llama mata mayas con la malla, por que la malla no mata mayas con la llama?";
+
+		}
+	}
+	stopnpctimer;
+	initnpctimer;
+	end;
+	
+OnEvento11_1:
+	npctalk "RoMX!";
+	end;
+
+OnEvento11_2:
+	sleep 2000;
+	npctalk "xD";
+	emotion e_heh;
+	end;
+
+OnEvento17:
+	npcwalkto 155,92;
+	end;
+
+OnEvento14:
+	npctalk "Santuary!";
+	end;
+
+OnWhisperGlobal:
+	if(getgmlevel() >= getvariableofnpc(.gm,"GMEventos")) {
+		set .npc$,"[^FF0000"+getvariableofnpc(.npc$,"GMEventos")+"^000000]"; //nombre del gm
+		mes .npc$;
+		mes "Hola patron, en que puedo ayudarle? ^^";
+		next;
+		switch (select("Revisar Log de Eventos","Revisar Log de Doble Login","Inicializacion de NPC","Camina!","Di este texto...","Di un mensaje a todo el server","Cambia de apariencia","Regresa a la normalidad","Nada, Gracias")){
+			case 1:
+				mes .npc$;
+				mes "Ok... te mostrare los ultimos 30 movimientos.";
+				next;
+				query_logsql("SELECT `nombre_usuario`, `mensaje` FROM `gm_eventos` ORDER BY `hora` DESC LIMIT 0 , 30", .nombre$, .mensaje$);
+				mes "Usuario---Mensaje";
+				for (set .@c, 0; .@c < getarraysize(.nombre$); set .@c, .@c + 1) {
+					mes " ";
+					mes .nombre$[.@c]+"---"+.mensaje$[.@c];
+				}
+				close;
+				break;
+			case 2:
+				mes .npc$;
+				mes "Ok... te mostrare los ultimos 30 registros.";
+				next;
+				query_logsql("SELECT `id`, `fecha`, `nombre`, `mapa`, `coordenada`, `ip`, `doble_login` FROM `dl` ORDER BY `id` DESC LIMIT 0 , 30", .id, .fecha$, .nombre$, .mapa$, .coordenada$, .ip$, .dl$);
+				mes "id/fecha/nombre del usuario/mapa/ip/dl ";
+				for (set .@c, 0; .@c < getarraysize(.id); set .@c, .@c + 1) {
+					mes " ";
+					mes .nombre$[.@c]+"/"+.fecha$[.@c]+"/"+.mapa$[.@c]+" "+.coordenada$[.@c]+"/"+.ip$[.@c]+"/"+.dl$[.@c];
+				}
+				close;
+				break;
+			case 3:
+				mes .npc$;
+				mes "Ok... caminata automatica y respuestas activadas.";
+				deletepset 1;
+				doevent "GM Eureka::OnInit";				
+				close;
+				break;
+			case 4:
+				mes .npc$;
+				mes "Eso ago >_>";
+				doevent "GM Eureka::OnTimer420000";				
+				close;
+				break;
+			case 5:
+				mes .npc$;
+				mes "Que quieres que diga?.";
+				input .@tiempogmexto$;
+				npctalk .@tiempogmexto$;
+				close;
+				break;
+			case 6:
+				mes .npc$;
+				mes "Que mensaje digo?.";
+				input .@tiempogmexto$;
+				announce getvariableofnpc(.npc$,"GMEventos")+" : "+.@tiempogmexto$,0;
+				close;
+				break;
+			case 7:
+				mes .npc$;
+				mes "Dime el numero de mob o numero de NPC. Mi numero es 2562";
+				input .@bicho;
+				next;
+				mes .npc$;
+				mes "Dime el nombre que quieras cambiarme.";
+				input .@nombre_bicho$;
+				next;
+				mes .npc$;
+				mes "Quiers que tenga un tamao especifico?";
+				mes "0 = normal";
+				mes "1 = pequenio";
+				mes "2 = gigante";
+				input .@tamano_bicho;
+				setnpcdisplay("GM Eureka", .@nombre_bicho$, .@bicho, .@tamano_bicho); 
+				close;
+				break;
+			case 8:
+				mes .npc$;
+				mes "Yo soy normal :D";
+				setnpcdisplay("GM Eureka", "GM Eureka", 2562, 0); 				
+				close;
+				break;
+			case 9:
+				mes .npc$;
+				mes "Bye.";
+				close;
+				break;
+		}
+	}
+	end;
+OnInit:
+        //Mecanica de Eureka para responder a fraces
+	defpattern 1, "([^:]+):.*\\s+(hola|holis|hi|ola)\\s+(Eureka|eureka)", "Lquote0";
+        defpattern 1, "([^:]+):.*\\sbuffer.*", "Lquote1";
+        defpattern 1, "([^:]+):.*\\shealer.*", "Lquote2";
+        defpattern 1, "([^:]+):.*\\scomo\\s+llego\\s+a\\s+(.*)", "Lquote3";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+bot", "Lquote4";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+(.*)\\s+bot", "Lquote4";
+        defpattern 1, "([^:]+):.*\\s+(hola|holis|hi)\\s+soy\\s+nuevo", "Lquote5";
+        defpattern 1, "([^:]+):.*\\sRoMX!", "Lquote6";
+        defpattern 1, "([^:]+):.*\\ste\\sodio\\s+(Eureka|eureka)", "Lquote7";
+        defpattern 1, "([^:]+):.*\\ste\\samo\\s+(Eureka|eureka)", "Lquote8";
+        defpattern 1, "([^:]+):.*\\sevento\\s+(Eureka|eureka)", "Lquote9";
+        defpattern 1, "([^:]+):.*\\s+(dame|regalame|regala|danos|quiero|queremos|tira|tradeame|trade)\\s+rare\\s+candy\\s+(Eureka|eureka)", "Lquote10";
+	defpattern 1, "([^:]+):.*\\s+(hola|holis|hi)\\s+a\\s+todos", "Lquote11";
+        defpattern 1, "([^:]+):.*\\s+(puta|culera|perra|mierda|pinche|cabrona|inche|uta|PUTA|CULERA|PERRA|MIERDA|PINCHE|CABRONA|INCHE|UTA)\\s+(Eureka|eureka|EUREKA)", "Lquote12";
+        defpattern 1, "([^:]+):.*\\s+(chito|romex)", "Lquote12";
+        defpattern 1, "([^:]+):.*\\sgorda\\s+(Eureka|eureka)", "Lquote13";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+gorda", "Lquote13";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+(.*)\\sgorda", "Lquote13";
+        defpattern 1, "([^:]+):.*\\sdonde\\s+(.*)\\s+(woe|woe?|WOE|WOE?)", "Lquote14";
+        defpattern 1, "([^:]+):.*\\s+(adios|bye)\\s+(Eureka|eureka)", "Lquote15";
+        defpattern 1, "([^:]+):.*\\spon\\s+(.*)\\s+(Eureka|eureka)", "Lquote16";
+        defpattern 1, "([^:]+):.*\\sme\\sdas\\s+(.*)\\s+(Eureka|eureka)", "Lquote17";
+        defpattern 1, "([^:]+):.*\\sdame\\s+(.*)\\s+(Eureka|eureka)", "Lquote17";
+        defpattern 1, "([^:]+):.*\\scallate\\s+(Eureka|eureka)", "Lquote18";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\scallate", "Lquote18";
+        defpattern 1, "([^:]+):.*\\s+(heal|dopa|dopas|resu)\\s+(Eureka|eureka)", "Lquote19";
+        defpattern 1, "([^:]+):.*\\sfea\\s+(Eureka|eureka)", "Lquote20";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\sfea", "Lquote20";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+(.*)\\sfea", "Lquote20";
+        defpattern 1, "([^:]+):.*\\s+(warper|@go)", "Lquote21";
+        defpattern 1, "([^:]+):.*\\s+(donde|quien|como)\\s+(.*)\\s+(refinar|refinador|refino)", "Lquote22";
+        defpattern 1, "([^:]+):.*\\s+(donde|quien|como)\\s+(refinar|refinador|refino)", "Lquote22";
+        defpattern 1, "([^:]+):.*\\s+(donde|quien|como)\\s+(.*)\\s+reset", "Lquote23";
+        defpattern 1, "([^:]+):.*\\s+(compro|comprar|consigo|consegir)\\s+alas\\s+de\\s+(mariposa|mosca)", "Lquote24";
+        defpattern 1, "([^:]+):.*\\s+(compro|comprar|consigo|consegir)\\s+(pociones|potas|lupas|magnifier|awakening|trampas)", "Lquote24";//donde compro potas
+        defpattern 1, "([^:]+):.*\\s+(donde|quien|como)\\s+(.*)\\s+banco", "Lquote25";
+        defpattern 1, "([^:]+):.*\\s+(compro|comprar)\\s+(.*)\\s+cash", "Lquote26";// que coompro con cash
+        defpattern 1, "([^:]+):.*\\s+jobmaster", "Lquote27";
+        defpattern 1, "([^:]+):.*\\scasate\\sconmigo\\s+(Eureka|eureka)", "Lquote28";
+        defpattern 1, "([^:]+):.*\\s+informacion\\s+(.*)\\s+(servidor|server|servidor?|server?)", "Lquote29";
+        defpattern 1, "([^:]+):.*\\s+(dime|quien)\\s+(del|es|de)\\s+(.*)\\s+(Eureka|eureka)", "Lquote30";
+        defpattern 1, "([^:]+):.*\\s+(quien|que|quien)\\s+(eres|es)\\s+(Eureka|eureka)", "Lquote32";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+sistema\\s+invita\\s+de\\s+(.*)", "Lquote33";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+dispell\\s+a\\s+(.*)", "Lquote34";
+        defpattern 1, "([^:]+):.*\\s+(Eureka|eureka)\\s+(santuary|santuario)", "Lquote35";
+        activatepset 1;
+ 	initnpctimer;
+ 	end;
+
+Lquote0://(hola|holis|hi|ola)+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(2)) {
+		case 0: npctalk "Hola "+strcharinfo(0)+", en que puedo ayudarte?"; break;
+		case 1: npctalk "Hola "+strcharinfo(0)+" ^^"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote1://*+buffer+*
+	sleep2 3000;
+        npctalk "En RoMX no contamos con Buffer";
+	callfunc "anti_flood";
+        end;
+
+Lquote2://*+healer+*
+	sleep2 3000;
+        npctalk "En RoMX no contamos con Healer";
+	callfunc "anti_flood";
+        end;
+
+Lquote3://como+llego+a+*
+	sleep2 3000;
+	if ($@p2$=="yuno?" || $@p2$=="Yuno?" || $@p2$=="yuno" || $@p2$=="Yuno"){npctalk "Pues, podrias ir a Izdule y tomar el zepelin; o ir de Izdule a Aldebaran y de hay a Yuno";}
+	else if ($@p2$=="prontera?" || $@p2$=="prontera"){npctalk "=_= ... camina en circulos 20 minutos y llegas";}
+	else if ($@p2$=="umbala?" || $@p2$=="Umbala?" || $@p2$=="umbala" || $@p2$=="Umbala"){npctalk "Ve a Morroc, despues a Comodo y de hay a Umbala";}
+	else if ($@p2$=="nifelheim" || $@p2$=="Nifelheim" || $@p2$=="nifelheim?" || $@p2$=="Nifelheim?"){npctalk "Ve a Morroc, despues a Comodo, despues a Umbala, despues entras en el warp del norte y entra en los warps de el centro.";}
+	else if ($@p2$=="gonryon" || $@p2$=="kulum" || $@p2$=="amatsu" || $@p2$=="louyang" || $@p2$=="moscovia" || $@p2$=="brasilis" || $@p2$=="sunken" || $@p2$=="gonryon" || $@p2$=="kulum?" || $@p2$=="amatsu?" || $@p2$=="louyang?" || $@p2$=="moscovia?" || $@p2$=="brasilis?" || $@p2$=="sunken?"){npctalk "Ve a Alberta, en los muelles del este encontraras quien te pueda llevar";}
+	else if ($@p2$=="hugel" || $@p2$=="lighthalzen" || $@p2$=="einbroch" || $@p2$=="hugel?" || $@p2$=="lighthalzen?" || $@p2$=="einbroch?"){npctalk "Toma el zepelin de Izdule y cambia de zepelin en Yuno, el te llevara a "+$@p2$;}
+	else if ($@p2$=="Einbech" || $@p2$=="einbech" || $@p2$=="Einbech?" || $@p2$=="einbech?"){npctalk "Desde Einbroch toma un tren que se encuentra al centro del mapa, el te llevara a "+$@p2$;}
+	else if ($@p2$=="lutie" || $@p2$=="Lutie" || $@p2$=="lutie?" || $@p2$=="Lutie?"){npctalk "En Aldebaran, se encuentra un NPC en la parte superior derecha del mapa, el te llevara a "+$@p2$;}
+	else if ($@p2$=="Aldebaran" || $@p2$=="aldebaran" || $@p2$=="Aldebaran?" || $@p2$=="aldebaran?"){npctalk "Pues, puedes ir a Izdule y de alli a Aldebaran o de Geffen a Aldebaran";}
+	else if ($@p2$=="mordor" || $@p2$=="MORDOR" || $@p2$=="mordor?" || $@p2$=="MORDOR?"){npctalk "Does not simply walk into mordor";}
+	else if ($@p2$=="narnia" || $@p2$=="NARNIA" || $@p2$=="narnia?" || $@p2$=="NARNIA?"){npctalk "Solo no salgas del closet :D";}
+	else {
+		switch(rand(4)) {
+			case 0: npctalk "Creo que Google es tu mejor aliado ahora "+strcharinfo(0)+"..."; break;
+			case 1: npctalk "Nunca e ido a "+$@p2$+", hay algo interesante alli?"; break;
+			case 2: npctalk $@p2$+"..."+$@p2$+"... me suena, pero no lo recuerdo :P"; break;
+			case 3: npctalk "... no lo recuerdo bien, pero creo que es al sur de Narnia y al Noroeste de Mordor."; break;
+		}
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote4://(Eureka|eureka)+*+bot
+	sleep2 3000;
+        switch(rand(5)) {
+		case 0: npctalk "Si fuera un bot cres que seria GM? dah!!"; break;
+		case 1: npctalk "Cuantos bot conoces que sepan cosas de ti ... como por ejemplo que has muerto "+PC_DIE_COUNTER+" veces."; break;
+		case 2: npctalk "Ni siquiera saves que es un bot >_>"; break;
+		case 3: npctalk "emm ... las saladitas son orneadas :D"; break;
+		case 4: npctalk "Camino, hablo, respondo, dopo, pongo eventos, reviso tu equipo, ago logs, mando mensajes, administro VIP, reviso DL, mando premios de eventos, posteo en face... ash nadamas por eso soy bot?"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote5://(hola|holis|hi)+soy+nuevo
+	sleep2 3000;
+	npctalk "Hola "+strcharinfo(0)+" bienvenido a RoMX, soy Eureka mucho gusto ^^";
+	sleep2 5000;
+	npctalk "Si quieres mas informacion del servidor, solo da click sobre mi.";
+	callfunc "anti_flood";
+        end;
+
+Lquote6://RoMX!
+	if (getvariableofnpc(.eventoactivo,"GMEventos") == 11){//solo si el evento de reaction esta activo
+		sleep2 3000;
+	        npctalk "Deja de hacer eso "+strcharinfo(0)+"!";
+		atcommand "@mute 3 "+strcharinfo(0);		
+	}
+        end;
+
+Lquote7://te+odio+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(4)) {
+		case 0: npctalk "Es un sentimiento mutuo ^^"; break;
+		case 1: npctalk "pero si yo te amo ... ok no ._."; break;
+		case 2: npctalk "Del odio al amor hay solo un paso"; break;
+		case 3: npctalk "Si me odiaras no hablarias conmigo :P"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote8://te+amo+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(4)) {
+		case 0: npctalk "Ash! ahora resulta que me amas u_u"; break;
+		case 1: npctalk "emmm .... las saladitas son orneadas :D"; break;
+		case 2: npctalk "Escuche que dijiste eso mismo a otra persona ... como piensas que te devo creerte?"; break;
+		case 3: npctalk "emmm .... yo solo te quiero como amigo"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote9://*+evento+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(4)) {
+		case 0: npctalk "Siempre les ago eventos "+strcharinfo(0)+", algun dia me aran un evento a mi!?"; break;
+		case 1: npctalk "Ok, iniciare el evento= <No me quejare con el GM por 2 horas> :D"; break;
+		case 2: npctalk "Tengo instrucciones de no iniciar eventos hasta que deslogees"; break;
+		case 3: npctalk "OK, iniciare el evento= <Quien mata mas veces a "+strcharinfo(0)+" en PVP>"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote10://*+(dame|regalame|regala|danos|quiero|queremos|tira|tradeame|trade)+rare+candy+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(3)) {
+		case 0: npctalk "Nooo, todos son mios muahahahaha!"; break;
+		case 1: npctalk strcharinfo(0)+", algun dia entenderas que no todo en RO son Rare Candy u_u"; break;
+		case 2: npctalk "Clarooooo, cuantos quieres "+strcharinfo(0)+", 100, 200? ... no me molestes con eso <_<"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote11://(hola|holis|hi)+a+todos
+	sleep2 3000;
+	npctalk "Hola "+strcharinfo(0)+", como estas?";
+	callfunc "anti_flood";
+        end;
+
+Lquote12://*+(puta|culera|perra|mierda|pinche|cabrona|inche|uta|PUTA|CULERA|PERRA|MIERDA|PINCHE|CABRONA|INCHE|UTA)+(Eureka|eureka|EUREKA)//*+(chito|romex)
+	sleep2 3000;
+        npctalk "Modera tu lenguaje "+strcharinfo(0)+"!";
+	atcommand "@mute 3 "+strcharinfo(0);		
+        end;
+
+Lquote13://*+gorda+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(2)) {
+		case 0: npctalk "Gorda la mas fea de tu casa!!"; break;
+		case 1: npctalk "Tu estas Fe@!"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote14://donde+*+(woe|woe?|WOE|WOE?)
+	sleep2 3000;
+	if (agitcheck()==1){
+		query_sql("select `town` from `woe_times` WHERE `active`=1",@ciudad);
+		if (@ciudad>=64) { set @temp$, "Arunafeltz"; set @ciudad, @ciudad-64;}
+		if (@ciudad>=32) { set @temp$, "Schwartzvelt"; set @ciudad, @ciudad-32;}
+		if (@ciudad>=16) { set @temp$, "Novice Castles"; set @ciudad, @ciudad-16;}
+		if (@ciudad>=8) { set @temp$, "Prontera"; set @ciudad, @ciudad-8;}
+		if (@ciudad>=4) { set @temp$, "Payon"; set @ciudad, @ciudad-4;}
+		if (@ciudad>=2) { set @temp$, "Geffen, recuerda que no se permiten 3 jobs en esa WOE"; set @ciudad, @ciudad-2;}
+		if (@ciudad==1) { set @temp$, "Aldebaran, recuerda que es Ancient WOE";}
+		npctalk strcharinfo(0)+" la WOE es en "+@temp$;
+	}else{npctalk "No hay WOE en este momento "+strcharinfo(0);}
+	callfunc "anti_flood";
+	end;
+
+Lquote15://(adios|bye)+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(2)) {
+		case 0: npctalk "Adios "+strcharinfo(0)+", suerte!"; break;
+		case 1: npctalk "Bye ^^"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote16://pon+*+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(4)) {
+		case 0: npctalk "pon! pon! que me ven cara de gallina?!"; break;
+		case 1: npctalk $@p2$+"!!, que mas quieres? que invoke a chuck norris?"; break;
+		case 2: npctalk "... ya me lo decian los Gms, <siempre querran mas> u_u"; break;
+		case 3: npctalk "<pon "+$@p2$+"> ... <pon healer> ... <pon warper> ... creo que aveces no saven lo que quieren u_u"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote17://me+das+*+(Eureka|eureka)
+	sleep2 3000;
+	if ($@p2$=="heal" || $@p2$=="dopa" || $@p2$=="dopas"){npctalk "Pues, si podria ... claro ... si quiesira u_u";}
+	else{
+	        switch(rand(2)) {
+			case 0: npctalk "<dame "+$@p2$+"> ... trabajo me costo tener el mio <_<"; break;
+			case 1: npctalk $@p2$+"!!!!, cres que los poring los dropean??!! =_=u"; break;
+		}
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote18://callate+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(3)) {
+		case 0: npctalk "NOOOOOOO!    waaaaaaaaaaa         sdsadsadasdsadasdsadsadsadadsdasdsadsadsadasdsadsa"; break;
+		case 1: npctalk "Como te atreves a intentar callar a tu GM?!";break;
+		case 2: npctalk "No! tu callate <_<"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote19://*+(heal|dopa|dopas|resu)+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(3)) {
+		case 0: npctalk "JA! me viste cara de NPC o que?"; break;
+		case 1: npctalk "emmm... no tengo SP sorry :D";break;
+		case 2: npctalk "Na, es mas divertido verte sufrir :3"; break;
+	}        
+	callfunc "anti_flood";
+        end;
+
+Lquote20://fea+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(2)) {
+		case 0: npctalk "Pero si te querias casar conmigo!! y ahora me dices eso T_T"; break;
+		case 1: npctalk "Tu estas Gord@"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote21://*+(warper|@go)
+	sleep2 3000;
+        npctalk "En RoMX no contamos con Warper";
+	callfunc "anti_flood";
+        end;
+
+Lquote22://*+(donde|quien|como)+*+(refinar|refinador|refino)
+	sleep2 3000;
+	npctalk strcharinfo(0)+" podrias ir con el NPC refinador de prontera, te marque en tu mapa donde se encuentra.";
+	callfunc "limpiar_marcas_mapa";
+	viewpoint 1,175,188,1,0xFFFF00;
+	callfunc "anti_flood";
+        end;
+
+Lquote23://*+(donde|quien|como)+*+reset
+	sleep2 3000;
+        npctalk strcharinfo(0)+" el NPC de Reset se encuentra donde marque en tu mapa.";
+	callfunc "limpiar_marcas_mapa";
+	viewpoint 1,151,192,2,0xFFFF00;
+	callfunc "anti_flood";
+        end;
+
+Lquote24://*+(compro|comprar|consigo|consegir)+alas+de+(mariposa|mosca)//*+(compro|comprar|consigo|consegir)+(pociones|potas|lupas|magnifier|awakening|trampas)
+	sleep2 3000;
+        npctalk strcharinfo(0)+" esos items los puedes comprar en la Tool Dealer, marque tu mapa en donde se encuentra uno.";
+	callfunc "limpiar_marcas_mapa";
+	viewpoint 1,136,219,3,0xFFFF00;
+	callfunc "anti_flood";
+        end;
+
+Lquote25://*+(donde|quien|como)+*+banco
+	sleep2 3000;
+        npctalk strcharinfo(0)+" el NPC Banco se encuentra al sur de aqui, marque tu mapa en donde se encuentra";
+	callfunc "limpiar_marcas_mapa";
+	viewpoint 1,132,191,4,0xFFFF00;
+	callfunc "anti_flood";
+        end;
+
+Lquote26://*+(compro|comprar)+*+cash
+	sleep2 3000;
+        npctalk strcharinfo(0)+", puedes usar tus cash ponts en las tiendas que se encuentran al sur de aqui, marque tu mapa en donde se encuentran";
+	callfunc "limpiar_marcas_mapa";
+	viewpoint 1,160,192,5,0xFFFF00;
+	callfunc "anti_flood";
+        end;
+
+Lquote27://*+jobmaster
+	sleep2 3000;
+        npctalk "En RoMX no contamos con Job Master o cambiador de Job, aqui usamos las quest normales.";
+	callfunc "anti_flood";
+        end;
+
+Lquote28://*+casate+conmigo+(Eureka|eureka)
+	sleep2 3000;
+        switch(rand(4)) {
+		case 0: npctalk "emmm ... nup"; break;
+		case 1: npctalk "Ja Ja Ja ... es una broma ... no?"; break;
+		case 2: npctalk "Solo lo dices por mis Rare Candy verdad <_<!"; break;
+		case 3: npctalk ".___.U"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote29://*+informacion+*+(servidor|server|servidor?|server?)
+	sleep2 3000;
+	npctalk "RoMX es un servidor low rates, tenemos 3os jobs, eventos diarios (aleatorios).";
+	sleep2 8000;
+	npctalk "NO tenemos healer, warper ni jobmaster, pero recompensamos el trabajo duro con cash por hora de juego, ademas de eventos de experiencia.";
+	sleep2 8000;
+	npctalk "Si quieres saver mas de mi como GM de eventos o mas cosas referente al servidor te aconsejo que visites el foro.";
+	callfunc "anti_flood";
+        end;
+
+Lquote30://(dime|quien)+(del|es|de)+*+(Eureka|eureka)
+	sleep2 3000;
+	npctalk "Sobre "+$@p4$+" esta la siguiente informacion:";
+	atcommand "@mi "+$@p4$;
+	callfunc "anti_flood";
+	end;
+
+Lquote32://(quien|que|quien)+eres+(Eureka|eureka|Eureka?|eureka?)
+	sleep2 3000;
+        switch(rand(5)) {
+		case 0: npctalk "Soy ... tu GM *-*"; break;
+		case 1: npctalk "No lo se, pero siento la necesidad de molestarte siempre :D"; break;
+		case 2: npctalk "Importa realmente quien o que soy "+strcharinfo(0)+"?"; break;
+		case 3: npctalk "Soy la GM mas linda e inteligente de el mundo n_n"; break;
+		case 4: npctalk "La que te saluda todos los dias :D"; break;
+	}
+	callfunc "anti_flood";
+        end;
+
+Lquote33://(Eureka|eureka)+(sistema)+(invita)+(de)+(.*)
+	if(getgmlevel()==99){
+		sleep2 5000;
+		set @p3$,$@p3$;
+		npctalk "Investigando a "+@p3$;
+		sleep2 5000;
+		query_sql("select `char_id`, `account_id` from `char` WHERE `name`='"+@p3$+"'", @id_char_invitado, @uid_char_invitado);
+		//si el usuario no existe
+		if(getarraysize(@id_char_invitado)==0){npctalk "El usuario "+@p3$+" no existe o esta mal escrito.";end;}
+		query_sql("select `value` from `global_reg_value` WHERE `account_id`="+@uid_char_invitado[0]+" AND `str`='#sistema_invitaciones'", @variable_invita);
+		query_sql("select `value` from `global_reg_value` WHERE `account_id`="+@uid_char_invitado[0]+" AND `str`='#estado_sia'", @bandera_cumplido);
+		if(getarraysize(@variable_invita)==0){//si no esta activa la bandrea de sistema
+			if(getarraysize(@bandera_cumplido)==0){
+				npctalk @p3$+" no es invitado o no existe";
+			}else{
+				npctalk @p3$+" cumplio los requisitos del sistema, por lo que ya fueron enviados los dulces.";
+			}
+			end;
+		}
+		query_sql("select `value` from `global_reg_value` WHERE `account_id`="+@uid_char_invitado[0]+" AND `str`='#horas_j_sia'", @horas_cumplidas);
+		query_sql("select `value` from `global_reg_value` WHERE `account_id`="+@uid_char_invitado[0]+" AND `str`='#nombre_anfitrion_sia$'", @nombre_anfitrion$);
+		query_sql("select `value` from `global_reg_value` WHERE `account_id`="+@uid_char_invitado[0]+" AND `str`='#mob_invita_amigo'", @mobs_anfitrion$);
+		npctalk "Sobre "+@p3$+" esta la siguiente informacion:";
+		dispbottom @p3$+"  fue invitado por: >> "+@nombre_anfitrion$[0]+" << tiene >> "+@horas_cumplidas[0]+" << horas de juego y >> "+@mobs_anfitrion$[0]+" << mobs matados.";
+		sleep2 5000;
+		mes "Quieres cambiar el nombre del anfitrion?";
+		if(select("No:Si")==2){
+			next;
+			mes "Cual es el nombre actual del anfitrion?";
+			input .@name$;
+			query_sql("UPDATE `global_reg_value` SET `value`='"+.@name$+"' WHERE `str`='#nombre_anfitrion_sia$' AND `account_id`="+@uid_char_invitado[0]);
+			next;
+			mes "Nombre cambiado";
+			close;
+		}else{close;}
+	}
+	end;
+
+
+Lquote34://(Eureka|eureka)+(dispell)+(a)+(.*)
+	if(getgmlevel()==99){
+		set .@id, getcharid(3);
+		set @p3$,$@p3$;
+		sleep2 1000;
+		npctalk "Dispell!!";
+		set @idcuenta,getcharid(3,@p3$);
+		attachrid(@idcuenta);
+		specialeffect2 235;
+		specialeffect2 753;
+		sc_end sc_all;
+		sc_start SC__GROOMY,1000,3;
+		atcommand "@option 0 0 0";
+		detachrid;
+		attachrid(.@id);
+	}
+	end;
+
+Lquote35://(Eureka|eureka)+(santuary)
+	if(getgmlevel()==99){
+		sleep2 1000;
+		donpcevent "Healer::OnTimer31000";
+		sleep2 30000;
+		donpcevent "Healer::OnFin";
+	}
+	end;
+
+On_sinflood:
+	set anti_flood,0;
+	deltimer strnpcinfo(3)+"::On_sinflood";
+	end;
+
+}
+
+function	script	anti_flood	{
+	deltimer strnpcinfo(3)+"::On_sinflood";
+	addtimer 30000,strnpcinfo(3)+"::On_sinflood";//agrega un contador por pj, espera 2 minutos y resetea la bandera
+	set anti_flood,anti_flood+1;
+	if (anti_flood==7){
+		deltimer strnpcinfo(3)+"::On_sinflood";
+		set anti_flood,0;
+		dispbottom getvariableofnpc(.npc$,"GMEventos")+" : No Spam! 30 minutos de castigo.";
+		atcommand "@mute 30 "+strcharinfo(0);
+	}
+	return;
+}
+
+
+function	script	limpiar_marcas_mapa	{
+	viewpoint 2,175,188,1,0xFFFF00;
+	viewpoint 2,151,192,2,0xFFFF00;
+	viewpoint 2,136,219,3,0xFFFF00;
+	viewpoint 2,132,191,4,0xFFFF00;
+	viewpoint 2,160,192,5,0xFFFF00;
+	return;
+}
+

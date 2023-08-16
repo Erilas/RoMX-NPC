@@ -1,0 +1,8 @@
+-	script	chart_stats	-1,{
+
+OnMinute00:
+OnMinute30:
+query_sql "insert into `chart` (`time`,`online`) values ('"+gettimetick(2)+"','"+getusers(1)+"')";
+end;
+
+}

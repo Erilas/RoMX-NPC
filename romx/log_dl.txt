@@ -1,0 +1,71 @@
+-	script	log_dl	-1,{
+
+OnInit:
+	//creamos tabla si no existe
+	query_logsql("CREATE TABLE IF NOT EXISTS `dl` (`id` int(11) NOT NULL AUTO_INCREMENT,`fecha` char(255) DEFAULT NULL,`nombre` char(255) DEFAULT NULL,`mapa` char(255) DEFAULT NULL,`coordenada` char(255) DEFAULT NULL,`ip` char(255) DEFAULT NULL,`doble_login` char(255) DEFAULT NULL,PRIMARY KEY (`id`));");
+
+	//array mapas de eventos y castillos donde esta prohivido el DL
+	setarray .mapas_sin_dl$[0],"quiz_02","pvp_n_1-5","quiz_01","prt_church","new_zone04", "aldeg_cas01", "aldeg_cas02", "aldeg_cas03", "aldeg_cas04", "aldeg_cas05", "gefg_cas01", "gefg_cas02", "gefg_cas03", "gefg_cas04", "gefg_cas05", "payg_cas01", "payg_cas02", "payg_cas03", "payg_cas04", "payg_cas05", "prtg_cas01", "prtg_cas02", "prtg_cas03", "prtg_cas04", "prtg_cas05", "nguild_alde", "nguild_gef", "nguild_pay", "nguild_prt", "schg_cas01", "schg_cas02", "schg_cas03", "schg_cas04", "schg_cas05", "arug_cas01", "arug_cas02", "arug_cas03", "arug_cas04", "arug_cas05";
+
+	end;
+
+OnPCLoginEvent:
+	//obtengo el ip del char
+	query_sql("SELECT `last_ip` FROM `login` WHERE `account_id` = '" + getcharid(3) + "'", ip_char$);
+	set #ip$,ip_char$;
+	end;
+
+OnPCLogoutEvent:
+	//al deslogear borra variable
+	set #ip$,0;
+	end;
+
+//al cambiar un mapa
+OnPCLoadMapEvent:
+
+	//si es woe o hay evento activo
+	if(agitcheck()==1 || getvariableofnpc(.eventoniciado,"GMEventos")==1){
+	
+		//obtenemos mapa donde esta ahora
+		getmapxy .@map$, .@x, .@y, 0;
+
+		//revisamos si estamos en unn mapa de prohivido dl
+		for (set .@c, 0; .@c < getarraysize(.mapas_sin_dl$); set .@c, .@c + 1){
+			
+			//si estoy en un mapa prohivido
+			if(.mapas_sin_dl$[.@c]==.@map$){
+			
+				//obtengo un array de cuentas con el mismo ip  con diferente id de cuenta y que este online
+				query_sql("SELECT `account_id`  FROM `global_reg_value` WHERE `value` = '"+#ip$+"' AND `str` = '#ip$' AND `account_id` != '"+getcharid(3)+"'", .@char_id_mismo_ip$);
+				
+				//si existe mas de 1 pj con el mismo ip y este Online
+				if (getarraysize(.@char_id_mismo_ip$)>0){
+
+					//reviso si dl no esta en el mismo mapa
+					for (set .@a, 0; .@a < getarraysize(.@char_id_mismo_ip$); set .@a, .@a + 1){
+
+						//reviso en que mapa esta el dl
+						set .@uid_cuanta_dl_01,.@char_id_mismo_ip$[.@a];//convierto el uid [texto] a uid [numero]
+						set .@nombre_pj$,rid2name(.@uid_cuanta_dl_01);//uso uid[numero] en rid2name
+												
+						getmapxy(.mappj1$,.mapx1,.mapy1,0,.@nombre_pj$);
+						
+						//si el dl esta en el mismo mapa
+						if(.mappj1$==.@map$){
+	
+							dispbottom "GM Eureka: Se detecto un doble login con el usuario "+.@nombre_pj$+", se agrega incidente al log; recuerde que esa accion esta prohibida en este mapa.";
+
+							//agrego log de dl
+							query_logsql("INSERT INTO `dl` (`fecha`,`nombre`,`mapa`,`coordenada`,`ip`,`doble_login`) VALUES (NOW(),'"+ strcharinfo(0)+"','"+.@map$+"','"+.@x+" "+.@y+"','"+#ip$+"','"+.@nombre_pj$+"')");
+		
+							//salgo de ciclo
+							end;
+						}
+					}
+
+				}
+			}
+		}
+	}
+	end;
+}

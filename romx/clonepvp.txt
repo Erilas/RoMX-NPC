@@ -1,0 +1,24 @@
+// [========================================================]
+guild_vs3,48,51,4	script	Clone Battle	411,{
+set .npc$, "[Clone Battle Manager]";
+mes .npc$;
+mes "Hola, te gustaria que te clonara?";
+mes "2000 Zenys por clon :D";
+mes "^FF0000NO TE CLONES OCULTO^000000";
+	switch(select("See.","Nah.","Matar Clones.")) {
+	case 1:
+		if((Zeny < 2000)) goto sinzeny;
+		set Zeny,zeny-2000;
+		atcommand "@evilclone " + getcharid(0) + "";
+	case 2:
+		close;
+	case 3:
+		killmonsterall "guild_vs3";
+		close;
+sinzeny:
+	next;
+	mes @npc$;
+	mes "Tu no el suficiente Zeny para clonarte.";
+	mes "bye";
+	close;
+}}

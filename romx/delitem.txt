@@ -1,0 +1,111 @@
+//
+ra_fild13,63,137,4	script	Basurero	870,{
+
+  // Remove Previous Arrays @arrays only clear on relog
+  deletearray @inventorylist_id[0], @inventorylist_count;
+  deletearray @inventorylist_amount[0], @inventorylist_count;
+  deletearray @inventorylist_refine[0], @inventorylist_count;
+  deletearray @inventorylist_card1[0], @inventorylist_count;
+  deletearray @inventorylist_card2[0], @inventorylist_count;
+  deletearray @inventorylist_card3[0], @inventorylist_count;
+  deletearray @inventorylist_card4[0], @inventorylist_count;
+  set @inventorylist_count, 0;
+
+  // Introduction
+  set @npc$,"[Basurero]";
+  mes @npc$;
+  mes "Hola yo puedo quedarme con los items que no utilises.";
+  mes "Selecciona el item que ya no quieras en tu iventario...";
+  mes "^FF0000Recuerda que si elijes un item con carta, me quedo con el item y la carta.^000000";
+
+  // Gather Inventory List
+  getinventorylist;
+
+  // Create the Menu 
+  // If Refine - Add +#
+  // If Card 1 - Add [#], If Card 2 - Add [#], If Card 3 - Add [#], If Card 4 - Add [#]
+  for (set .@a, 0; .@a < @inventorylist_count; set .@a, .@a + 1) {
+    if (@inventorylist_refine[.@a]) { set .@refine$, "+" + @inventorylist_refine[.@a] + " "; }
+    if (@inventorylist_card1[.@a]) { set .@c1$, "[" + @inventorylist_card1[.@a] + "]"; }
+    if (@inventorylist_card2[.@a]) { set .@c2$, "[" + @inventorylist_card2[.@a] + "]"; }
+    if (@inventorylist_card3[.@a]) { set .@c3$, "[" + @inventorylist_card3[.@a] + "]"; }
+    if (@inventorylist_card4[.@a]) { set .@c4$, "[" + @inventorylist_card4[.@a] + "]"; }
+    if (.@list$ == "") { set .@list$, .@refine$ + @inventorylist_id[.@a] + " - " + getitemname(@inventorylist_id[.@a]) + .@c1$ + .@c2$ + .@c3$ + .@c4$; }
+    else { set .@list$, .@list$ + ":" + .@refine$ + @inventorylist_id[.@a] + " - " + getitemname(@inventorylist_id[.@a]) + .@c1$ + .@c2$ + .@c3$ + .@c4$; }
+  }
+
+  // Store the Array Index of the Option Selected into .@choice
+  set .@choice, select(.@list$) - 1;
+  
+  // [DEBUG] - START
+  // SAFE TO REMOVE BETWEEN [DEBUG] TAGS
+  dispbottom "[DEBUG] - El ID del item a Borrar: " + @inventorylist_id[.@choice];
+  dispbottom "[DEBUG] - Cantiidad actual del item: " + countitem(@inventorylist_id[.@choice]);
+  dispbottom "[DEBUG] - Nombre del item a borrar: " + getitemname(@inventorylist_id[.@choice]);
+  dispbottom "[DEBUG] - Carta 1: " + getitemname(@inventorylist_card1[.@choice]);
+  dispbottom "[DEBUG] - Carta 2: " + getitemname(@inventorylist_card2[.@choice]);
+  dispbottom "[DEBUG] - Carta 3: " + getitemname(@inventorylist_card3[.@choice]);
+  dispbottom "[DEBUG] - Carta 4: " + getitemname(@inventorylist_card4[.@choice]);
+  // [DEBUG] - END
+  
+  // Default to .@amount to 1 for single deletion
+  set .@amount, 1;
+  
+  // If There's more than 1 of the item, ask how many to remove...
+  if (@inventorylist_amount[.@choice] > 1) {
+    switch(select("Borrar algunos:Borrar todos")) {
+      case 1:
+        // [DEBUG] - START
+        dispbottom "[DEBUG] - Tu elejiste Borrar ALGUNOS items";
+        // [DEBUG] - END
+        input .@amount;
+        if (.@amount > @inventorylist_amount[.@choice]) {
+	      // [DEBUG] - START
+	      dispbottom "[DEBUG] - Seleccionaste demaciados!";
+	      // [DEBUG] - END
+          set .@amount, @inventorylist_amount[.@choice];
+          // [DEBUG] - START
+          dispbottom "[DEBUG] - Tiene una Maximo de " + .@amount + " por item";
+          // [DEBUG] - END
+        }
+        else if (.@amount < 0) {
+	      // [DEBUG] - START
+	      dispbottom "[DEBUG] - Valor menos a 0, Revirtiendo a 0";
+	      // [DEBUG] - END
+          set .@amount, 0;
+        }
+        break;
+      case 2:
+        // [DEBUG] - START
+        dispbottom "[DEBUG] - Seleccionaste TODOS. Borrando " + .@amount + "items";
+        // [DEBUG] - END
+        set .@amount, @inventorylist_amount[.@choice];
+    }
+  }
+
+  // Confirm Deletion
+  mes "Estas seguro de borrar: ";
+  mes "^FF0000Recuerda que ya no te regresare el item nunca^000000";
+  mes .@amount + " unidad(es) de " + getitemname(@inventorylist_id[.@choice]);
+
+  switch(select("Si:No")) {
+    case 1: // Yes
+      // [DEBUG] - START
+      dispbottom "[DEBUG] -Tu elejiste Borrar " + .@amount + " unidad(es) de " + getitemname(@inventorylist_id[.@choice]) + " con el ID: " + @inventorylist_id[.@choice];
+      // [DEBUG] - END
+      delitem @inventorylist_id[.@choice], .@amount;
+      break;
+    case 2: // No
+      // [DEBUG] - START
+      dispbottom "[DEBUG] - Tu cancelaste el borrado de item";
+      // [DEBUG] - END
+      mes "Bien, entonces...";
+      close;
+  }
+
+  // [DEBUG] - START
+  dispbottom "[DEBUG] - NPC Termina de hablar";
+  // [DEBUG] - END
+  mes "Regresa pronto";
+  close;
+}

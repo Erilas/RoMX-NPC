@@ -1,0 +1,45 @@
+// [========================================================]
+turbo_room,106,117,3	script	Rentador	447,{
+	set .npc$,"[^FF0000Rent Master^000000]";
+	mes .npc$;
+	if (getskilllv("MC_PUSHCART")>=1 && checkcart()!=1) {//si tiene pushcart
+		mes "Hola!, "+strcharinfo(0);
+		mes "Puedo rentarte un bonito carro de mano por ^0000FF3 cash points^000000, te interesa?";
+		if (select("Si, porfavor","Lo pensare...") == 1) {
+			next;
+			atcommand  "@cash -3";
+			setcart;
+			mes .npc$;
+			mes "Cuidalo bien, hasta luego!";
+			close;
+		}else{close;}
+	}
+	if (getskilllv("KN_RIDING")>0 && checkriding()!=1 || Class==4064 && checkriding()!=1) {//si tiene riding
+		mes "Hola!, "+strcharinfo(0);
+		mes "Puedo rentarte un transporte por ^0000FF3 cash points^000000, te interesa?";
+		if (select("Si, porfavor","Lo pensare...") == 1) {
+	 		next;
+			atcommand  "@cash -3";
+			setriding;
+			mes .npc$;
+			mes "Cuidalo bien, hasta luego!";
+			close;
+		}else{close;}
+	}
+	if (getskilllv("HT_FALCON")>=1 && checkfalcon()!=1) {//si tiene falcon
+		mes "Hola!, "+strcharinfo(0);
+		mes "Puedo rentarte un alcon ^0000FF3 cash points^000000, te interesa?";
+		if (select("Si, porfavor","Lo pensare...") == 1) {
+			next;
+			atcommand  "@cash -3";
+			setfalcon;
+			mes .npc$;
+			mes "Cuidalo bien, hasta luego!";
+			close;
+		}else{close;}
+	}
+	mes "Hola!, "+strcharinfo(0)+" como te va?";
+	close;
+	end;
+}// fin script
+

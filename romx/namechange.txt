@@ -1,0 +1,66 @@
+prontera,165,164,3	script	Renombre	952,{
+	mes "[^FF8000Renombre^000000]";
+	mes " ";
+	mes "Hola, yo puedo cambiarte el nombre";
+	mes " ";
+	mes "Este servicio tiene un costo de ^FF0000 10 Poring Coins^000000";
+	next;
+
+	mes "[^FF8000Renombre^000000]";
+	mes " ";
+	mes "Por favor introduce tu nuevo nombre";
+	next;
+	input .@name$;
+	
+	// check name length
+	if (getstrlen(.@name$)<4) {
+		dispbottom "El nombre debe tener por lo menos 4 letras.";
+		close2;
+		end;
+	} else if (getstrlen(.@name$)>24) {
+		dispbottom "El nombre no puede tener mas de 24 letras.";
+		close2;
+		end;
+	}
+	// confirm
+	mes "Cambiar tu nombre de";
+	mes strcharinfo(0)+" -->^0000FF "+.@name$+"^000000  ?";
+	mes " ";
+	mes "Despues de confirmar seras deslogueado de RoMX.";
+	mes " ";
+	mes "^FF0000Por favor espera 30 segundos antes de volver a entrar!";
+	if(select("Si, Cambia mi nombre:No, gracias")==2) close;
+	
+	if (getcharid(1)) {
+		dispbottom "Por favor sal de tu Party antes de proceder.";
+		close2;
+		end;
+	} else if (getcharid(2)) {
+		dispbottom "Por favor sal de tu Guild antes de proceder.";
+		close2;
+		end;
+	}
+	// check if name exists
+	query_sql "SELECT COUNT(char_id) FROM `char` WHERE name='"+escape_sql(.@name$)+"'", .@name_exists;
+	if (.@name_exists) {
+		dispbottom "Lo siento, ese nombre ya esta en uso.";
+		close2;
+		end;
+	}
+	
+	// Zeny/Item cost goes here
+	if(countitem(7539) < 10) {
+		dispbottom "Al parecer no tienes suficientes Poring Coins.";
+		close2;
+		end;
+	}
+	delitem 7539,10;
+
+	announce "El usuario "+strcharinfo(0)+" ha decidido cambiar su nombre a "+.@name$+"",0,0x0099FF;
+	
+	set .@char_id, getcharid(0);	// save their Char ID
+	atcommand "@kick "+strcharinfo(0);
+	sleep 500;	// (usually not necessary) give the server time to save their char to SQL
+	query_sql "UPDATE `char` SET `name`='"+escape_sql(.@name$)+"' WHERE char_id="+.@char_id;
+	end;
+}

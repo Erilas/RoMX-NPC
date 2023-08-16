@@ -1,0 +1,4 @@
+turbo_room,123,117,4	script	Kafra Staff::kaf_prin	861,{
+	cutin "kafra_09",2;
+	callfunc "F_Kafra",0,2,1,0,0;
+}

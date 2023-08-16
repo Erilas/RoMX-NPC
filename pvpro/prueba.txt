@@ -1,0 +1,4 @@
+turbo_room,100,100,3	script	Armors Shop	459,{
+set .@x,getcharid(3);
+unitwalk .@x,114,123;
+}

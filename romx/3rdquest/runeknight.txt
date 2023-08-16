@@ -1,0 +1,167 @@
+//===== eAthena Script ======================================= 
+//= Arc Bishop Job Quest
+//===== By: ================================================== 
+//= hismoon
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= eAthena SVN
+//===== Description: ========================================= 
+//= Job Change quest for Arc Bishop class.
+//===== Additional Comments: ================================= 
+//= 1.0 Release ;P
+//============================================================ 
+izlude,66,212,4	script	Rune Knight	470	,{
+
+	set @npc$,"[Rune Knight Zhang]";
+	
+	if (Class == 4060) goto L_IsAB;		//Check if you a Royal Guard
+	if (Class == 4008) goto L_Change;	// Check
+	if (Class >= 0 && Class <= 7) goto L_NoChange;
+	if (Class >= 9 && Class <= 4007) goto L_NoChange; // NONTRANS-SWITCH
+	if (Class >= 4009 && Class <= 4031) goto L_NoChange; //SWITCH-TRANS
+	if (Class >= 4032 && Class <= 4112) goto L_NoChange; //BABYS
+
+L_Change:
+		if (BaseLevel < 99) goto L_BHigh;
+		if (JobLevel < 70) goto L_JHigh;
+		mes @npc$;
+		mes "Welcome "+strcharinfo(0)+".";
+		mes "I can change your Job to a Rune Knight.";
+		next;
+		mes @npc$;
+		mes "Do you want to change your Job to a Rune Knight?";
+		next;
+		menu "Yes of course.",M_INFO,"No, Not Yet.",M_CANCEL;
+
+M_INFO:
+	if (checkriding() != 0) goto L_Riding;
+	mes @npc$;
+	mes "To change your Job I need to test your courage first.";
+	mes "Bring me the following items to pass the test.";
+	mes " ";
+	mes "Here is the list.";
+	mes " ";
+	mes "^FF0000 10 Well-Dried Bone^000000";
+	mes "^FF0000 20 Blue Bijou^000000";
+	mes "^FF0000 20 Yellow Bijou^000000";
+	mes "^FF0000 1 Bastard Sword [3]^000000";
+	mes "^FF0000 200 Strange Steel Piece^000000";
+	mes "^FF0000 5,000,000 Zeny^000000";
+	next;
+	menu "Cancel",M_CANCEL,"I got them!",M_READY;
+
+M_READY:
+	mes @npc$;
+	if (SkillPoint) goto L_SkillsM;
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7451)>0 && Zeny>5000000){ goto M_MVP;}
+	if(countitem(628)<10 || countitem(7446)<20 || countitem(7448)<20 || countitem(1155)<1 || countitem(7167)<200 || (Zeny < 5000000)) goto M_NOITEMS;
+	delitem 628,10;
+	delitem 7446,20;
+	delitem 7448,20;
+	delitem 1155,1;
+	delitem 7167,200;
+	job:
+	set Zeny,zeny-5000000;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	jobchange 4060;
+	ResetStatus;
+	ResetSkill;
+	getitem 5746,1;
+	getitem 2795,1;//apple ring
+	set quest_3job,1;
+	mes @npc$;
+	mes "Ok done! Congratulations, you are now a Rune Knight";
+	close;
+M_MVP:
+	next;
+	mes @npc$;
+	mes "OMG! This item you have there, show your value.";
+	next;
+	delitem 7451,1;
+	goto job;
+
+L_IsAB:
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+".";
+	mes "You are a Rune Knight already.";
+	if(quest_3job==0){
+		next;
+		mes @npc$;
+		mes "Wait!!";
+		mes "I almost forgot...this is yours.";
+		getitem 5746,1;
+		getitem 2795,1;//apple ring
+		set quest_3job,1;
+		next;
+		mes @npc$;
+	}
+	mes "Is there anything else I can do for you?.";
+	next;
+	menu "Rent a Dragon",M_GRIFFON,"Cancel.",M_CANCEL;
+	close;
+
+M_GRIFFON:
+	mes @npc$;
+	mes "This has a cost of of 20,000z.";
+	if(select("Cancel:OK")==0){close;}
+	if (BaseJob != Job_Swordman && BaseClass == Job_Swordman && checkriding() == 0 && getskilllv("KN_RIDING")>0 && Zeny > 20000) {
+		set Zeny,zeny-20000;
+		setriding;
+	}else{
+		next;
+		mes @npc$;
+		mes "Sorry " + strcharinfo(0) + ", Please make sure you are have the required skill or Zeny.";
+	}
+	close;
+
+
+L_BHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Base Level for the Job Change.";
+	close;
+
+L_JHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Job Level for the Job Change.";
+	close;
+
+L_NoChange:
+	mes @npc$;
+	mes "Huh?";
+	mes "You aren't an Lord Knight Class.";
+	mes "Please go away.";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the required items.";
+	mes "Please come back another time... when you ARE ready";
+	close;
+
+L_SkillsM:
+	mes "Please use up all your skill points.";
+	mes "Otherwise I cant turn you into a Rune Knight";
+	close;
+
+L_Riding:
+	mes "You cannot change your Job into Rune Knight.";
+	mes "because you are riding a PecoPeco...";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+
+}
+
+
+

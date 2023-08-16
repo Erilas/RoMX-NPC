@@ -1,0 +1,851 @@
+// NPC Anunciante de Mvps muertos by Rokimoki
+// contacto: alexmanalopez@gmail.com
+-	script	GlobalMvP	-1,{
+OnNPCKillEvent:
+switch (killedrid) {
+	// Amon Ra
+	case 1511:
+		//announce strcharinfo(0) +" ha matado a un Amon Ra",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LAmonRa, LAmonRa + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// B_EREMES
+	case 1647:
+		//announce strcharinfo(0) +" ha matado a un Eremes",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LB_EREMES, LB_EREMES + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Atroce
+	case 1785:
+		//announce strcharinfo(0) +" ha matado a un Atroce",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LAtroce, LAtroce + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// BACSOJIN_
+	case 1630:
+		//announce strcharinfo(0) +" ha matado a un Bascojin",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LBascojin, LBascojin + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// EVENT_BAPHO
+	case 1399:
+		//announce strcharinfo(0) +" ha matado a un Baphomet Evento",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LEventBapho, LEventBapho + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Baphomet
+	case 1039:
+		//announce strcharinfo(0) +" ha matado a un Baphomet",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LBaphomet, LBaphomet + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// BEELZEBUB_
+	case 1874:
+		//announce strcharinfo(0) +" ha matado a un Beelzebub",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LBeelzebub, LBeelzebub + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Dark Lord
+	case 1272:
+		//announce strcharinfo(0) +" ha matado a un Dark Lord",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LDarkLord, LDarkLord + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Detale
+	case 1719:
+		//announce strcharinfo(0) +" ha matado a un Detale",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LDetale, LDetale + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Doppelganger
+	case 1046:
+		//announce strcharinfo(0) +" ha matado a un Doppelganger",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LDoppelganger, LDoppelganger + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Dracula
+	case 1389:
+		//announce strcharinfo(0) +" ha matado a un Dracula",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LDracula, LDracula + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Drake
+	case 1112:
+		//announce strcharinfo(0) +" ha matado a un Drake",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LDrake, LDrake + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Eddga
+	case 1115:
+		//announce strcharinfo(0) +" ha matado a un Eddga",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LEdgga, LEdgga + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Evil Snake Lord
+	case 1418:
+		//announce strcharinfo(0) +" ha matado a un Evil Snake Lord",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LSnakeLord, LSnakeLord + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// FALLINGBISHOP
+	case 1871:
+		//announce strcharinfo(0) +" ha matado a un Fallingbishop",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LBishop, LBishop + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Garm
+	case 1252:
+		//announce strcharinfo(0) +" ha matado a un Garm",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LGarm, LGarm + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// GLOOMUNDERNIGHT
+	case 1768:
+		//announce strcharinfo(0) +" ha matado a un Gloom Under Night",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LGloom, LGloom + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Golden Bug
+	case 1086:
+		//announce strcharinfo(0) +" ha matado a un Golden Thiefbug",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LGoldenBug, LGoldenBug + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// G_MAGALETA
+	case 1802:
+		//announce strcharinfo(0) +" ha matado a una Magaleta",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LMagaleta, LMagaleta + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// High Priest Magaleta
+	case 1649:
+		//announce strcharinfo(0) +" ha matado a una High Priest Magaleta",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LHPMagaleta, LHPMagaleta + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// High Wizard Katryne
+	case 1651:
+		//announce strcharinfo(0) +" ha matado a una High Wizard Katryne",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LHWKatryne, LHWKatryne + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Ifrit
+	case 1832:
+		//announce strcharinfo(0) +" ha matado a un Ifrit",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LIfrit, LIfrit + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Incantation Samurai
+	case 1492:
+		//announce strcharinfo(0) +" ha matado a un Incantation Samurai",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LIncantationSamurai, LIncantationSamurai + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Kiel_
+	case 1734:
+		//announce strcharinfo(0) +" ha matado a un Kiel",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LKiel, LKiel + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Stormy Knight
+	case 1251:
+		//announce strcharinfo(0) +" ha matado a un Stormy Knight",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LStormyKnight, LStormyKnight + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Ktullanux
+	case 1779:
+		//announce strcharinfo(0) +" ha matado a un Ktullanux",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LKtullanux, LKtullanux + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Lady Tanee
+	case 1688:
+		//announce strcharinfo(0) +" ha matado a un Lady Tanee",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LLadyTanee, LLadyTanee + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Lord Knight Seyren
+	case 1646:
+		//announce strcharinfo(0) +" ha matado a un Lord Knight Seyren",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LKSeyren, LKSeyren + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Lord of Death
+	case 1373:
+		//announce strcharinfo(0) +" ha matado a un Lord of Death",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LLordDeath, LLordDeath + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Maya
+	case 1147:
+		//announce strcharinfo(0) +" ha matado a un Maya",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LMaya, LMaya + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Mistress
+	case 1059:
+		//announce strcharinfo(0) +" ha matado a un Mistress",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LMistress, LMistress + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Moonlight flower
+	case 1150:
+		//announce strcharinfo(0) +" ha matado a un Moonlight Flower",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LMoonFlower, LMoonFlower + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Naght Seiger
+	case 1956:
+		//announce strcharinfo(0) +" ha matado a un Nagh Seiger",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LNagh, LNagh + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Orc Hero
+	case 1087:
+		//announce strcharinfo(0) +" ha matado a un Orc Hero",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LOrcHero, LOrcHero + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Orc Lord
+	case 1190:
+		//announce strcharinfo(0) +" ha matado a un Orc Lord",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LOrcLord, LOrcLord + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Osiris
+	case 1038:
+		//announce strcharinfo(0) +" ha matado a un Osiris",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LOsiris, LOsiris + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Pharaoh
+	case 1157:
+		//announce strcharinfo(0) +" ha matado a un Pharaoh",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LPharaoh, LPharaoh + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Phreeoni
+	case 1159:
+		//announce strcharinfo(0) +" ha matado a un Phreeoni",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LPhreeoni, LPhreeoni + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Poripori
+	case 1502:
+		//announce strcharinfo(0) +" ha matado a un Pori pori",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LPoriPori, LPoriPori + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// RSX
+	case 1623:
+		//announce strcharinfo(0) +" ha matado a un RSX",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LRSX, LRSX + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Sniper Cecil
+	case 1650:
+		//announce strcharinfo(0) +" ha matado a un Sniper Cecil",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LSniper2, LSniper2 + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Tao Gunka
+	case 1583:
+		//announce strcharinfo(0) +" ha matado a un Tao Gunka",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LTaoGunka, LTaoGunka + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Thanatos
+	case 1708:
+		//announce strcharinfo(0) +" ha matado a un Thanatos",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LThanatos, LThanatos + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Turtle General
+	case 1312:
+		//announce strcharinfo(0) +" ha matado a un Turtle General",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LTurtleGeneral, LTurtleGeneral + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Valkyrie rangdris
+	case 1751:
+		//announce strcharinfo(0) +" ha matado a un Valkyrie Rangdris",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LValkyrieRan, LValkyrieRan + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Vesper
+	case 1685:
+		//announce strcharinfo(0) +" ha matado a un Vesper",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LVesper, LVesper + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Whitesmith Howard
+	case 1648:
+		//announce strcharinfo(0) +" ha matado a un Whitesmith Howard",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LWhites2, LWhites2 + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Satan Morroc
+	case 1917:
+		//announce strcharinfo(0) +" ha matado a un Satan Morroc",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LSMorroc, LSMorroc + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Egnigem Cenia
+	case 1658:
+		//announce strcharinfo(0) +" ha matado a un Egnigem Cenia",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LEgnigem, LEgnigem + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	// Gopinich
+	case 1885:
+		//announce strcharinfo(0) +" ha matado a un Gopinich",bc_blue;
+		set MVPTotal, MVPTotal + 1;
+		set LZmey, LZmey + 1;
+		set @nom$, strcharinfo(0);
+		callfunc ("rankmvp",MVPTotal,@nom$);
+		end;
+	default:
+		end;
+} // End switch
+end;
+} // End script
+
+function	script	rankmvp	{
+// Gracias a Ryophin de eAthena por su peque?a ayuda
+// Y a los dem?s que me intentaron ayudar
+set @mvptotal, getarg(0);
+set @nomb$, getarg(1);
+
+if (@mvptotal > $top1) {
+	if ($nomb1$ == strcharinfo(0)) { // Si estamos en top 1
+		// Simplemente seguimos contando
+		set $top1, @mvptotal;
+		set $nomb1$, @nomb$;
+		// Acabamos
+		return;
+	} else { // Si alcanzamos el top 1
+		// Almacenamos el antiguo top 1
+		set @aux, $top1;
+		set @aux$, $nomb1$;
+		// Nos asignamos al top 1
+		set $top1, @mvptotal;
+		set $nomb1$, @nomb$;
+		// El viejo top 1 ahora es top 2
+		set $top2, @aux;
+		set $nomb2$, @aux$;
+		// Acabamos
+		return;
+	} // End if
+	} else if (@mvptotal > $top2) {
+		if ($nomb2$ == strcharinfo(0)) { // Si estamos en top 2
+			// Seguimos contando las muertes del top 2
+			set $top2, @mvptotal;
+			set $nomb2, @nomb$;
+			// Acabamos
+			return;
+		} else { // Si alcanzamos el top 2
+			// Almacenamos el antiguo top 2
+			set @aux, $top2;
+			set @aux$, $nomb2$;
+			// Nos asignamos al top 2
+			set $top2, @mvptotal;
+			set $nomb2$, @nomb$;
+			// El viejo top 2 ahora es top 3
+			set $top3, @aux;
+			set $nomb3$, @aux$;
+			// Acabamos
+			return;
+		} // End if
+		} else if (@mvptotal > $top3) {
+			if ($nomb3$ == strcharinfo(0)) { // Si estamos en top 3
+				// Seguimos contando el top 3
+				set $top3, @mvptotal;
+				set $nomb3$, @nomb$;
+				// Acabamos
+				return;
+			} else { // Si alcanzamos el top 3
+				// Almacenamos el antiguo top 3
+				set @aux, $top3;
+				set @aux$, $nomb3$;
+				// Nos asignamos al top 3
+				set $top3, @mvptotal;
+				set $nomb3$, @nomb$;
+				// El viejo top 3 ahora es top 4
+				set $top4, @aux;
+				set $nomb4$, @aux$;
+				// Acabamos
+				return;
+			} // End if
+			} else if (@mvptotal > $top4) {
+				if ($nomb4$ == strcharinfo(0)) { // Si estamos en top 4
+					// Seguimos contando el top 4
+					set $top4, @mvptotal;
+					set $nomb4$, @nomb$;
+					// Acabamos
+					return;
+				} else { // Si alcanzamos el top 4
+					// Almacenamos el antiguo top 4
+					set @aux, $top4;
+					set @aux$, $nomb4$;
+					// Nos asignamos al top 4
+					set $top4, @mvptotal;
+					set $nomb4$, @nomb$;
+					// El viejo top 4 es ahora top 5
+					set $top5, @aux;
+					set $nomb5$, @aux$;
+					// Acabamos
+					return;
+				} // End if
+			} else if (@mvptotal > $top5) {
+				if ($nomb5$ == strcharinfo(0)) { // Si estamos en top 5
+					// Seguimos contando el top5
+					set $top5, @mvptotal;
+					set $nomb5, @nomb$;
+					// Acabamos
+					return;
+				} else { // Si alcanzamos el top 5
+					// Directamente nos sobreescribimos en el top 5
+					set $top5, @mvptotal;
+					set $nomb5$, @nomb$;
+					// Acabamos
+					return;
+				} // End if
+			} // End if
+		return;
+} // End function
+
+
+// NPC Rank Top 5 by Rokimoki de eAthena
+// email de contacto: alexmanalopez@gmail.com
+prontera,165,143,4	script	MvPRank	110,{
+set .nombre$, "[MvP Ranker]";
+
+mes .nombre$;
+mes "Yo soy el MVP Ranker, que quieres saber...";
+next;
+switch (select("Top5:Mi Rank:Nada")) {
+	case 1:
+		if (strcharinfo(0) == $nomb1$) {
+			mes .nombre$;
+			mes "El top5 de Mvp killers en RoMX son...";
+			next;
+			callfunc "Top5";
+			next;
+			switch (select("Menu de Ranker:Salir")) {
+				case 1:
+					mes .nombre$;
+					mes "Ok veo que eres inteligente, elige una opcion...";
+					next;
+					switch (select("Anunciar mi Top:Anunciar todo el Rank:Nada")) {
+						case 1:
+							mes .nombre$;
+							mes "Por 100,000 zenys puedes anunciar que eres el Top 1 a todo el servidor.";
+							next;
+							switch (select("Anunciarme:Salir")) {
+								case 1:
+									mes .nombre$;
+									mes "Bueno alla vamos!";
+									next;
+									if (Zeny < 100000) {
+										mes .nombre$;
+										mes "No tienes dinero suficiente, solo son 100,000 z";
+										close;
+									} else {
+										mes .nombre$;
+										specialeffect2 68;
+										mes "ya esta";
+										announce "El MvP Killer de RoMX es: " +$nomb1$ +" con: " +$top1 +" victimas MvPs.",bc_yellow;
+										set Zeny, Zeny - 100000;
+										close;
+									} // End if
+
+								case 2:
+									mes .nombre$;
+									mes "Ok, adios...";
+									close;
+							} // End switch
+						case 2:
+							mes .nombre$;
+							mes "Por 40,000 zenys puedes anunciar el Rank Mvp a todo el servidor.";
+							next;
+							switch (select("Anunciarlo:Salir")) {
+								case 1:
+									mes .nombre$;
+									mes "Bueno alla vamos !";
+									next;
+									if (Zeny < 40000) {
+										mes .nombre$;
+										mes "No tienes dinero suficiente, solo son 40,000 z";
+										close;
+									} else {
+										mes .nombre$;
+										mes "ya esta";
+										announce "Rank MvP RoMX -> Top 1: " +$nomb1$ +"Top 2: " +$nomb2$ +"Top 3: " +$nomb3$ +"Top 4: " +$nomb4$ +"Top 5: " +$nomb5$ +" .",bc_yellow;
+										set Zeny, Zeny - 40000;
+										close;
+									} // End if
+
+								case 2:
+									mes .nombre$;
+									mes "Ok, adios...";
+									close;
+							} // End switch
+						case 3:
+							mes .nombre$;
+							mes "Ok pues veo que no eres tan inteligente, vuelve mientras sigas siendo Top 1.";
+							close;
+						} // End switch
+				case 2:
+					mes .nombre$;
+					mes "Ok, vuelve mientras sigas siendo top 1.";
+					close;
+				} // End switch
+		} else {
+			mes .nombre$;
+			mes "El top5 de Mvp killers en RoMX son...";
+			next;
+			callfunc "Top5";
+			close;
+		} // End if
+
+	case 2:
+		mes .nombre$;
+		mes "Elige que quieres de tu rank personal...";
+		next;
+		switch (select("Cuenta de MvPs totales:Que MvPs he matado:Resetear Mi Rank:Nada")) {
+			case 1:
+				mes .nombre$;
+				mes "Has matado: " +MVPTotal +" MvPs.";
+				close;
+			case 2:
+				mes .nombre$;
+				mes "Te enseñare la lista de MvPs, creo que sera un poco larga...";
+				next;
+				mes "Amon Ra: " +LAmonRa +" muertos.";
+				mes "Assassin Cross Eremes: " +LAssassinCrossEremes +" muertos.";
+				mes "Eremes Especial: " +LB_EREMES +" muertos.";
+				mes "Atroce: " +LAtroce +" muertos.";
+				next;
+				mes "Bascojin: " +LBascojin +" muertos.";
+				mes "Baphomet Evento: " +LEventBapho +" muertos.";
+				mes "Baphomet: " +LBaphomet +" muertos.";
+				mes "Beelzebub: " +LBeelzebub +" muertos.";
+				next;
+				mes "Dark Lord: " +LDarkLord +" muertos.";
+				mes "Detale: " +LDetale +" muertos.";
+				mes "Doppelganger: " +LDoppelganger +" muertos.";
+				mes "Dracula: " +LDracula +" muertos.";
+				next;
+				mes "Gopinich: " +LZmey +" muertos.";
+				mes "Drake: " +LDrake +" muertos.";
+				mes "Eddga: " +LEdgga +" muertos.";
+				mes "Entweihen: " +LEntweihen +" muertos.";
+				next;
+				mes "Evil Snake Lord: " +LSnakeLord +" muertos.";
+				mes "Fallen Bishop: " +LBishop +" muertos.";
+				mes "Garm: " +LGarm +" muertos.";
+				mes "Gloom Under Night: " +LGloom +" muertos.";
+				next;
+				mes "Golden Bug: " +LGoldenBug +" muertos.";
+				mes "Magaleta: " +LMagaleta +" muertos.";
+				mes "High Priest Magaleta: " +LHPMagaleta +" muertos.";
+				mes "High Wizard Katryne: " +LHWKatryn +" muertos.";
+				next;
+				mes "Ifrit: " +LIfrit +" muertos.";
+				mes "Incantation Samurai: " +LIncantationSamurai +" muertos.";
+				mes "Kiel: " +LKiel +" muertos.";
+				mes "Stormy Knight: " +LStormyKnight +" muertos.";
+				next;
+				mes "Ktullanux: " +LKtullanux +" muertos.";
+				mes "Lady Tanee: " +LLadyTanee +" muertos.";
+				mes "Lord Knight Seyren: " +LKSeyren +" muertos.";
+				mes "Lord Death: " +LLordDeath +" muertos.";
+				next;
+				mes "Maya: " +LMaya +" muertos.";
+				mes "Mistress: " +LMistress +" muertos.";
+				mes "Moonlight Flower: " +LMoonFlower +" muertos.";
+				mes "Nagh Seiger: " +LNagh +" muertos.";
+				next;
+				mes "Orc Hero: " +LOrcHero +" muertos.";
+				mes "Orc Lord: " +LOrcLord +" muertos.";
+				mes "Osiris: " +LOsiris +" muertos.";
+				mes "Pharaoh: " +LPharaoh +" muertos.";
+				next;
+				mes "Phreeoni: " +LPhreeoni +" muertos.";
+				mes "Pori Pori: " +LPoriPori +" muertos.";
+				mes "RSX: " +LRSX +" muertos.";
+				mes "Sniper Cecil: " +LSniper2 +" muertos.";
+				next;
+				mes "Tao Gunka: " +LTaoGunka +" muertos.";
+				mes "Thanatos: " +LThanatos +" muertos.";
+				mes "Turtle General: " +LTurtleGeneral +" muertos.";
+				mes "Valkyrie Rangdris: " +LValkyrieRan +" muertos.";
+				next;
+				mes "Vesper: " +LVesper +" muertos.";
+				mes "Whitesmith Howard: " +LWhites2 +" muertos.";
+				mes "Satan Morroc: " +LSMorroc +" muertos.";
+				mes "Egnigem Cenia: " +LEgnigem +" muertos.";
+				next;
+				mes .nombre$;
+				mes "Bueno, espero que te guste tu rank personal.";
+				close;
+			case 3:
+				mes .nombre$;
+				mes "Perdona, esta opcion fue cerrada por el GM...";
+				close;
+			case 4:
+				mes .nombre$;
+				mes "Bueno vuelve en cualquier momento, estare por aqui...";
+				close;
+			case 9://inavilitado
+				mes .nombre$;
+				mes "Estas seguro de que quieres resetear la cuenta total de los mvps matados por ti?";
+				next;
+				switch (select("Si:No")) {
+					case 1:
+						mes .nombre$;
+						mes "Ya esta reseteado...";
+						set LAmonRa, 0;
+						set LAngeling, 0;
+						set LArchangeling, 0;
+						set LAssassinCrossEremes, 0;
+						set LB_EREMES, 0;
+						set LAtroce, 0;
+						set LBascojin, 0;
+						set LEventBapho, 0;
+						set LBaphomet, 0;
+						set LBeelzebub, 0;
+						set LCatONine, 0;
+						set LDarkIllusion, 0;
+						set LDarkLord, 0;
+						set LDetale, 0;
+						set LDeviling, 0;
+						set LDoppelganger, 0;
+						set LDracula, 0;
+						set LDragonFly, 0;
+						set LDrake, 0;
+						set LEddga, 0;
+						set LEntweihen, 0;
+						set LSnakeLord, 0;
+						set LBishop, 0;
+						set LGarm, 0;
+						set LGemini, 0;
+						set LGhostring, 0;
+						set LGloom, 0;
+						set LEclipse, 0;
+						set LGoldenBug, 0;
+						set LMagaleta, 0;
+						set LHellion, 0;
+						set LHPMagaleta, 0;
+						set LHWKatrinn, 0;
+						set LHWKatryn, 0;
+						set LHydrolancer, 0;
+						set LIfrit, 0;
+						set LIncantationSamurai, 0;
+						set LKiel, 0;
+						set LStormyKnight, 0;
+						set LKtullanux, 0;
+						set LLadyTanee, 0;
+						set LGSeyren, 0;
+						set LKSeyren, 0;
+						set LLordDeath, 0;
+						set LMastering, 0;
+						set LMaya, 0;
+						set LMayaPurple, 0;
+						set LMistress, 0;
+						set LMoonFlower, 0;
+						set LMutantDragon, 0;
+						set LNagh, 0;
+						set LOrcHero, 0;
+						set LOrcLord, 0;
+						set LOsiris, 0;
+						set LPharaoh, 0;
+						set LPhreeoni, 0;
+						set LPoriPori, 0;
+						set LRSX, 0;
+						set LSniper1, 0;
+						set LSniper2, 0;
+						set LTaoGunka, 0;
+						set LThanatos, 0;
+						set LThanatos2, 0;
+						set LThanatos3, 0;
+						set LThanatos4, 0;
+						set LThanatos5, 0;
+						set LTirfing, 0;
+						set LToad, 0;
+						set LTurtleGeneral, 0;
+						set LVagabondWolf, 0;
+						set LValkyrie, 0;
+						set LValkyrieRan, 0;
+						set LVesper, 0;
+						set LVocal, 0;
+						set LWhites1, 0;
+						set LWhites2, 0;
+						set LSMorroc, 0;
+						set LEgnigem, 0;
+						set LZmey, 0;
+						set MVPTotal, 0;
+						close;
+					case 2:
+						mes .nombre$;
+						mes "Ok, vuelve cuando estes seguro.";
+						close;
+				} // End switch
+			} // End switch
+	case 3:
+		mes .nombre$;
+		mes "Vale, vuelve en cualquier momento.";
+		close;
+} // End switch
+
+OnWhisperGlobal:
+		if (getgmlevel() >= 40) {
+			mes .nombre$;
+			mes "Quieres resetear el Rank de MVP?";
+			next;
+			switch (select("Si:No")) {
+				case 1:
+					mes .nombre$;
+					mes "Alla vamos...";
+					next;
+					set $nomb1$, "";
+					set $top1, 0;
+					set $nomb2$, "";
+					set $top2, 0;
+					set $nomb3$, "";
+					set $top3, 0;
+					set $nomb4$, "";
+					set $top4, 0;
+					set $nomb5$, "";
+					set $top5, 0;
+					set Actreset, 1;
+					mes .nombre$;
+					mes "Rank reseteado !";
+					break;
+				case 2:
+					mes .nombre$;
+					mes "Ok! saves donde encontrarme.";
+					break;
+			} // End switch
+		}//end if
+close;
+
+OnPCLoginEvent: // Refresh when Log in
+OnPCLogoutEvent: // Refresh when Log out
+OnPCLoadMapEvent: // Refresh when load any map
+if (Actreset == 1) {
+	set MVPTotal, 0;
+	set Actreset, 0;
+} // End if
+end;
+} // End script
+
+function	script	Top5	{
+mes "[- Top 5 MvP Killers -]";
+mes "Top 1: " +$nomb1$ +" con " +$top1 +" muertes.";
+mes "Top 2: " +$nomb2$ +" con " +$top2 +" muertes.";
+mes "Top 3: " +$nomb3$ +" con " +$top3 +" muertes.";
+mes "Top 4: " +$nomb4$ +" con " +$top4 +" muertes.";
+mes "Top 5: " +$nomb5$ +" con " +$top5 +" muertes.";
+mes "Tu Rank Personal es de: " +MVPTotal +" muertes.";
+return;
+} // End function

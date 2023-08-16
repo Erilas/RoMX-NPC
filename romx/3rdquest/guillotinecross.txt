@@ -1,0 +1,143 @@
+//===== eAthena Script ======================================= 
+//= Arc Bishop Job Quest
+//===== By: ================================================== 
+//= hismoon
+//===== Current Version: ===================================== 
+//= 1.0
+//===== Compatible With: ===================================== 
+//= eAthena SVN
+//===== Description: ========================================= 
+//= Job Change quest for Arc Bishop class.
+//===== Additional Comments: ================================= 
+//= 1.0 Release ;P
+//============================================================ 
+morocc,271,43,7	script	Guillotine Cross	467,{
+
+	set @npc$,"[Guillotine Cross Meme]";
+	
+	if (Class == 4065) goto L_IsAB;		//Check if you a Guillotine Cross
+	if (Class == 4013) goto L_Change;	// Checks if the Class a Baby Priest, Priest or High Priest
+	if (Class >= 0 && Class <= 7) goto L_NoChange;
+	if (Class >= 9 && Class <= 4012) goto L_NoChange;
+	if (Class >= 4014 && Class <= 4030) goto L_NoChange;
+	if (Class >= 4032 && Class <= 4112) goto L_NoChange;
+
+L_Change:
+		if (BaseLevel < 99) goto L_BHigh;
+		if (JobLevel < 70) goto L_JHigh;
+		mes @npc$;
+		mes "Welcome "+strcharinfo(0)+".";
+		mes "I can change your Job to a Guillotine Cross.";
+		next;
+		mes @npc$;
+		mes "Do you want to change your Job to a Guillotine Cross?";
+		next;
+		menu "Yes of course.",M_INFO,"No, Not Yet.",M_CANCEL;
+
+M_INFO:
+	mes @npc$;
+	mes "To change your Job I need to test your courage first.";
+	mes "Bring me the following items to pass the test.";
+	mes " ";
+	mes "Here is the list.";
+	mes " ";
+	mes "^FF0000 300 Poison Bottles^000000";
+	mes "^FF0000 50 Sharp Paper^000000";
+	mes "^FF0000 10 Tropical Banana^000000";
+	mes "^FF0000 10 Pyroxene^000000";
+	mes "^FF0000 1 Infiltrator^000000";
+	mes "^FF0000 5,000,000 Zeny^000000";
+	next;
+	menu "Cancel",M_CANCEL,"I got them!",M_READY;
+
+M_READY:
+	mes @npc$;
+	if (SkillPoint) goto L_SkillsM;
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7022)>0 && Zeny>5000000){ goto M_MVP;}
+	if(countitem(678)<300 || countitem(7112)<50 || countitem(634)<10 || countitem(7296)<10 || countitem(1261)<1 || (Zeny < 5000000)) goto M_NOITEMS;
+	delitem 678,300;
+	delitem 7112,50;
+	delitem 634,10;
+	delitem 7296,10;
+	delitem 1261,1;
+	job:
+	set Zeny,zeny-5000000;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	jobchange 4065;
+	ResetStatus;
+	ResetSkill;
+	getitem 5755,1;
+	getitem 2795,1;//apple ring
+	set quest_3job,1;
+	mes @npc$;
+	mes "Ok done! Congratulations, you are now a Guillotine Cross";
+	close;
+
+M_MVP:
+	next;
+	mes @npc$;
+	mes "OMG! This item you have there, show your value.";
+	next;
+	delitem 7022,1;
+	goto job;
+
+L_IsAB:
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+".";
+	mes "Enjoy your new skills?";
+	if(quest_3job==0){
+		next;
+		mes @npc$;
+		mes "Wait!!";
+		mes "I almost forgot...this is yours.";
+		getitem 5755,1;
+		getitem 2795,1;//apple ring
+		set quest_3job,1;
+	}
+	close;
+
+L_BHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Base Level for the Job Change.";
+	close;
+
+L_JHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Job Level for the Job Change.";
+	close;
+
+L_NoChange:
+	mes @npc$;
+	mes "Huh?";
+	mes "You aren't an Assassin Cross Class.";
+	mes "Please go away.";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the required items.";
+	mes "Please come back another time... when you ARE ready";
+	close;
+
+L_SkillsM:
+	mes "Please use up all your skill points.";
+	mes "Otherwise I cant turn you into a Guillotine Cross";
+	close;
+
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+
+}
+
+
+

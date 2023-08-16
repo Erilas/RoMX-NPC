@@ -1,0 +1,103 @@
+//====================================================================
+
+-	script	hourlypoints	-1,{
+
+//--Start of the Script
+OnPCLoginEvent:
+attachnpctimer ""+strcharinfo(0)+"";
+initnpctimer;
+getmapxy(.@mapacarcel$,.@x,.@y,0);
+if (.@mapacarcel$=="sec_pri"){stopnpctimer;}
+if (#hora_cash==0){set #hora_cash,gettimetick(2);}
+end;
+	
+OnPCLoadMapEvent:
+getmapxy(.@mapacarcel$,.@x,.@y,0);
+if (.@mapacarcel$=="sec_pri"){stopnpctimer;dispbottom "El conteo de horas de juego del sistema \"Invita a un amigo\" a sido desactivado debido a que estan en Jail.";}
+end;
+
+OnTimer30000:
+//Check if Vending (normal or @at)
+if(checkchatting() == 1) {
+	if(#sistema_invitaciones==1){dispbottom "El conteo de horas de juego del sistema \"Invita a un amigo\" a sido desactivado debido a que abriste un Chat. Por favor reloguea para volver a activar el contador.";}
+	stopnpctimer;
+	end;
+}
+//Check if Idle
+if(checkvending()==0){
+	getmapxy( .@map$, .@x, .@y, 0 );
+	if(@map$ == .@map$ && @x == .@x && @y == .@y) {
+		set @afk, @afk + 1;
+	}
+	//If move timer resets
+	else {
+		set @afk, 0;
+	}
+}
+	set @map$, .@map$; set @x, .@x; set @y, .@y;
+//Idle Check for 5 Minutes
+if(@afk == 10) {
+	if(#sistema_invitaciones==1){dispbottom "El conteo de horas de juego del sistema \"Invita a un amigo\" a sido desactivado debido a que permaneciste inactivo por 10 minutos. Por favor reloguea para volver a activar el contador.";}
+	stopnpctimer;
+	end;
+}
+end;
+
+OnTimer60000:
+
+	set @minute, @minute + 1;
+
+	if(@minute%15==0){set #cash_x_hora,#cash_x_hora+15;}
+
+	if(checkvending()== 1 && #cash_x_hora == 120){
+		set #cash_x_hora,0;
+		set @minute,0;
+		atcommand "@cash " + 1;
+	}
+
+	if(#cash_x_hora > 61 && checkvending()==0){
+		set #cash_x_hora,0;
+		set @minute,0;	
+	}
+
+	if(#cash_x_hora == 60 && checkvending()==0){
+		set #cash_x_hora,0;
+		set @minute,0;
+		if(#sistema_invitaciones==1){
+			set #horas_j_sia, #horas_j_sia+1;
+			if(agitcheck()==0){callfunc "CheckStartBK";}//si no hay woe activa posivilidad de antibot
+		}
+	}
+
+	stopnpctimer;
+
+	initnpctimer;
+
+	end;
+
+OnNPCKillEvent:
+	set .@porciento,5;
+	set .@tiempo_cash,3692;//una hora
+	//dispbottom "Mataste un "+getmonsterinfo(killedrid,0)+" nivel "+getmonsterinfo(killedrid,1);
+	set #mob_invita_amigo,#mob_invita_amigo+1;
+	if(gettimetick(2)>#hora_cash){
+		if(getmonsterinfo(killedrid,1)>=30 && getmonsterinfo(killedrid,1)<=50){
+			if(rand(100)<.@porciento){
+				atcommand "@cash " + 6;
+				set #hora_cash,gettimetick(2)+.@tiempo_cash;
+			}
+		}else if(getmonsterinfo(killedrid,1)>=51 && getmonsterinfo(killedrid,1)<=70){
+			if(rand(100)<.@porciento){
+				atcommand "@cash " + 10;
+				set #hora_cash,gettimetick(2)+.@tiempo_cash;
+			}
+		}else if(getmonsterinfo(killedrid,1)>=71){
+			if(rand(100)<.@porciento){
+				atcommand "@cash " + 15;
+				set #hora_cash,gettimetick(2)+.@tiempo_cash;
+			}
+		}
+		//dispbottom gettimetick(2)+" - "+#hora_cash;
+	}
+}
+//--End of the Script

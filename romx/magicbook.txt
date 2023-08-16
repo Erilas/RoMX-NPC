@@ -1,0 +1,671 @@
+//===== eAthena Script =======================================
+geffen,42,112,5	script	Bookcrafter Paul	735,{
+	set @npc$,"[Paul]";
+	mes @npc$; 
+	mes "Hi, I see you know my brother...."; 
+	mes "Well, I got the skill to make Magic Books!";
+	mes "Warning! This Books are fragile."; 
+	mes "^FF0000Rental period for 3 days.^000000"; 
+	mes "What book would you like?";
+	menu "Magic Book Box (Fire Bolt)",M_FIRE,"Magic Book Box (Cold Bolt)",M_COLD,"Magic Book Box (Lightening Bolt)",M_LIGHT,"Magic Book Box (Earth Spike)",M_SPIKE,"Cancel",M_CANCEL;
+
+M_FIRE:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "25 Blank Scroll";
+	mes "5  Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Red Blood";
+	mes "20 Red Gemstone";
+	next;
+	menu "Make Them!",M_MAKEFIRE,"Cancel",M_CANCEL;
+
+M_MAKEFIRE:
+	mes "Good good, let me just check";
+	next;   
+	if (countitem(7433)<25 || countitem(1061)<5 || countitem(7117)<1 || countitem(990)<10 || countitem(716)<20) goto M_NOITEMS;
+	delitem 7433,25;
+	delitem 1061,5;
+	delitem 7117,1;
+	delitem 990,10;
+	delitem 716,20;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17003,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_COLD:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "25 Blank Scroll";
+	mes "5  Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Crystal Blue";
+	mes "20 Blue Gemstone";
+	next;
+	menu "Make Them!",M_MAKECOLD,"Cancel",M_CANCEL;
+
+M_MAKECOLD:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<25 || countitem(1061)<5 || countitem(7117)<1 || countitem(991)<10 || countitem(717)<20) goto M_NOITEMS;
+	delitem 7433,25;
+	delitem 1061,5;
+	delitem 7117,1;
+	delitem 991,10;
+	delitem 717,20;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17004,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_LIGHT:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "25 Blank Scroll";
+	mes "5  Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Wind of Verdure";
+	mes "20 Yellow Gemstone";
+	next;
+	menu "Make Them!",M_MAKELIGHT,"Cancel",M_CANCEL;
+
+M_MAKELIGHT:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<25 || countitem(1061)<5 || countitem(7117)<1 || countitem(992)<10 || countitem(715)<20) goto M_NOITEMS;
+	delitem 7433,25;
+	delitem 1061,5;
+	delitem 7117,1;
+	delitem 992,10;
+	delitem 715,20;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17005,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_SPIKE:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "25 Blank Scroll";
+	mes "5  Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Green Live";
+	mes "20 Stone";
+	next;
+	menu "Make Them!",M_MAKESPIKE,"Cancel",M_CANCEL;
+
+M_MAKESPIKE:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<25 || countitem(1061)<5 || countitem(7117)<1 || countitem(993)<10 || countitem(7049)<20) goto M_NOITEMS;
+	delitem 7433,25;
+	delitem 1061,5;
+	delitem 7117,1;
+	delitem 993,10;
+	delitem 7049,20;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17015,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the requirements.";
+	mes "Please come back another time...";
+	close;
+
+M_LEAVE:
+	mes @npc$;
+	mes "Maybe another time?";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+}
+
+//===== eAthena Script =======================================
+
+xmas,210,126,5	script	Bookcrafter Daniel	735,{
+	set @npc$,"[Daniel]";
+	mes @npc$; 
+	mes "Hi, I see you know my brother...."; 
+	mes "Well, I got the skill to make Magic Books!";
+	mes "Warning! This Books are fragile."; 
+	mes "^FF0000Rental period for 3 days.^000000"; 
+	mes "What book would you like?";
+	menu "Magic Book Box (Jupitel Thunder)",M_JUPITEL,"Magic Book Box (Water Ball)",M_WATER,"Magic Book Box (Heaven's Drive)",M_HEAVEN,"Magic Book Box (Thunder Storm)",M_THUNDERS,"Cancel",M_CANCEL;
+
+M_JUPITEL:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "50 Blank Scroll";
+	mes "10 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Rough Wind";
+	mes "15 Green Herb";
+	mes "3  Topaz";
+	next;
+	menu "Make Them!",M_MAKEJUPITEL,"Cancel",M_CANCEL;
+
+M_MAKEJUPITEL:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<50 || countitem(1061)<10 || countitem(7117)<1 || countitem(996)<10 || countitem(511)<15 || countitem(728)<3) goto M_NOITEMS;
+	delitem 7433,50;
+	delitem 1061,10;
+	delitem 7117,1;
+	delitem 996,10;
+	delitem 511,15;
+	delitem 728,3;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17012,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_WATER:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "50 Blank Scroll";
+	mes "10 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Mystic Frozen";
+	mes "15 Blue herb";
+	mes "3  Sapphire";
+	next;
+	menu "Make Them!",M_MAKEWATER,"Cancel",M_CANCEL;
+
+M_MAKEWATER:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<50 || countitem(1061)<10 || countitem(7117)<1 || countitem(995)<10 || countitem(510)<15 || countitem(726)<3) goto M_NOITEMS;
+	delitem 7433,50;
+	delitem 1061,10;
+	delitem 7117,1;
+	delitem 995,10;
+	delitem 510,15;
+	delitem 726,3;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17013,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_HEAVEN:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "50 Blank Scroll";
+	mes "10 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "10 Great Nature";
+	mes "15 Yellow Herb";
+	mes "25  Stone";
+	next;
+	menu "Make Them!",M_MAKEHEAVEN,"Cancel",M_CANCEL;
+
+M_MAKEHEAVEN:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<50 || countitem(1061)<10 || countitem(7117)<1 || countitem(997)<10 || countitem(508)<15 || countitem(7049)<25) goto M_NOITEMS;
+	delitem 7433,50;
+	delitem 1061,10;
+	delitem 7117,1;
+	delitem 997,10;
+	delitem 508,15;
+	delitem 7049,25;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17014,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_THUNDERS:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "50 Blank Scroll";
+	mes "10 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "20 Wind of Verdure";
+	mes "15 Green Herb";
+	mes "3  Zircon";
+	next;
+	menu "Make Them!",M_MAKETHUNDERS,"Cancel",M_CANCEL;
+
+M_MAKETHUNDERS:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<50 || countitem(1061)<10 || countitem(7117)<1 || countitem(992)<20 || countitem(511)<15 || countitem(729)<3) goto M_NOITEMS;
+	delitem 7433,50;
+	delitem 1061,10;
+	delitem 7117,1;
+	delitem 992,20;
+	delitem 511,15;
+	delitem 729,3;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17011,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the requirements.";
+	mes "Please come back another time...";
+	close;
+
+M_LEAVE:
+	mes @npc$;
+	mes "Maybe another time?";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+}
+
+//===== eAthena Script =======================================
+alberta,189,61,5	script	Bookcrafter Sam	735,{
+	set @npc$,"[Sam]";
+	mes @npc$; 
+	mes "Hi, I see you know my brother...."; 
+	mes "Well, I got the skill to make Magic Books!";
+	mes "Warning! This Books are fragile."; 
+	mes "^FF0000Rental period for 3 days.^000000"; 
+	mes "What book would you like?";
+	menu "Magic Book Box (Storm Gust)",M_SG,"Magic Book Box (Lord Of Vermilion)",M_LOV,"Magic Book Box (Meteor Storm)",M_MS,"Cancel",M_CANCEL;
+
+M_SG:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "75 Blank Scroll";
+	mes "15 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "20 Mystic Frozen";
+	mes "5  Aquamarine";
+	mes "25 Blue Herb";
+	mes "25 Crystal Blue";
+	next;
+	menu "Make Them!",M_MAKESG,"Cancel",M_CANCEL;
+
+M_MAKESG:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<75 || countitem(1061)<15 || countitem(7117)<1 || countitem(995)<20 || countitem(720)<5 || countitem(510)<25 || countitem(991)<25) goto M_NOITEMS;
+	delitem 7433,75;
+	delitem 1061,15;
+	delitem 7117,1;
+	delitem 995,20;
+	delitem 720,5;
+	delitem 510,25;
+	delitem 991,25;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17006,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_LOV:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "75 Blank Scroll";
+	mes "15 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "20 Rough Wind";
+	mes "25 Wind of Verdure";
+	mes "25 Green Herb";
+	mes "5  Emerald";
+	next;
+	menu "Make Them!",M_MAKELOV,"Cancel",M_CANCEL;
+
+M_MAKELOV:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<75 || countitem(1061)<15 || countitem(7117)<1 || countitem(996)<20 || countitem(992)<25 || countitem(511)<25 || countitem(721)<5) goto M_NOITEMS;
+	delitem 7433,75;
+	delitem 1061,15;
+	delitem 7117,1;
+	delitem 996,20;
+	delitem 992,25;
+	delitem 511,25;
+	delitem 721,5;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17007,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_MS:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "75 Blank Scroll";
+	mes "15 Witched Starsand";
+	mes "1  Torn Magic Book";
+	mes "20 Flame Heart";
+	mes "25 Red Blood";
+	mes "25 Red Herb";
+	mes "5  Garnet";
+	next;
+	menu "Make Them!",M_MAKEMS,"Cancel",M_CANCEL;
+
+M_MAKEMS:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<75 || countitem(1061)<15 || countitem(7117)<1 || countitem(994)<20 || countitem(990)<25 || countitem(507)<25 || countitem(718)<5) goto M_NOITEMS;
+	delitem 7433,75;
+	delitem 1061,15;
+	delitem 7117,1;
+	delitem 994,20;
+	delitem 990,25;
+	delitem 507,25;
+	delitem 718,5;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17008,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the requirements.";
+	mes "Please come back another time...";
+	close;
+
+M_LEAVE:
+	mes @npc$;
+	mes "Maybe another time?";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+}
+
+
+//===== eAthena Script =======================================
+yuno_in02,110,167,5	script	Bookcrafter Carlos	735,{
+	set @npc$,"[Carlos]";
+	mes @npc$; 
+	mes "Hi, I see you know my brother...."; 
+	mes "Well, I got the skill to make Magic Books!";
+	mes "Warning! This Books are fragile."; 
+	mes "^FF0000Rental period for 3 days.^000000"; 
+	mes "What book would you like?";
+	menu "Magic Book Box (Comet)",M_COMET,"Magic Book Box (Tetra Vortex)",M_TETRA,"Magic Book Box (Earth Strain)",M_STRAIN,"Magic Book Box (Chain Lightning)",M_CHAIN,"Magic Book Box (Crimson Rock)",M_CRIMSON,"Magic Book Box (Drain Life)",M_DRAIN,"Cancel",M_CANCEL;
+
+M_COMET:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "100 Blank Scroll";
+	mes "20  Witched Starsand";
+	mes "1   Torn Magic Book";
+	mes "25  Flame Heart";
+	mes "5   Amethyst";
+	mes "50  Red Herb";
+	mes "25  Ruby";
+	next;
+	menu "Make Them!",M_MAKECOMET,"Cancel",M_CANCEL;
+
+M_MAKECOMET:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<100 || countitem(1061)<20 || countitem(7117)<1 || countitem(994)<25 || countitem(719)<5 || countitem(507)<50 || countitem(723)<25) goto M_NOITEMS;
+	delitem 7433,100;
+	delitem 1061,20;
+	delitem 7117,1;
+	delitem 994,25;
+	delitem 719,5;
+	delitem 507,50;
+	delitem 723,25;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17009,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_TETRA:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "100 Blank Scroll";
+	mes "20  Witched Starsand";
+	mes "1   Torn Magic Book";
+	mes "10  Flame Heart";
+	mes "10  Mystic Frozen";
+	mes "10  Rough Wind";
+	mes "10  Great Nature";
+	next;
+	menu "Make Them!",M_MAKETETRA,"Cancel",M_CANCEL;
+
+M_MAKETETRA:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<100 || countitem(1061)<20 || countitem(7117)<1 || countitem(994)<10 || countitem(995)<10 || countitem(996)<10 || countitem(997)<10) goto M_NOITEMS;
+	delitem 7433,100;
+	delitem 1061,20;
+	delitem 7117,1;
+	delitem 994,10;
+	delitem 995,10;
+	delitem 996,10;
+	delitem 997,10;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17010,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+	
+M_STRAIN:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "100 Blank Scroll";
+	mes "20  Witched Starsand";
+	mes "1   Torn Magic Book";
+	mes "25  Great Nature";
+	mes "50  Stone Heart";
+	mes "50  Yellow Herb";
+	mes "20  Sardonyx";
+	next;
+	menu "Make Them!",M_MAKESTRAIN,"Cancel",M_CANCEL;
+
+M_MAKESTRAIN:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<100 || countitem(1061)<20 || countitem(7117)<1 || countitem(997)<25 || countitem(953)<50 || countitem(508)<50 || countitem(725)<20) goto M_NOITEMS;
+	delitem 7433,100;
+	delitem 1061,20;
+	delitem 7117,1;
+	delitem 997,25;
+	delitem 953,50;
+	delitem 508,50;
+	delitem 725,20;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17016,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_CHAIN:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "100 Blank Scroll";
+	mes "20  Witched Starsand";
+	mes "1   Torn Magic Book";
+	mes "25  Rough Wind";
+	mes "50  Green Herb";
+	mes "25  Opal";
+	mes "25  Harpy Feather";
+	next;
+	menu "Make Them!",M_MAKECHAIN,"Cancel",M_CANCEL;
+
+M_MAKECHAIN:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<100 || countitem(1061)<20 || countitem(7117)<1 || countitem(996)<25 || countitem(511)<50 || countitem(727)<25 || countitem(7115)<25) goto M_NOITEMS;
+	delitem 7433,100;
+	delitem 1061,20;
+	delitem 7117,1;
+	delitem 996,25;
+	delitem 511,50;
+	delitem 727,25;
+	delitem 7115,25;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17017,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_CRIMSON:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "100 Blank Scroll";
+	mes "20  Witched Starsand";
+	mes "1   Torn Magic Book";
+	mes "10  Flame Heart";
+	mes "50  Bloody Rune";
+	mes "50  Red Herb";
+	mes "50  Red Blood";
+	next;
+	menu "Make Them!",M_MAKECRIMSON,"Cancel",M_CANCEL;
+
+M_MAKECRIMSON:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<100 || countitem(1061)<20 || countitem(7117)<1 || countitem(994)<10 || countitem(7563)<50 || countitem(507)<50 || countitem(990)<50) goto M_NOITEMS;
+	delitem 7433,100;
+	delitem 1061,20;
+	delitem 7117,1;
+	delitem 994,10;
+	delitem 7563,50;
+	delitem 507,50;
+	delitem 990,50;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17018,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_DRAIN:
+	next;
+	mes @npc$;
+	mes "For this book you need:";
+	mes " ";
+	mes "100 Blank Scroll";
+	mes "20  Witched Starsand";
+	mes "1   Torn Magic Book";
+	mes "50  Rune of Darkness";
+	mes "25  Will of Darkness";
+	mes "25  Sticky Posion";
+	mes "25  Cursed Ruby";
+	next;
+	menu "Make Them!",M_MAKEDRAIN,"Cancel",M_CANCEL;
+
+M_MAKEDRAIN:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(7433)<100 || countitem(1061)<20 || countitem(7117)<1 || countitem(7511)<50 || countitem(7340)<25 || countitem(7565)<25 || countitem(724)<25) goto M_NOITEMS;
+	delitem 7433,100;
+	delitem 1061,20;
+	delitem 7117,1;
+	delitem 7511,50;
+	delitem 7340,25;
+	delitem 7565,25;
+	delitem 724,25;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	getitem 17019,1;
+	mes @npc$;
+	mes "Ok done!";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the requirements.";
+	mes "Please come back another time...";
+	close;
+
+M_LEAVE:
+	mes @npc$;
+	mes "Maybe another time?";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+}

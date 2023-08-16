@@ -1,0 +1,57 @@
+//
+alberta,32,252,4	script	Mado Maker	851,{
+
+set @npc$,"[Mechanic Sam]";
+	
+if (Class == 4064) {goto L_IsAB;}//si es mecanico
+else{emotion 20;}
+close;
+L_IsAB:
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+".";
+	mes "You are a Mechanic!";
+	mes "Is there anything else I can do for you?.";
+	next;
+	switch (select("Rent a Mado:Nothing")) {
+			case 1:
+				mes @npc$;
+				mes "The Rent of mado have a cost of 20,000z.";
+				mes "Do you like rent?";
+				switch (select("Yep, rent a Mado:No.")) {
+					case 1:
+						if (checkriding() != 0) goto L_Riding;
+						if(Zeny < 20000) goto M_NOITEMS;
+						atcommand "@mount";
+						set Zeny,zeny-20000;
+						break;
+					case 2:
+						next;
+						goto M_CANCEL;
+						break;
+				}
+				break;
+			case 2:
+				next;
+				goto M_CANCEL;
+				break;
+	}
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have enough Zeny .";
+	mes "Please come back another time...";
+	close;
+
+L_Riding:
+	mes "You already have a Mado";
+	mes "...";
+	close;
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+
+}

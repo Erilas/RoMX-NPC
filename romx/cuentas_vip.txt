@@ -1,0 +1,18 @@
+//script que revisa si el usuario sigue siendo VIP
+-	script	revisa_VIP	-1,{
+
+OnPCLoginEvent:
+	query_sql ("SELECT COUNT( * ) FROM `vip` WHERE `idcuenta` = '" + getcharid(3) + "' AND `estado` = '1'",.@id_vip);
+	if (.@id_vip>0){//si es un usuario VIP
+		query_sql ("SELECT `fecha_final` FROM `vip` WHERE `idcuenta` = '" + getcharid(3) + "' AND `estado` = '1'",.@fecha_final_vip);
+		if (gettimetick(2)<.@fecha_final_vip){
+			atcommand "@adjgmlvl 1 "+ strcharinfo(0);
+			dispbottom "Cuenta VIP activa";
+		}
+		else{
+			atcommand "@adjgmlvl 0 "+ strcharinfo(0);
+			query_sql ("UPDATE `vip` SET `estado` = 0 WHERE `idcuenta` = '" + getcharid(3)+ "'");
+			dispbottom "Tu cuenta VIP caduco";
+		}
+	}//end if
+}//end funcion

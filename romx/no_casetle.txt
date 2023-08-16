@@ -1,0 +1,25 @@
+//revisa que no entren a castles que no deven, solo funciona cuando es un castle!
+-	script	castle_mal	-1,{
+OnPCLoadMapEvent:
+	if (agitcheck()==1){
+		set .@castle_actual$,getvariableofnpc(.castillo_actual$,"WoE Information");
+		set .@temp,0;
+		getmapxy(.@mapawoe$,.@x,.@y,0);
+		for (set .@a, 0; .@a < getarraysize(.woe_castl$); set .@a, .@a + 1){
+			if(.@mapawoe$==.woe_castl$[.@a]){
+				set .@temp,1;//variable se modifica para warp
+				if(.@mapawoe$==.@castle_actual$){set .@temp,0;}//si es el castle actual, no warpear
+			}
+		}
+		if(.@temp==1){//warp a mapa gravado
+			dispbottom "El castillo activo es "+getcastlename(.@castle_actual$);
+			warp "SavePoint",0,0;
+		}
+	}
+end;
+
+OnInit:
+	//Arrays con mapas de castles
+	setarray .woe_castl$, "aldeg_cas01", "aldeg_cas02", "aldeg_cas03", "aldeg_cas04", "aldeg_cas05", "gefg_cas01", "gefg_cas02", "gefg_cas03", "gefg_cas04", "gefg_cas05", "payg_cas01", "payg_cas02", "payg_cas03", "payg_cas04", "payg_cas05", "prtg_cas01", "prtg_cas02", "prtg_cas03", "prtg_cas04", "prtg_cas05", "nguild_alde", "nguild_gef", "nguild_pay", "nguild_prt", "schg_cas01", "schg_cas02", "schg_cas03", "schg_cas04", "schg_cas05", "arug_cas01", "arug_cas02", "arug_cas03", "arug_cas04", "arug_cas05";
+	end;
+}

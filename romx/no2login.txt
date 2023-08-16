@@ -1,0 +1,53 @@
+//===== eAthena Script =======================================
+//= DOBLE LOGIN
+//===== By ===================================================
+//= zerosk8
+//===== Version ==============================================
+//= BETA
+//===== Compatible With ======================================
+//= eAthena stable 12815 - ONLY SQL
+//===== Description ==========================================
+//= El script detecta posibles DOBLE LOGIN 
+//= 
+//===== Comments =============================================
+// No comments yet
+//============================================================
+
+prontera,0,0,0	script	DOBLELOGIN	-1,{
+OnPCLoginEvent:
+if (getgmlevel() < 90){
+
+query_sql "SELECT `account_id` FROM `char` WHERE `name` = '"+strcharinfo(0)+"' ", @acc_id$;
+query_sql "SELECT `last_ip` FROM `login` WHERE `account_id` = '"+@acc_id$+"' ", @ip$ ;
+query_sql "SELECT `doble_login` FROM `login` WHERE `account_id` = '"+@acc_id$+"' " , @doble_login$;
+//set @check$, 0;
+query_sql "SELECT `TOTAL` FROM ( SELECT `login`.`last_ip` AS login_ip, `login`.`account_id` AS login_id, `char`.`account_id` AS char_id, Count(*) AS TOTAL FROM `login` , `char` WHERE `char`.`online` = '1' AND login.last_ip = '"+@ip$+"' AND NOT `login`.`account_id` = '"+@acc_id$+"' GROUP BY login_id ) AS CONTADOR ", @check$;
+
+if( @check$ != "0" && @doble_login$ =="0"){
+
+//atcommand strcharinfo(0)+":@request SE HA DECTADO UN DOBLE LOGIN DE: "+strcharinfo(0)+" CON ACCID: "+@acc_id$+ ", IP: " +@ip$+ ;
+//BAN, JALFOR..........
+dispbottom "Tu doble login sera desconectado en 5 minutos";
+sleep2 300000;	
+atcommand "@kick  "+strcharinfo(0)+"";
+
+} 
+else { 
+
+//mes +@check$+;
+// agregacion de elseif(@check$ !="0" && @doble_login$ = "1" )      
+// Y agregar atcommand strcharinfo(0)+":@request DOBLE LOGIN AUTORISADO DE:" +strcharinfo(0)+;
+close;
+
+}
+set .@fuera, getcharid(0);
+	OnPCLogoutEvent:
+		set @check$, 0;
+		//query_sql "UPDATE `char` SET `online`='0' WHERE char_id="+.@fuera;
+		end;
+
+} else {
+close;
+}
+
+}

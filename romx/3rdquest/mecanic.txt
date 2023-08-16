@@ -1,0 +1,176 @@
+//============================================================ 
+einbroch,77,114,6	script	Mechanic	851,{
+
+	set @npc$,"[Mechanic Smith]";
+	
+	if (Class == 4064) goto L_IsAB;		//Check if you a 
+	if (Class == 4011) goto L_Change;	// Check
+	if (Class >= 0 && Class <= 8) goto L_NoChange;
+	if (Class >= 9 && Class <= 4010) goto L_NoChange; // NONTRANS-SWITCH
+	if (Class >= 4012 && Class <= 4031) goto L_NoChange; //SWITCH-TRANS
+	if (Class >= 4032 && Class <= 4112) goto L_NoChange; //BABYS
+
+L_Change:
+		if (BaseLevel < 99) goto L_BHigh;
+		if (JobLevel < 70) goto L_JHigh;
+		mes @npc$;
+		mes "Welcome "+strcharinfo(0)+".";
+		mes "I can change your Job to a Mechanic.";
+		next;
+		mes @npc$;
+		mes "Do you want to change your Job to a Mechanic?";
+		next;
+		menu "Yes of course.",M_INFO,"No, Not Yet.",M_CANCEL;
+
+M_INFO:
+	if (checkcart() != 0) goto L_Riding;
+	mes @npc$;
+	mes "To change your Job I need to test your courage first.";
+	mes "Bring me the following items to pass the test.";
+	mes " ";
+	mes "Here is the list.";
+	mes " ";
+	mes "^FF0000 5 Phlogopite^000000";//7290
+	mes "^FF0000 15 Hammer of Blacksmith^000000";//1005
+	mes "^FF0000 1 Emperium Anvil^000000";//989
+	mes "^FF0000 20 Transparent Plate (Red)^000000";//7353
+	mes "^FF0000 100 Metal Fragment^000000";//7095 
+	mes "^FF0000 5,000,000 Zeny^000000";
+	next;
+	menu "Cancel",M_CANCEL,"I got them!",M_READY;
+
+M_READY:
+	mes @npc$;
+	if (SkillPoint) goto L_SkillsM;
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(1516)>0) goto M_MENYITEMS;
+	if(getequiprefinerycnt(4)== 10 && Zeny < 5000000){goto M_MVP;}
+	if(countitem(7290)<5 || countitem(1005)<15 || countitem(989)<1 || getequipid(3)==1516 || countitem(7353)<20 || countitem(7095)<100 || (Zeny < 5000000)) goto M_NOITEMS;
+	delitem 7290,5;
+	delitem 1005,15;
+	delitem 989,1;
+	delitem 7353,20;
+	delitem 7095,100;
+	set Zeny,zeny-5000000;
+	job:
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	jobchange 4064;
+	ResetStatus;
+	ResetSkill;
+	if (sex == 1) {	getitem 5749,1;}else{getitem 5760,1;}
+	getitem 2795,1;//apple ring
+	set quest_3job,1;
+	mes @npc$;
+	mes "Ok done! Congratulations, you are now a Mechanic";
+	close;
+
+M_MVP:
+	next;
+	mes @npc$;
+	mes "OMG! This item you have there, show your value.";
+	next;
+	delitem 1516,1;
+	goto job;
+
+L_IsAB:
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+".";
+	mes "You are a Mechanic already.";
+	if(quest_3job==0){
+		next;
+		mes @npc$;
+		mes "Wait!!";
+		mes "I almost forgot...this is yours.";
+		if (sex == 1) {	getitem 5749,1;}else{getitem 5760,1;}
+		getitem 2795,1;//apple ring
+		set quest_3job,1;
+		next;
+		mes @npc$;
+	}
+	mes "Is there anything else I can do for you?.";
+	next;
+	switch (select("Rent a Mado:Nothing")) {
+			case 1:
+				mes @npc$;
+				mes "The Rent of mado have a cost of 20,000z.";
+				mes "Do you like rent?";
+				switch (select("Yep, rent a Mado:No.")) {
+					case 1:
+						if (checkriding() != 0) goto L_Riding_Mado;
+						if(Zeny < 20000) goto M_NOITEMS;
+						set Zeny,zeny-20000;
+						atcommand "@mount";
+						break;
+					case 2:
+						next;
+						goto M_CANCEL;
+						break;
+				}
+				break;
+			case 2:
+				next;
+				goto M_CANCEL;
+				break;
+	}
+	close;
+
+L_BHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Base Level for the Job Change.";
+	close;
+
+L_JHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Job Level for the Job Change.";
+	close;
+
+L_NoChange:
+	mes @npc$;
+	mes "Huh?";
+	mes "You aren't an Blacksmith Class.";
+	mes "Please go away.";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the required items.";
+	mes "Please come back another time... when you ARE ready";
+	close;
+
+M_MENYITEMS:
+	mes @npc$;
+	mes "You have MORE THAN ONE Sword Mace in your inventory.";
+	mes "Please come back another time... when you ARE ready";
+	close;
+
+L_SkillsM:
+	mes "Please use up all your skill points.";
+	mes "Otherwise I cant turn you into a Mechanic";
+	close;
+
+L_Riding:
+	mes "You cannot change your Job into Mechanic.";
+	mes "because you are Rent Pushcart...";
+	close;
+
+L_Riding_Mado:
+	mes "You already have a Mado";
+	mes "...";
+	close;
+
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+
+}
+
+
+

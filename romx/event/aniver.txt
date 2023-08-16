@@ -1,0 +1,198 @@
+//============================================================ 
+//NPC Aniversario RoMX
+//============================================================ 
+prontera,271,100,4	script	Aniversario RoMX	562,{
+	setarray .items_ani[0],
+			4381,
+			4058,
+			4334,
+			7019,
+			2623,
+			2622,
+			4097,
+			4064,
+			4133,
+			17002,
+			4107,
+			4027,
+			4092,
+			2624,
+			4076,
+			4315,
+			4216,
+			2625,
+			13758,
+			14545;
+	setarray .costo_items_ani[0],
+			50,
+			50,
+			50,
+			50,
+			50,
+			45,
+			45,
+			45,
+			45,
+			45,
+			40,
+			40,
+			40,
+			40,
+			35,
+			35,
+			35,
+			35,
+			35,
+			5;
+	set .@nombre$, "[^FF0000Maquina Tragamonedas^000000]";
+	mes "[^FF0000"+strcharinfo(0)+"^000000]";
+	mes "Al parecer esto es una maquina tragamonedas...y tiene un mensaje pegado con cinta adhesiva";
+	next;
+	if(select("Leer Mensaje","Inspeccionar los botones")==1){
+		mes "[^FF0000RoMX Staff^000000]";
+		mes "Muchas gracias por estar con nosotros todo este tiempo, espero que disfrutes nuestro esfuerzo por tener un servidor diferente a los demas y sigas con nosotros mucho tiempo mas.";	
+		next;
+		if(select("Inspeccionar los botones","Revisar debajo de la nota")==2){
+			mes "[^FF0000"+strcharinfo(0)+"^000000]";
+			mes "Hay un boton rojo y uno azul";
+			next;
+			if(select("^FF3F14Oprimir boton rojo^000000","^1455FFOprimir boton Azul^000000")==1){
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes ".";
+				next;
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "..";
+				next;
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "...";
+				next;
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "....";
+				next;
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes ".....";
+				next;
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "Una pantalla se encendio y muestra el mensaje:";
+				mes " ";
+				mes "^01DA09Neugierig^000000";
+				close;
+			}
+			mes "[^FF0000"+strcharinfo(0)+"^000000]";
+			mes "Aparecio un teclado detras de una puertesilla oculta.";
+			input .@texto_ani$;
+			next;
+			if(.@texto_ani$=="Neugierig"){
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "De una puerta lateral aparecio una palanca";
+				next;
+				if(select("Mover la palanca hacia arriba","Mover la palanca hacia abajo")==2){
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes ".";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "..";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "...";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "....";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes ".....";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "Una pantalla se encendio y muestra un numero:";
+					mes " ";
+					mes "^01DA09160511^000000";
+					close;
+				}
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "Una pantalla se encendio y muestra la numeracion del 0 al 9... parece que puedo tocar los numeros como si fueran botones.";
+				input .@num_ani;
+				next;
+				if(.@num_ani==160511){
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes ".";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "..";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "...";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "....";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes ".....";
+					next;
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "Una pantalla muestra un mensaje:";
+					next;
+					mes "[^FF0000Erilas^000000]";
+					mes " ";
+					mes "^01DA09Siempre caen :P^000000";
+					sleep2 3000;
+					atcommand "@nuke "+strcharinfo(0);
+					close;
+				}else{
+					mes "[^FF0000"+strcharinfo(0)+"^000000]";
+					mes "La maquina parece que se a apagado...";
+					close;
+				}
+			}else{
+				next;
+				mes "[^FF0000"+strcharinfo(0)+"^000000]";
+				mes "La maquina encondio el teclado... y parece que la maquina se apago";
+				close;
+			}
+		}
+	}
+	mes "[^FF0000"+strcharinfo(0)+"^000000]";
+	mes "Hay botones marcados y forman un menu.";
+	for (set .@c, 0; .@c < getarraysize(.items_ani); set .@c, .@c + 1) {
+		//mes getitemname(.items_ani[.@c])+" "+.costo_items_ani[.@c]+" "+getitemname(674);
+		set .@menu_aniversario$,.@menu_aniversario$+":^F08900"+getitemname(.items_ani[.@c])+"^000000 ^FF3729"+.costo_items_ani[.@c]+"^000000 ^B8B8B8"+getitemname(674)+"^000000";
+	}
+	set @seleccion,select(.@menu_aniversario$)-2;
+	next;
+	mes .@nombre$;
+	mes "Seleccionaste:";
+	mes "^00A521"+getitemname(.items_ani[@seleccion])+"^000000";
+	mes "Que tiene un costo de";
+	mes "^FF0000"+.costo_items_ani[@seleccion]+"^000000 ^B8B8B8Mithril Coin^000000";
+	mes "Esa es tu Eleccion?";
+	next;
+	if(select("Claro, estoy seguro","Mejor no, gracias")==2){
+		mes .@nombre$;
+		mes "Regresa cuando quieras!";	
+		close;
+		end;
+	}
+	if(countitem(674)<.costo_items_ani[@seleccion]){
+		mes "[^FF0000"+strcharinfo(0)+"^000000]";
+		mes "Al parecer no tengo suficientes ^B8B8B8"+getitemname(674)+"^000000 para hacer funcionar la maquina...";
+		close;
+		end;	
+	}else{
+		mes "[^FF0000"+strcharinfo(0)+"^000000]";
+		mes "Introdusco las monedas por la ranura.";
+		delitem 674,.costo_items_ani[@seleccion];//elimina las monedas
+		next;
+		specialeffect2 10;
+		specialeffect 338;
+		specialeffect 715;
+		mes "[^FF0000"+strcharinfo(0)+"^000000]";
+		mes "Salio un objeto de la maquina";
+		getitem .items_ani[@seleccion],1;//da premio
+		next;
+		mes .@nombre$;
+		mes "Gracias por Estar en RoMX!";
+		close;
+		end;
+	}
+	end;
+}
+

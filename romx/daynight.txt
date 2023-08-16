@@ -1,0 +1,12 @@
+-	script	Day_Night	-1,{
+OnClock0700:
+	day;	// sunrise
+	end;
+OnClock1930:
+	night;	// sunset
+	end;
+
+OnInit:
+	if (gettime(3)<6 || gettime(3)>=17) night;	// Day-Night cycle
+	end;
+}

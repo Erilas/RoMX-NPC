@@ -1,0 +1,104 @@
+//============================================================ 
+prontera,183,214,4	script	Armero Pet	125,{
+	set .@nombre$, "[^FF0000Armero Pet^000000]";
+	mes .@nombre$;
+	mes "Hola "+strcharinfo(0)+", yo puedo crear un accesorio para tu mascota, solo dime el accesorio que quieras y te dire lo que necesito.";
+	for (set .@c, 0; .@c < getarraysize(.items_hats); set .@c, .@c + 1) {
+		set .@menu_aniversario$,.@menu_aniversario$+":"+getitemname(.items_hats[.@c]);
+	}
+	set @seleccion,select(.@menu_aniversario$)-2;
+	next;
+	mes .@nombre$;
+	mes "Para el ^00A521"+getitemname(.items_hats[@seleccion])+"^000000 necesito:";
+	set @marcado_temporal,@seleccion*3;
+	mes "1 ^FF0000"+getitemname(.costo_hats[@marcado_temporal])+"^000000";
+	mes "1 ^FF0000"+getitemname(.costo_hats[@marcado_temporal+1])+"^000000";
+	mes "1 ^FF0000"+getitemname(.costo_hats[@marcado_temporal+2])+"^000000";
+	mes "Tienes esos items?";
+	next;
+	if(select("Si","Regreso en un momento...")==2){
+		mes .@nombre$;
+		mes "Regresa cuando quieras!";	
+		close;
+		end;
+	}
+	if(countitem(.costo_hats[@marcado_temporal])==0 || countitem(.costo_hats[@marcado_temporal+1])==0 || countitem(.costo_hats[@marcado_temporal+2])==0){
+		mes .@nombre$;
+		mes "Al parecer no tienes lo necesario para crear ese accesorio...";
+		close;
+		end;	
+	}else{
+		mes .@nombre$;
+		mes "Muy bien, no tardare en esto.";
+		delitem .costo_hats[@marcado_temporal],1;
+		delitem .costo_hats[@marcado_temporal+1],1;
+		delitem .costo_hats[@marcado_temporal+2],1;
+		emotion 21;
+		next;
+		mes .@nombre$;
+		mes "Aqui tienes, espero lo disfrutes";
+		getitem .items_hats[@seleccion],1;
+		close;
+		end;
+	}
+	end;
+
+OnInit:
+	setarray .items_hats[0],10022,10023,10024,10025,10026,10027,10028,10029,10030,10031,10032,10033,10034,10035,10036,10037,10038;
+
+setarray .costo_hats[0],
+			728,//Gold Earring
+			726,
+			614,
+			511,//Green Jewel Bag
+			729,
+			7003,
+			10014,//Fashion Glasses
+			974,
+			973,
+			5001,//Hairband Of Stars
+			629,
+			712,
+			507,//Tassel for Durumagi
+			914,
+			949,
+			523,//Pet Soul Ring
+			2232,
+			1757,
+			662,//Beautiful Badges
+			712,
+			2208,
+			7445,//Jade Trinket
+			1022,
+			511,
+			7262,//Summer Fan
+			7064,
+			1024,
+			7215,//Ring Of Death
+			952,
+			7315,
+			747,//Queen's Coronet
+			2233,
+			999,
+			1020,//Afro
+			1034,
+			1060,
+			2281,//Masked Ball
+			7568,
+			7205,
+			7317,//Spring
+			7325,
+			1098,
+			7106,//Horn Of Hell
+			7265,
+			507,
+			2281,//Black Butterfly Mask
+			7568,
+			7205,
+			1021,//Horn Barrier
+			947,
+			7065;		
+	end;
+
+}
+

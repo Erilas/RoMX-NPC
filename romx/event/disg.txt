@@ -1,0 +1,60 @@
+//============================================================ 
+prontera,164,95,4	script	Disguise	795,{
+set @npc$,"[Disguise Master]";
+mes @npc$;
+mes "Hola!";
+mes "Puedo trasformarte en un Mob";
+mes "Solo dime el ID del Mob del 1001 al 2024";
+mes "Por ejemplo 1002";
+menu "Transformarme en el mob...",M_mob,"Transformarme al azar",M_rand,"Transformarme en uno custom",M_rand2,"Regresar a la normalidad",M_undis,"No, Gracias",M_CANCEL;
+
+M_mob:
+next;
+input @bicho;
+	if (getstrlen(@bicho)<4) {
+		mes @npc$;		
+		mes "El ID debe tener por lo menos 4 numeros >:(";
+		close;
+		end;
+	} 
+	if (@bicho >= 1001 && @bicho <= 2024)
+		{
+			disguise(@bicho);
+			close;
+			end;
+		} 	
+	else
+		{
+			mes @npc$;
+			mes "Ese mob no existe >:(";
+			close;
+			end;
+		} 
+
+M_rand:
+		set var,rand(1001,2024);
+		disguise(var);
+		close;		
+		end;
+		
+M_rand2:	
+	set varia,rand(1,2);
+	if (varia==1) {	
+		set va,rand(2501,2504);
+		disguise(va);
+		close;
+		end;}
+	else if (varia==2) {
+		disguise(2494);
+		close;
+		end;}
+		
+M_undis:	
+		undisguise;
+		close;
+		end;
+
+M_CANCEL:
+close;
+end;
+}

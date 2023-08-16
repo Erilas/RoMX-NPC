@@ -1,0 +1,105 @@
+//============================================================ 
+// Evento aniversario
+//============================================================ 
+
+
+
+//============================================================ 
+// Si el moustro es matado
+//============================================================ 
+
+-	script	abrircaja	-1,{
+OnNPCKillEvent:
+	if(killedrid==2565) {
+		if(rand(10)<=1){
+			specialeffect2 812;
+			specialeffect2 722;
+			nude;
+			sc_start SC_COMA,0,0;		
+			sc_start SC_DECREASEAGI,300000,10;
+		}
+	}
+end;
+}
+
+//============================================================ 
+// Respawn cajas //mob avail= 2565,1337
+//============================================================ 
+niflheim,195,203,195,203	monster	Pandora Box	2565,1,600000,1200000,1
+niflheim,143,258,143,258	monster	Pandora Box	2565,1,600000,1200000,1
+niflheim,133,144,133,144	monster	Pandora Box	2565,1,600000,1200000,1
+niflheim,197,53,197,53	monster	Pandora Box	2565,1,600000,1200000,1
+niflheim,158,133,158,133	monster	Pandora Box	2565,1,600000,1200000,1
+niflheim,322,218,322,218	monster	Pandora Box	2565,1,600000,1200000,1
+
+//============================================================ 
+// Respawn mobs normales
+//============================================================ 
+niflheim,0,0,0,0	monster	Loli Ruri	1892,70,600000,1200000,0
+niflheim,0,0,0,0	monster	Bloody Murderer	1507,70,600000,1200000,0
+niflheim,0,0,0,0	monster	Quve	1508,70,600000,1200000,0
+niflheim,0,0,0,0	monster	Dullahan	1504,70,600000,1200000,0
+
+niflheim,0,0,0,0	monster	Doppelganger	1966,6,0,0,0
+
+
+niflheim,195,203,195,203	monster	Loli Ruri	1892,15,0,0,0
+niflheim,195,203,195,203	monster	Bloody Murderer	1507,15,0,0,0
+niflheim,195,203,195,203	monster	Quve	1508,15,0,0,0
+niflheim,195,203,195,203	monster	Dullahan	1504,15,0,0,0
+
+niflheim,143,258,143,258	monster	Loli Ruri	1892,15,0,0,0
+niflheim,143,258,143,258	monster	Bloody Murderer	1507,15,0,0,0
+niflheim,143,258,143,258	monster	Quve	1508,15,0,0,0
+niflheim,143,258,143,258	monster	Dullahan	1504,15,0,0,0
+
+niflheim,133,144,133,144	monster	Loli Ruri	1892,15,0,0,0
+niflheim,133,144,133,144	monster	Bloody Murderer	1507,15,0,0,0
+niflheim,133,144,133,144	monster	Quve	1508,15,0,0,0
+niflheim,133,144,133,144	monster	Dullahan	1504,15,0,0,0
+
+niflheim,197,53,197,53	monster	Loli Ruri	1892,15,0,0,0
+niflheim,197,53,197,53	monster	Bloody Murderer	1507,15,0,0,0
+niflheim,197,53,197,53	monster	Quve	1508,15,0,0,0
+niflheim,197,53,197,53	monster	Dullahan	1504,15,0,0,0
+
+niflheim,158,133,158,133	monster	Loli Ruri	1892,15,0,0,0
+niflheim,158,133,158,133	monster	Bloody Murderer	1507,15,0,0,0
+niflheim,158,133,158,133	monster	Quve	1508,15,0,0,0
+niflheim,158,133,158,133	monster	Dullahan	1504,15,0,0,0
+
+niflheim,322,218,322,218	monster	Loli Ruri	1892,15,0,0,0
+niflheim,322,218,322,218	monster	Bloody Murderer	1507,15,0,0,0
+niflheim,322,218,322,218	monster	Quve	1508,15,0,0,0
+niflheim,322,218,322,218	monster	Dullahan	1504,15,0,0,0
+
+//============================================================ 
+// mapflags
+//============================================================ 
+niflheim	mapflag	pvp
+niflheim	mapflag	nowarp
+niflheim	mapflag	nowarpto
+niflheim	mapflag	noteleport
+niflheim	mapflag	nosave
+niflheim	mapflag	nomemo
+niflheim	mapflag	noreturn
+nif_fild01	mapflag	nowarp
+nif_fild01	mapflag	nowarpto
+nif_fild01	mapflag	nosave
+nif_fild01	mapflag	nomemo
+nif_fild01	mapflag	noreturn
+nif_fild02	mapflag	nowarp
+nif_fild02	mapflag	nowarpto
+nif_fild02	mapflag	nosave
+nif_fild02	mapflag	nomemo
+nif_fild02	mapflag	noreturn
+nif_in	mapflag	pvp
+nif_in	mapflag	nowarp
+nif_in	mapflag	nowarpto
+nif_in	mapflag	nosave
+nif_in	mapflag	nomemo
+nif_in	mapflag	noreturn
+niflheim	mapflag	restricted	5
+nif_fild01	mapflag	restricted	5
+nif_fild02	mapflag	restricted	5
+nif_in	mapflag	restricted	5

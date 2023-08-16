@@ -1,0 +1,44 @@
+prontera.gat,152,193,12	script	Donaciones SMS	982,{
+set .@n$,"^008888[Donaciones SMS]^000000"; //Nombre del NPC
+set @pxe,10; //Cantidad de Puntos que recibirá por cada Euro.
+
+setarray @paisN$[0],"DE","AR","AU","AT","BE","BO","CL","CO","EC","ES","FR","GB","NL","IE","MX","NO","PE","PT","SE","CH","VE";
+setarray @paisE[0],170,82,177,69,165,101,87,146,100,120,125,148,127,200,107,157,142,168,174,123,78;
+
+mes .@n$;
+mes "Introduce el codigo que has recibido por SMS:";
+input @codigo$;
+set	 @codigomd5$,md5(@codigo$);
+next;
+
+query_sql("SELECT COUNT(*) FROM sms WHERE CodigoMD5 = '" + @codigomd5$ + "' AND Estado = '0'", @producto);
+if (@producto == 0) {
+    query_sql("SELECT COUNT(*) FROM sms WHERE CodigoMD5 = '" + @codigomd5$+ "' AND Estado = '1'", @producto);
+    if (@producto == 0) {
+        mes .@n$;
+        mes "El codigo de donacion SMS: ^ff0000"+@codigo$+"^000000";
+        mes "No es valido.";
+        close;
+    }
+
+query_sql("SELECT Pais FROM sms WHERE CodigoMD5 = '" + @codigomd5$ + "' AND Estado = '0'", @paisR$);
+
+for(set .@i, 0; .@i < getarraysize(@paisN$); set .@i, .@i + 1) {
+   if(@paisN$[.@i] == @paisR$) {
+      set @paisRE,@paisE[.@i];
+   }
+}
+set @bsms,@pxe*@paisRE/100;
+
+    mes .@n$;
+    mes "El codigo de donacion SMS: ^ff0000"+@codigo$+"^000000";
+    mes "Ya ha sido utilizado y ya no es valido.";
+    close;
+}
+query_sql("UPDATE sms SET estado = '1', CuentaAdquisicion = '" + getcharid(3) + "', FechaAdquisicion = '" + gettimestr("%d-%m-%Y %H:%M:%S",21) + "' WHERE CodigoMD5 = '" + @codigomd5$ + "'");
+getitem 7539,10;
+mes .@n$;
+mes "El codigo de donacion SMS: ^ff0000"+@codigo$+"^000000";
+mes "Es correcto.";
+close;
+}

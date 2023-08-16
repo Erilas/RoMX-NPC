@@ -1,0 +1,38 @@
+//============================================================ 
+new_1-1,57,114,5	script	Bienvenido	864,8,8,{
+//himinn,51,43,5	script	Bienvenido	948,{
+set .@npc$,"[Presentador RoMX]";
+set .@baseexp$, getBattleFlag("base_exp_rate")/100;
+set .@jobexp$, getBattleFlag("job_exp_rate")/100;
+set .@ratedrops$, getBattleFlag("item_rate_card")/100;
+mes .@npc$;
+mes "Hola "+strcharinfo(0)+".";
+mes "Bienvenido a RoMX.";
+mes "Los rates actuales son "+.@baseexp$+"x "+.@jobexp$+"x "+.@ratedrops$+"x ";
+mes "RoMX cuenta con 3er Jobs, los cuales tienen limite de nivel 150/50, los 2os Jobs tiene limite de nivel 99/70.";
+next;
+mes .@npc$;
+mes "Tambien RoMX cuenta con eventos automaticos, WOEs divididas por niveles y NPC como -Reset Girl-, -Hidden Slot Enchat-, -QuitaCartas-, -Banco-, -Cambiador de Nombre-, -Estilista-, -BranchRoom- y muchos mas, algunos de ellos usan un item llamado -Poring Coin- el cual lo puedes conseguir de muchas maneras dentro de el juego.";
+next;
+mes .@npc$;
+mes "Como representante, te deseo que te diviertas mucho en nuestra comunidad.";
+set @idtemp,getcharid(3);
+//mes "Mi UID: "+@idtemp;
+if (uidprueba6==getcharid(3)){ goto M_REPETIDO;}
+query_sql("SELECT COUNT( * ) FROM `global_reg_value` WHERE `value` LIKE '" + @idtemp + "' AND `str` LIKE 'uidprueba6'", @repe);
+//mes "query: "+@repe;
+if (@repe>0){ goto M_REPETIDO;}
+set uidprueba6,getcharid(3);
+query_sql("INSERT INTO `global_reg_value` (`char_id`,`str`,`value`,`type`,`account_id`) VALUES ('" +@idtemp+"','uidprueba6','" +@idtemp+"','2','0')");
+getitem 14545,3;//Field Manual 300%
+getitem 17002,25;//rare candy
+mes "Veo que eres nuevo en el servidor, toma este regalo de bienvenida.";
+mes "Cada dulce pude aumentarte un nivel, usalos sabiamente.";
+close;
+M_REPETIDO:
+	mes "Que tengas felices Drops :D";
+	close;	 
+
+OnTouch: 
+	npctalk "Si necesitas ayuda wispea a Main";
+}

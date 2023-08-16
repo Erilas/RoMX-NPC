@@ -1,0 +1,174 @@
+// [========================================================]
+// [===========             DivineRO             ===========]
+// [========================================================]
+// [===========         Refinador ADVesp         ===========]
+// [========================================================]
+// [ Versión editada por haunter94                          ]
+// [========================================================]
+// [ Script original: eAthena original                      ]
+// [========================================================]
+
+
+prt_in,56,54,2	script	Refiner Jr	98,{
+	set @name$,"Refinador Novato";
+	callfunc "refina";
+	end;
+}
+
+function	script	refina	{
+	set @features,1;
+	mes "[" + @name$ + "]";
+	mes "Yo soy un herrero novato... Yo puedo refinar cualquier arma o armadura que tu escojas!";
+	mes "Que pieza de equipo tu deseas refinar?";
+	next;
+	setarray .@position$[1], "Head","Body","Left hand","Right hand","Robe","Shoes","Accessory 1","Accessory 2","Head 2","Head 3";
+	set .@menu$,"";
+	for( set .@i,1; .@i <= 10; set .@i,.@i+1 )
+	{
+		if( getequipisequiped(.@i) )
+			set .@menu$, .@menu$ + .@position$[.@i] + "-" + "[" + getequipname(.@i) + "]";
+
+		set .@menu$, .@menu$ + ":";
+	}
+	set @part,select(.@menu$);
+	goto CHECK1;
+
+//Verifica si el item es refinable
+CHECK1:
+	if(getequipisenableref(@part)) goto CHECK2;
+	mes "[" + @name$ + "]";
+	mes "No puedo trabajar sobre este item.";
+	close;
+
+//Verifica si el item esta identificado
+CHECK2:
+	if(getequipisidentify(@part)) goto CHECK3;
+	mes "[" + @name$ + "]";
+	mes "Necesitas identificar el item primero.";
+	close;
+
+//Verifica si el items ya esta refinado a +10
+CHECK3:
+	if(getequiprefinerycnt(@part) < 10) goto REFINE0;
+	mes "[" + @name$ + "]";
+	mes "Esta arma ya esta en su maximo nivel, no puede ser refinada.";
+	close;
+
+//Refine Armor
+REFINE0:
+	set @refineitemid, getequipid(@part);
+	set @refinerycnt, getequiprefinerycnt(@part);
+	if(getequipweaponlv(@part) > 0) goto REFINE1;
+	set @matname$,"Elunium";
+	set @material,985;
+	set @price,2000;
+	set @safe,4;
+	goto L_refinefeatures;
+
+//Refina Armas Nivel 1
+REFINE1:
+	if(getequipweaponlv(@part) > 1) goto REFINE2;
+	set @matname$,"Phracon";
+	set @material,1010;
+	set @price,50;
+	set @safe,7;
+	goto L_refinefeatures;
+
+//Refina Armas Nivel 2
+REFINE2:
+	if(getequipweaponlv(@part) > 2) goto REFINE3;
+	set @matname$,"Emveretarcon";
+	set @material,1011;
+	set @price,200;
+	set @safe,6;
+	goto L_refinefeatures;
+
+//Refina Armas Nivel 3
+REFINE3:
+	if(getequipweaponlv(@part) > 3) goto REFINE4;
+	set @matname$,"Oridecon";
+	set @material,984;
+	set @price,5000;
+	set @safe,5;
+	goto L_refinefeatures;
+
+//Refina Armas Nivel 4
+REFINE4:
+	set @matname$,"Oridecon";
+	set @material,984;
+	set @price,20000;
+	set @safe,4;
+	goto L_refinefeatures;
+
+LNoItem:
+	mes "[" + @name$ + "]";
+	mes "Mira aqui... no tienes ningun item puesto...";
+	close;
+
+LNoFake:
+	mes "[" + @name$ + "]";
+	mes "Clan... No, pero imaginaste que podria ser tan estupido!?!";
+	mes "Sal antes de que te aturda con mi martillo!!!";
+	close;
+
+Lcancel:
+	mes "[" + @name$ + "]";
+	mes "Usted lo dijo, que asi sea.";
+	close;
+
+Lcancel1:
+	mes "Ah ...Me sentiria muy mal si destruyo otro pedazo de equipo con mis propias manos.";
+	close;
+
+Lcancel2:
+	mes "[" + @name$ + "]";
+	mes "Es todo lo que tienes? Desafortunadamente no puedo trabajar a tan bajo precio. Trata de ponerte en mi lugar.";
+	close;
+
+// Nuevas funciones de refinamiento
+L_refinefeatures:
+	if(getequiprefinerycnt(@part) >= @safe) goto Lnosafe;
+	next;
+	mes "[" + @name$ + "]";
+	mes "Puedo refinar esto hasta su limite de seguridad... Es tu eleccion...";
+	next;
+	menu "Hasta el limite de seguridad.",Lsafe,"Cambie de idea...",Lcancel;
+
+Lsafe:
+	set @refinecnt,@safe - getequiprefinerycnt(@part);
+	set @fullprice,@price * @refinecnt;
+	mes "[" + @name$ + "]";
+	mes "Le costara " + @refinecnt + " " + @matname$ + " y " + @fullprice + " Zeny. Esta bien?";
+	next;
+	menu "Si",-,"No...",Lcancel;
+	if((countitem(@material) < @refinecnt) || (Zeny < @fullprice)) goto Lcancel2;
+	set Zeny,Zeny - @fullprice;
+	delitem @material,@refinecnt;
+	goto L_refinesafe;
+
+Lnosafe:
+	next;
+	mes "[" + @name$ + "]";	
+	mes "Hmm... Espere! Este equipo ya se ha refinado al maximo nivel de su seguridad.";
+	mes "Aun soy un novato, en cuanto pueda hacerlo seras el primero en saberlo.";
+	close;
+
+// Subfunción de refinamiento seguro
+L_refinesafe:
+	if (getequipisequiped(@part) == 0) goto LNoItem; // 
+	if (getequipid(@part) != @refineitemid) goto LNoFake; // 
+	if (getequippercentrefinery(@part) < 100) goto LNoFake; // 
+	mes "Clang, clang!!!";
+	successrefitem @part;
+	emotion 21;
+	set @refinecnt,@refinecnt - 1;
+	//next;
+	if(@refinecnt == 0) goto Lend;
+	goto L_refinesafe;
+
+	Lend:
+		next;
+		mes "[" + @name$ + "]";
+		mes "Ya termine... Vuelve pronto.";
+		close;
+}

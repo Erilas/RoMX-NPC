@@ -1,0 +1,55 @@
+// NPC Buscador de items 
+// haunter94
+alde_tt02,391,163,4	script	Buscador de Items	719,{
+set .@nombre$, "[^FF0000Buscador de Items^000000]";
+if(getgmlevel() !=99){end;}
+do{
+	mes .@nombre$;
+	mes "Dime el ID del item que deseas que busque?";
+	mes "Por ejemplo: Mithril Coin = 674";
+	input .@id_item;
+	next;
+	query_sql("SELECT SUM(inventory.amount) FROM `inventory` WHERE nameid="+.@id_item+" OR card0="+.@id_item+" OR card1="+.@id_item+" OR card2="+.@id_item+" OR card3="+.@id_item,.@inventario);
+	query_sql("SELECT SUM(cart_inventory.amount) FROM `cart_inventory` WHERE nameid="+.@id_item+" OR card0="+.@id_item+" OR card1="+.@id_item+" OR card2="+.@id_item+" OR card3="+.@id_item,.@carrosMerch);
+	query_sql("SELECT SUM(storage.amount) FROM  `storage` WHERE nameid="+.@id_item+" OR card0="+.@id_item+" OR card1="+.@id_item+" OR card2="+.@id_item+" OR card3="+.@id_item,.@storagec);
+	set .@total_item,.@inventario+.@carrosMerch+.@storagec;
+	mes .@nombre$;
+	mes "Existen ^FF0000"+.@total_item+"^000000 "+.@id_item+" ("+getitemname(.@id_item)+").";
+	mes .@inventario+" en Inventarios.";
+	mes .@storagec+" en Storages de Kafra.";	
+	mes .@carrosMerch+" en Carros de Merchant.";
+	mes " ";
+	mes "Puedo darte mas detalles sobre el item y a quien pertenecen.";
+	mes "En que parte lo Busco?";
+	switch (select("Inventario","Storage","Carros de Merchant")) {
+		case 1://inventario
+			set .@lugar$,"Inventario";
+			query_sql("SELECT inventory.amount as moda, `char`.name FROM `char` Join inventory ON inventory.char_id=`char`.char_id WHERE inventory.nameid ="+.@id_item+" OR card0="+.@id_item+" OR card1="+.@id_item+" OR card2="+.@id_item+" OR card3="+.@id_item+" GROUP BY inventory.char_id  ORDER BY moda DESC LIMIT 128", .@numero_item, .@nomb_pj$);
+			break;
+		case 2://storage
+			set .@lugar$,"Storage";
+			query_sql("SELECT storage.amount as moda, `char`.name FROM `char` Join storage ON storage.account_id=`char`.account_id WHERE storage.nameid ="+.@id_item+" OR card0="+.@id_item+" OR card1="+.@id_item+" OR card2="+.@id_item+" OR card3="+.@id_item+" GROUP BY storage.account_id  ORDER BY moda DESC LIMIT 128", .@numero_item, .@nomb_pj$);
+			break;
+		case 3://carros
+			set .@lugar$,"Carros de Merch";
+			query_sql("SELECT cart_inventory.amount as moda, `char`.name FROM `char` Join cart_inventory ON cart_inventory.char_id=`char`.char_id WHERE cart_inventory.nameid ="+.@id_item+" OR card0="+.@id_item+" OR card1="+.@id_item+" OR card2="+.@id_item+" OR card3="+.@id_item+" GROUP BY cart_inventory.char_id  ORDER BY moda DESC LIMIT 128", .@numero_item, .@nomb_pj$);
+			break;
+	}
+	next;
+	mes .@nombre$;
+	mes "Item "+.@id_item+" ("+getitemname(.@id_item)+") en "+.@lugar$;
+	mes "Cantidad       Personaje";
+	for (set .@c, 0; .@c < getarraysize(.@nomb_pj$); set .@c, .@c + 1) {
+		mes .@numero_item[.@c]+"       "+.@nomb_pj$[.@c];
+	}
+	next;
+	mes .@nombre$;
+	mes "Buscar otro item?";
+	next;
+	deletearray .@nomb_pj$[0],128;
+	deletearray .@numero_item[0],128;
+}while(select("Sip:Nop") == 1);
+close;
+} // End Script
+
+

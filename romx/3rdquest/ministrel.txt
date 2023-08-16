@@ -1,0 +1,131 @@
+//============================================================ 
+comodo,184,167,5	script	Ministrel	480,{
+
+	set @npc$,"[Ministrel Erilaz]";
+	
+	if (Class == 4075) goto L_IsAB;		//Check if you a Guillotine Cross
+	if (Class == 4020) goto L_Change;	// Checks if the Class a Baby Priest, Priest or High Priest
+	if (Class >= 0 && Class <= 7) goto L_NoChange;
+	if (Class >= 9 && Class <= 4019) goto L_NoChange;
+	if (Class >= 4021 && Class <= 4030) goto L_NoChange;
+	if (Class >= 4031 && Class <= 4112) goto L_NoChange;
+
+L_Change:
+		if (BaseLevel < 99) goto L_BHigh;
+		if (JobLevel < 70) goto L_JHigh;
+		mes @npc$;
+		mes "Welcome "+strcharinfo(0)+".";
+		mes "I can change your Job to a Ministrel.";
+		next;
+		mes @npc$;
+		mes "Do you want to change your Job to a Ministrel?";
+		next;
+		menu "Yes of course.",M_INFO,"No, Not Yet.",M_CANCEL;
+
+M_INFO:
+	mes @npc$;
+	mes "To change your Job I need to test your courage first.";
+	mes "Bring me the following items to pass the test.";
+	mes " ";
+	mes "Here is the list.";
+	mes " ";
+	mes "^FF0000 1   Harp [2]^000000";
+	mes "^FF0000 5   Peridot^000000";
+	mes "^FF0000 1   Joker Jester^000000";
+	mes "^FF0000 20  Frozen Rose^000000";
+	mes "^FF0000 50  Well-baked Cookie^000000";
+	mes "^FF0000 5,000,000 Zeny^000000";
+	next;
+	menu "Cancel",M_CANCEL,"I got them!",M_READY;
+
+M_READY:
+	mes @npc$;
+	if (SkillPoint) goto L_SkillsM;
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(638)>0 && Zeny>5000000){ goto M_MVP;}
+	if(countitem(1910)<1 || countitem(7289)<5 || countitem(5003)<1 || countitem(749)<20 || countitem(538)<50 || (Zeny < 5000000)) goto M_NOITEMS;
+	delitem 1910,1;
+	delitem 7289,5;
+	delitem 5003,1;
+	delitem 749,20;
+	delitem 538,50;
+	job:
+	set Zeny,zeny-5000000;
+	mes @npc$;
+	mes "Give me a second.....";
+	next;
+	jobchange 4075;
+	ResetStatus;
+	ResetSkill;
+	getitem 5751,1;
+	getitem 2795,1;//apple ring
+	set quest_3job,1;
+	mes @npc$;
+	mes "Ok done! Congratulations, you are now a Ministrel";
+	close;
+
+L_IsAB:
+	mes @npc$;
+	mes "Hello "+strcharinfo(0)+".";
+	mes "Enjoy your new skills?";
+	if(quest_3job==0){
+		next;
+		mes @npc$;
+		mes "Wait!!";
+		mes "I almost forgot...this is yours.";
+		getitem 5751,1;
+		getitem 2795,1;//apple ring
+		set quest_3job,1;
+	}
+	close;
+M_MVP:
+	next;
+	mes @npc$;
+	mes "OMG! This item you have there, show your value.";
+	next;
+	delitem 638,1;
+	goto job;
+
+
+L_BHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Base Level for the Job Change.";
+	close;
+
+L_JHigh:
+	mes @npc$;
+	mes "Sorry "+strcharinfo(0)+".";
+	mes "You haven't got the Job Level for the Job Change.";
+	close;
+
+L_NoChange:
+	mes @npc$;
+	mes "Huh?";
+	mes "You aren't an Music Class.";
+	mes "Please go away.";
+	close;
+
+M_NOITEMS:
+	mes @npc$;
+	mes "You don't have the required items.";
+	mes "Please come back another time... when you ARE ready";
+	close;
+
+L_SkillsM:
+	mes "Please use up all your skill points.";
+	mes "Otherwise I cant turn you into a Ministrel";
+	close;
+
+
+M_CANCEL:
+	mes @npc$;
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+
+}
+
+
+

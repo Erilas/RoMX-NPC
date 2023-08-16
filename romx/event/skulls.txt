@@ -1,0 +1,275 @@
+-	script	skullPVP	-1,{
+OnPCKillEvent:
+
+	set .@killer_id,killedrid;
+	set .@temp, getcharid(3);
+
+	attachrid killedrid;
+	set .@ip_check$,#ip$;
+	set .@lvl_muerto,BaseLevel;
+	attachrid .@temp;
+	
+	if(.@killer_id!=#Ultimo_Muerto && .@lvl_muerto>60 && .@ip_check$!= #ip$){
+		set .@killer_char_id,getcharid(0,rid2name(.@killer_id));
+		set @card3, .@killer_char_id & 65535;
+		set @card4, .@killer_char_id >> 16;
+		getitem2 7420, 1,1,0,0,254,0,@card3,@card4;
+		set #Ultimo_Muerto,.@killer_id;
+	}
+
+end;
+}
+
+//[========================================================]
+//				NPC
+//[========================================================]
+		//[========================================================]                                                    
+prontera,146,107,3	script	Skull Trader	512,{
+	set @n$,"~ ^00B200Skull Trader^000000 ~";
+	mes @n$;
+	mes "Hahahahahha...";
+	mes "Me gusta ver como los guerreros pelean a muerte. Se me hacen divertidos esos combates!";
+	next;
+	mes @n$;
+	mes "Para poder ayudarlos en sus combates, he decidido ofrecerles un 'servicio...'";
+	next;
+	mes @n$;
+	mes "Traeme las cabezas de tus enemigos y te dare item de apoyo para tus batallas..hahahahah";
+	next;
+	switch(select("Ahora no:Cambiar Skulls")){
+		case 1:
+		mes @n$;
+		mes "Se que volveras..hahahaha!";
+		close;
+	}
+	function DEBUG_MES;
+	function RESET;
+	mes @n$;
+	mes "Estos son los items que puedo ofrecerte, pero ten en cuenta que pido ^999999Skulls en lugar de Zeny.^000000";
+	close2;
+	dispbottom "Actualmente tienes " + countitem(7420) + " skulls.";
+	callshop "Skull_Shop",1;
+	npcshopattach "Skull_Shop";
+	end;
+
+OnWhisperGlobal:
+	if(getgmlevel() > 3) {
+		set @n$,"~ ^00B200Skull Trader^000000 ~";
+		mes @n$;
+		mes "Hola, en que te puedo ayudar patron?";
+		next;
+		switch(select("Agregar Item y precio:Eliminar Item de tienda")){
+			case 1:
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000ID del item^000000.";
+				next;
+				input @item_id;
+				mes @n$;
+				mes "Por favor ingresa la ^FF0000Cantidad a entregar^000000.";
+				next;
+				input @cant;
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000Precio^000000 del item.";
+				next;
+				input @price;
+				mes @n$;
+				mes "Confirma:";
+				mes "^FF0000Item: " + getitemname(@item_id);
+				mes "ID: " + @item_id;
+				mes "Cantidad: "+@cant;
+				mes "Precio: " + @price + "^000000";
+				mes "Es correcto?";
+				next;
+				if(!(select("- No!:- Si") -1)){ 
+					mes @n$; 
+					mes "Accion cancelada."; 
+				} else {
+					query_sql "INSERT INTO `dynamic_shop_skull` ( `id` , `cant`, `price` ) VALUES ( '"+@item_id+"' , '"+@cant+"', '"+@price+"' )";
+					npcshopadditem "Skull_Shop", @item_id, @price;
+					mes @n$;
+					mes "El item a sido agregado a la tienda!";
+				}
+				next;
+				break;
+			case 2:
+				RESET(1);
+				mes @n$;
+				mes "Por favor ingresa el ^FF0000ID del item^000000.";
+				next;
+				input @item_id;
+				next;
+				query_sql("SELECT `id` FROM `dynamic_shop_skull` WHERE `id`="+@item_id, @id_all);
+				if(!@id_all[0]){
+					set @admin_menu,0;
+					mes @n$;
+					mes "^FF0000Ese ID no existe en la tienda^000000";
+					next;
+				} else {
+					mes @n$;
+					mes "Confirmas borrar el item ^FF0000"+@item_id+" - "+getitemname(@item_id)+"^000000?";
+					next;
+					if(select("No:Si") -1){ 
+						query_sql("DELETE FROM `dynamic_shop_skull` WHERE `id`="+@item_id);
+						npcshopdelitem "Skull_Shop", @item_id;
+						mes @n$;
+						mes "El item fue eliminado.";
+						close;
+					}
+				}
+				break;			
+		}//switch
+	}//end if
+	close;
+	end;
+	
+OnBuyItem:
+
+	set @price, 0;
+	set @quantity, 0;
+	set @total, 0;
+
+	RESET(1);
+
+	query_sql "SELECT * FROM `dynamic_shop_skull` ORDER BY price ASC", @id_all, @cant_all, @price_all;
+	
+	if(!@id_all[0]) DEBUG_MES(0);
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1)
+		for( set @z, 0; @z < getarraysize(@id_all); set @z, @z + 1)
+			if(@id_all[@z] == @bought_nameid[@i]){
+				set @quantity, @quantity + (@price_all[@z] * @bought_quantity[@i]);
+				set @total, @total+(@cant_all[@z] * @bought_quantity[@i]);
+			}
+		mes "~ ^999999Cuenta^000000 ~";
+	
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) 
+		mes "^FF0000" + @total + " unidad(es) de " + getitemname(@bought_nameid[@i]) + " ^000000";
+		mes "Te costara ^999999" + @quantity + " skulls^000000!";
+	for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) {
+		if(@bought_nameid[@i]==2550 || @bought_nameid[@i]==2443 || @bought_nameid[@i]==2764 || @bought_nameid[@i]==2775){
+			mes "Recuerda que estos items solo afectan el cast time de la quest de pesca de New World...^FF0000No afectan cast de skills!^000000";
+		}
+		break;
+	}
+	mes "Quieres completar la compra?";
+	next;
+	switch(select("No, gracias:Si, lo compro")){
+		case 1:
+			RESET(0);
+			mes @n$; mes "Compra cancelada.";
+			close;
+			break;
+		case 2:
+			if(countitem(7420) < @quantity){
+				RESET(0);
+				mes @n$;
+				mes "Lo siento, no tienes suficientes ^999999skulls^000000...";
+				close;
+			} else {
+				delitem 7420,@quantity;
+				for( set @i, 0; @i < getarraysize(@bought_nameid); set @i, @i + 1 ) 
+				getitem @bought_nameid[@i], @total;
+				RESET(0);
+			}
+			break;
+		
+			} // End switch
+			
+	
+	mes @n$;
+	mes "Gracias por tu compra...espero sea util para tus batallas...hahahaaha!";
+	close;
+	
+
+// ( -------------------------- Functions: --------------------------- ) \\
+
+	function DEBUG_MES {
+
+	// ( ----- If the SQL-DBs are empty ----- ) \\
+	// ( ------- getarg(0) - Player --------- ) \\
+	// ( ------- getarg(1) - Admin ---------- ) \\
+
+		if(!getarg(0)){
+
+			mes @n$;
+			mes "^FF0000Error de Base de Datos.^000000";
+			mes "Por favor intenta de nuevo en un rato.";
+			mes "Si esta no es la primera ves que ve este mensaje, por favor reportelo al GM!";
+			close;
+			
+		} else {
+		
+			mes @n$;
+			mes "^FF0000Error de Base de Datos.^000000";
+			mes "Asegurece de que la tabla existe o no este vacia!";
+			close;
+			
+		}
+		
+	}
+
+	function RESET {
+
+	// ( ---------------------- Reset of the Variables -------------------- ) \\
+	// ( -------- getarg(0) - 1 for SQL-RESET; 0 for OnBuyItem-RESET. ----- ) \\
+
+		if(getarg(0)){
+		
+			deletearray @id_all, getarraysize(@id_all);
+			deletearray @price_all, getarraysize(@price_all);
+			deletearray @cant_all, getarraysize(@cant_all);
+			
+		} else {
+		
+			deletearray @bought_quantity, getarraysize(@bought_quantity);
+			deletearray @bought_nameid, getarraysize(@bought_nameid);
+			
+		}
+		
+		return;
+
+	}
+	
+// ( ------------------------------------------------------------------ ) \\
+
+OnCerrar:
+	switch (@i) {
+		case 1:
+			changelook 5, 0;
+			break;
+		case 2:
+			changelook 4, 0;
+			break;
+		case 3:
+			changelook 3, 0;
+			break;
+		default:
+			break;
+	} // End switch
+	deltimer strnpcinfo(3)+"::OnCerrar";
+	set @i, 0;
+	set @eqid, 0;
+	close;
+	end;
+
+OnInit:
+
+	query_sql("CREATE TABLE IF NOT EXISTS `dynamic_shop_skull` (`id` int(11) NOT NULL DEFAULT '0',`cant` int(11) NOT NULL DEFAULT '0',`price` int(11) NOT NULL DEFAULT '0',PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;");
+
+
+  	npcshopdelitem "Skull_Shop", 512;
+
+	query_sql "SELECT * FROM `dynamic_shop_skull` ORDER BY price ASC", .id_all, .cant_all, .price_all;
+	
+	if(!.id_all[0])
+		end;
+	
+	npcshopitem "Skull_Shop", .id_all[0], .price_all[0];
+	
+	for( set .i, 1; .i < getarraysize(.id_all); set .i, .i + 1 ) 
+		{npcshopadditem "Skull_Shop", .id_all[.i], .price_all[.i];}
+
+	end;
+	
+}
+
+-	shop	Skull_Shop	-1,512:20 // Dummy-Shop.

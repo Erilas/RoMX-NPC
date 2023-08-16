@@ -1,0 +1,102 @@
+//===== Hourly Points Script =========================================
+//===== By: ==========================================================
+//= GorthexTiger modified by Nibi
+//===== Current Version: =============================================
+//= 1.0
+//===== Compatible With: =============================================
+//= Any eAthena Version
+//===== Description: =================================================
+//= Get Points every successful hours of gameplay, you cannot get
+//= the points even if you miss a second or a minute. A player will
+//= get a very big bonus if they played 12 hours consecutively
+//= or without logging out of the game. If the player is vending
+//= the script will then stop.
+//===== Additional Comments: =========================================
+//= You can modify the script to your liking.
+//= The default points is Kafrapoints change it anyway if you like.
+//= 1.1 = Check Chatting too
+//= 1.2 = 5 Minute Idle Check & @at/@autotrade check.
+//= 1.3 = Corrected the current balance line on 12 Hours Consecutive
+//====================================================================
+
+-	script	hourlypoints	-1,{
+
+//--Start of the Script
+OnPCLoginEvent:
+attachnpctimer ""+strcharinfo(0)+"";
+initnpctimer;
+getmapxy(.@mapacarcel$,.@x,.@y,0);
+if (.@mapacarcel$=="sec_pri"){stopnpctimer;}
+end;
+	
+OnPCLoadMapEvent:
+getmapxy(.@mapacarcel$,.@x,.@y,0);
+if (.@mapacarcel$=="sec_pri"){stopnpctimer;}
+end;
+
+OnTimer30000:
+//Check if Vending (normal or @at)
+if(checkchatting() == 1) {
+	dispbottom "Has dejado de recibir Cash Point debido a que abriste un Chat. Por favor reloguea para volver a activar el contador.";
+	stopnpctimer;
+	end;
+}
+//Check if Idle
+if(checkvending()==0){
+	getmapxy( .@map$, .@x, .@y, 0 );
+	if(@map$ == .@map$ && @x == .@x && @y == .@y) {
+		set @afk, @afk + 1;
+	}
+	//If move timer resets
+	else {
+		set @afk, 0;
+	}
+}
+	set @map$, .@map$; set @x, .@x; set @y, .@y;
+//Idle Check for 5 Minutes
+if(@afk == 10) {
+	dispbottom "Has dejado de recibir Cash Point debido a que permaneciste inactivo por 10 minutos. Por favor reloguea para volver a activar el contador.";
+	stopnpctimer;
+	end;
+}
+end;
+
+OnTimer60000:
+	set @minute, @minute + 1;
+	//Check for 1 Minute
+	if(@minute%15==0){set #cash_x_hora,#cash_x_hora+15;}
+	if(checkvending()== 1 && #cash_x_hora == 120){
+		set #cash_x_hora,0;
+		set @minute,0;
+		set .@point_amt, 1;
+		set .soy_invitado,0;
+		atcommand "@cash " + .@point_amt;
+	}
+	if(#cash_x_hora > 61 && checkvending()==0){
+		set #cash_x_hora,0;
+		set @minute,0;	
+	}
+	if(#cash_x_hora == 60 && checkvending()==0){
+		set #cash_x_hora,0;
+		set @minute,0;
+		set .@point_amt, 10; //Points to get every hour (default: 10)
+		set .soy_invitado,0;
+		atcommand "@cash " + .@point_amt;
+		if(#sistema_invitaciones==1){set #horas_j_sia, #horas_j_sia+1;}
+		set @consecutive_hour, @consecutive_hour + 1;
+		if(agitcheck()==0){callfunc "CheckStartBK";}//si no hay woe activa posivilidad de antibot
+	}
+	//Check for 12 hours consecutive
+	if(@consecutive_hour == 12 && checkvending()==0) {
+		set @consecutive_hour,0;
+		set .@cpoint_amt, 60; //Points to get for 12 Consecutive hours (default: 50)
+		atcommand "@cash " + .@cpoint_amt;
+		dispbottom "Has recibido "+.@cpoint_amt+" Cash Points por jugar durante 12 horas";
+	}
+	stopnpctimer;
+	initnpctimer;
+	end;
+}
+//--End of the Script
+
+

@@ -1,0 +1,30 @@
+alde_tt02,383,162,4	script	Charlat	942,{
+OnInit:
+        defpattern 1, "([^:]+):.*\\shola.*", "Palabra0";
+        defpattern 1, "([^:]+):.*\\sheal.*", "Palabra1";
+        defpattern 1, "([^:]+):.*\\sbuff.*", "Palabra2";
+        activatepset 1;
+        end;
+
+Palabra0:
+   npctalk "Hola "+strcharinfo(0);
+   end;
+
+Palabra1:
+   percentheal 100,100;
+   end;
+
+Palabra2:
+   sc_start 32, (24000 + (50000 * 10)), 10;
+   sc_start 29, (30000 * 50), 10;         
+   sc_start 30, (24000 + (50000 * 10)), 10;
+   sc_start 35, 60000, 5;         
+   sc_start 40, (15000 + (50000 * 5)), 5;      
+   sc_start 41, (5000 + (50000 * 5)), 5;      
+   sc_start 115, (20000 * 10), 5;
+end;
+
+
+
+
+}

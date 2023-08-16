@@ -1,0 +1,256 @@
+//===== eAthena Script =======================================
+ra_fild12,40,231,5	script	Farrokh	930,{
+	if (countitem(5170)<1) {
+	emotion 20;
+	}
+	else
+	{
+	mes "[Farrokh]"; 
+	mes "Hi, I see you know my brother...."; 
+	mes "Well, I got the skill to reinvent your Feather Beret!";
+	mes "Ah, the ^CC6633Colorful Feather Berets^000000 gotta love em huh?"; 
+	next; 
+	menu "Tell me More!",M_INFO,"Make Them!",M_MAKE,"Cancel",M_CANCEL;
+
+M_MAKE:
+	mes "[Farrokh]";
+	mes "Nice! what color would you like?";
+query_sql("SELECT `value` FROM `global_reg_value` WHERE `account_id` = '" + getcharid(3) + "' AND `str` LIKE '#CASHPOINTS'", .@cashp);
+	menu "^FF7700Orange Feather Beret^000000",M_ORANGE,"^777777Silver Feather Beret^000000",M_SILVER,"^DD66BBPink Feather Beret^000000",M_PINK,"^006600Green Feather Beret^000000",M_GREEN,"^FF0000Red Feather Beret^000000",M_RED,"^FFDD00Gold Feather Beret^000000",M_GOLD,"^0000FFBlue Feather Beret^000000",M_BLUE,"^00BBFFLight Blue Feather Beret^000000",M_LBLUE,"^492D00Brown Feather Beret^000000",M_BROWN,"^8717D2Purple Feather Beret^000000",M_PURPLE,"^777777White Feather Beret^000000",M_WHITE,"Black Feather Beret^000000",M_BLACK,"Cancel",M_CANCEL;
+
+
+M_ORANGE:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(980)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 980,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15765,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_SILVER:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(982)<1 || countitem(983)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 982,1;
+	delitem 983,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15766,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_PINK:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(982)<1 || countitem(975)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 982,1;
+	delitem 975,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15755,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_GREEN:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(979)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 979,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15754,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_RED:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(975)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 975,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15757,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_GOLD:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(976)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 976,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15753,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_BLUE:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(978)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 978,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15752,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_LBLUE:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(982)<1 || countitem(978)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 982,1;
+	delitem 978,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15764,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_BROWN:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(975)<1 || countitem(979)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 975,1;
+	delitem 979,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15763,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_PURPLE:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(981)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 981,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15756,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_WHITE:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(982)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 982,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15758,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_BLACK:
+	mes "Good good, let me just check";
+	next;   
+	if(countitem(5170)<1 || countitem(983)<1 || .@cashp<20 || (Zeny < 500000)) goto M_NOITEMS;
+	delitem 5170,1;
+	delitem 983,1;
+	atcommand "@cash -20";
+	set Zeny,zeny-500000;
+	mes "[Farrokh]";
+	mes "Give me a second.....";
+	next;
+	getitem 15751,1;
+	mes "[Farrokh]";
+	mes "Ok done!";
+	close;
+
+M_INFO:
+	mes "[Farrokh]";
+	mes "For any of them you need a ^006600Feather Beret";
+	mes "20 Cash Point, 500,000 zeny^000000 and";
+	mes "a different dyestuff for each color";
+	mes "Here is the list.";
+	mes " ";
+	mes "^FF7700 Orange: Orange Dyestuff^000000";
+	mes "^777777 Silver: Black & White Dyestuffs^000000";
+	mes "^DD66BB Pink: Scarlet & White Dyestuffs^000000";
+	mes "^006600 Green: Darkgreen Dyestuff^000000";
+	mes "^FF0000 Red: Scarlet Dyestuff^000000";
+	mes "^FFDD00 Gold: Lemon Dyestuff^000000";
+	mes "^0000FF Blue: Cobaltblue Dyestuff^000000";
+	mes "^00BBFF Light Blue: Cobaltblue & White Dyestuffs^000000";
+	mes "^492D00 Brown: Scarlet & Darkgreen Dyestuffs^000000";
+	mes "^8717D2 Purple: Violet Dyestuff^000000";
+	mes "^777777 White: White Dyestuff^000000";
+	mes " Black: Black Dyestuff";
+	next;
+	menu "Make Them!",M_MAKE,"Cancel",M_CANCEL;
+
+M_NOITEMS:
+	mes "[Farrokh]";
+	mes "You don't have the requirements.";
+	mes "Please come back another time...";
+	close;
+
+M_LEAVE:
+	mes "[Farrokh]";
+	mes "Maybe another time?";
+	close;
+
+M_CANCEL:
+	mes "[Farrokh]";
+	mes "Aw, what a shame";
+	mes "Giving up already?";
+	close;
+}}

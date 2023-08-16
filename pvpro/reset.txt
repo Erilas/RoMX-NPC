@@ -1,0 +1,135 @@
+turbo_room,93,117,5	script	Reset Manager	436,{
+// Mode of NPC
+// 1 = Switch & Save Status Build
+// 2 = Reset Status
+// 4 = Reset Skills
+// 7 = All of Above [ 1+2+4 = 7 ]
+set .BMMode,7;
+
+// How Many Slots available to Save Status Builds.
+set .MaxSlots,5;
+
+setarray .BMCosts[1],
+			"5",		// Switch Builds Cost
+			"1",		// Save Build Cost
+			"10",		// Reset Status Cost
+			"10";		// Reset Skills Cost
+				
+while(1){
+	mes "^0000FF[Reset Manager]^000000";
+	mes "Hola!";
+	mes "Yo puedo memorizar tus combinaciones de estatus para que puedas usarlos cuando queiras!";
+	mes "Puedo memorizar hasta ^FF0000"+.MaxSlots+"^000000 combinaciones de estatus!";
+	next;
+	mes "^0000FF[Reset Manager]^000000";
+	mes "Costos:";
+	mes "Cambiar a una buid guardada: ^FF0000"+.BMCosts[1]+"^000000 Cash ";
+	mes "Guardar Build: ^FF0000"+.BMCosts[2]+"^000000 Cash ";
+	mes "Reset de Status: ^FF0000"+.BMCosts[3]+"^000000 Cash ";
+	mes "Reset de Skills: ^FF0000"+.BMCosts[4]+"^000000 Cash ";
+switch( select( ( .BMMode & 1 )?"^0000FFCambiar a Status Guardados^000000":"",
+				( .BMMode & 1 )?"^0000FFGuardar Status Actual^000000":"",	
+				( .BMMode & 2 )?"^0000FFReset Status^000000":"",	
+				( .BMMode & 4 )?"^0000FFReset Skills^000000":"")){
+	Case 1:
+		next;
+		if( #CASHPOINTS < .BMCosts[ @menu ] ){
+			mes "Tu necesitas ^FF0000"+.BMCosts[ @menu ]+" Cash^000000 para usar este servicio.";
+			next;
+			break;
+			}
+		mes "^0000FFCosto^000000 : ^FF0000"+.BMCosts[ @menu ]+"^000000 Cash";
+		message strcharinfo(0),"Captura 0 para cancelar";
+		mes "^FF0000Slot[X]^000000-[^0000FFSTR|AGI|VIT|INT|DEX|LUK^000000]";
+		mes "^0000FF_____________________________^000000";
+		for( set .@i,1; .@i <= .MaxSlots; set .@i,.@i + 1 ){
+			mes "^FF0000@^000000 Stats ^0000FF"+.@i+"^000000 - [ ^0000FF"+getd("STR_"+.@i)+"|"+getd("AGI_"+.@i)+"|"+getd("VIT_"+.@i)+"|"+getd("INT_"+.@i)+"|"+getd("DEX_"+.@i)+"|"+getd("LUK_"+.@i)+"^000000 ]";
+			}
+		mes "^0000FF_____________________________^000000";
+		input .@a,0,.MaxSlots;
+		if( .@a != 0 ){
+			callfunc("SwitchBuild",.@a);
+			message strcharinfo(0),"Hecho";
+			atcommand  "@cash "+"-"+.BMCosts[ @menu ];
+			}
+		next;
+		break;
+	Case 2:
+		next;
+		if( #CASHPOINTS < .BMCosts[ @menu ] ){
+			mes "Tu necesitas ^FF0000"+.BMCosts[ @menu ]+" Cash^000000 para usar este servicio.";
+			next;
+			break;
+			}
+		mes "^0000FFCosto^000000 : ^FF0000"+.BMCosts[ @menu ]+"^000000 Cash";
+		mes "^0000FF_____________________________^000000";
+		mes "^FF0000@^000000 STR - "+readparam(bStr)+"  ^FF0000@^000000 AGI - "+readparam(bAgi)+"  ^FF0000@^000000 VIT - "+readparam(bVit)+"";
+		mes "^FF0000@^000000 INT - "+readparam(bInt)+"  ^FF0000@^000000 DEX - "+readparam(bDex)+"  ^FF0000@^000000 LUK - "+readparam(bLuk)+"";
+		mes "^0000FF_____________________________^000000";
+		message strcharinfo(0),"Captura 0 para cancelar";
+		mes "^FF0000Slot[X]^000000-[^0000FFSTR|AGI|VIT|INT|DEX|LUK^000000]";
+		mes "^0000FF_____________________________^000000";
+		for( set .@i,1; .@i <= .MaxSlots; set .@i,.@i + 1 ){
+			mes "^FF0000@^000000 Stats ^0000FF"+.@i+"^000000 - [ ^0000FF"+getd("STR_"+.@i)+"|"+getd("AGI_"+.@i)+"|"+getd("VIT_"+.@i)+"|"+getd("INT_"+.@i)+"|"+getd("DEX_"+.@i)+"|"+getd("LUK_"+.@i)+"^000000 ]";
+			}
+		mes "^0000FF_____________________________^000000";
+		input .@a,0,.MaxSlots;
+		if( .@a != 0 ){
+			callfunc("SaveBuild",.@a);
+			atcommand  "@cash "+"-"+.BMCosts[ @menu ];
+			}
+		next;
+		break;
+	Case 3:
+		next;
+		if( #CASHPOINTS < .BMCosts[ @menu ] ){
+			mes "Tu necesitas ^FF0000"+.BMCosts[ @menu ]+" Cash^000000 para usar este servicio.";
+			next;
+			break;
+			}
+		mes "^0000FFCosto^000000 : ^FF0000"+.BMCosts[ @menu ]+"^000000 Cash";
+		ResetStatus;
+		atcommand  "@cash "+"-"+.BMCosts[ @menu ];
+		mes "^0000FF[Reset Manager]^000000";
+		mes "Tus Estatus han sido Reseteados. Tu has obtenido tus ^FF0000Puntos de Estatus originales^000000";
+		next;
+		break;
+	Case 4:
+		next;
+		if( #CASHPOINTS < .BMCosts[ @menu ] ){
+			mes "Tu necesitas ^FF0000"+.BMCosts[ @menu ]+" Cash^000000 para usar este servicio.";
+			next;
+			break;
+			}
+		mes "^0000FFCosto^000000 : ^FF0000"+.BMCosts[ @menu ]+"^000000 Cash";
+		ResetSkill;
+		atcommand  "@cash "+"-"+.BMCosts[ @menu ];
+		mes "^0000FF[Reset Manager]^000000";
+		mes "Tus skills han sido Reseteados. Tu has obtenido tus ^FF0000Puntos de Skills originales^000000";
+		next;
+		break;
+		}
+	}
+}
+
+function	script	SaveBuild	{
+	setd "STR_"+getarg(0),readparam(bStr);
+	setd "AGI_"+getarg(0),readparam(bAgi);
+	setd "VIT_"+getarg(0),readparam(bVIT);
+	setd "INT_"+getarg(0),readparam(bInt);
+	setd "DEX_"+getarg(0),readparam(bDex);
+	setd "LUK_"+getarg(0),readparam(bLuk);
+return;
+}
+
+function	script	SwitchBuild	{
+	ResetStatus;
+	statusup2 bStr,getd( "STR_"+getarg(0) )-1;
+	statusup2 bAgi,getd( "AGI_"+getarg(0) )-1;
+	statusup2 bVit,getd( "VIT_"+getarg(0) )-1;
+	statusup2 bInt,getd( "INT_"+getarg(0) )-1;
+	statusup2 bDex,getd( "DEX_"+getarg(0) )-1;
+	statusup2 bLuk,getd( "LUK_"+getarg(0) )-1;
+	set StatusPoint,0;
+return;
+}
